@@ -700,6 +700,25 @@
           }
         }
       }
+    },
+    "/search/{search_string}" : {
+      "get" : {
+        "tags" : [ ],
+        "summary" : "Get product search",
+        "description" : "Perform a product search with user string parameter.",
+        "operationId" : "get-search",
+        "parameters" : [ {
+          "name" : "search_string",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : { }
+      }
     }
   },
   "components" : {
