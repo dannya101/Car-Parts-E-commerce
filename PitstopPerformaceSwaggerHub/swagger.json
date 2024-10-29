@@ -700,29 +700,6 @@
           }
         }
       }
-    },
-    "/admin/inventory" : {
-      "get" : {
-        "tags" : [ ],
-        "summary" : "Get Inventory",
-        "description" : "Get a list of all inventory items.",
-        "operationId" : "get-admin-inventory",
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Product"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components" : {
