@@ -301,7 +301,7 @@
     "/cart" : {
       "get" : {
         "tags" : [ ],
-        "summary" : "Get Cart by ID",
+        "summary" : "Your GET endpoint",
         "description" : "Get the current user's cart details.",
         "operationId" : "get-cart",
         "responses" : {
@@ -310,7 +310,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/Cart"
+                  "$ref" : "#/components/schemas/inline_response_200_2"
                 }
               }
             }
@@ -343,6 +343,15 @@
             "type" : "string"
           }
         } ],
+        "responses" : { }
+      }
+    },
+    "/checkout" : {
+      "post" : {
+        "tags" : [ ],
+        "summary" : "Begin Checkout Process",
+        "description" : "",
+        "operationId" : "post-checkout",
         "responses" : { }
       }
     }
@@ -616,15 +625,6 @@
             "x-stoplight" : {
               "id" : "b1orcb0aouw16"
             }
-          },
-          "products" : {
-            "type" : "array",
-            "items" : {
-              "$ref" : "#/components/schemas/Order"
-            },
-            "x-stoplight" : {
-              "id" : "jmy8bzuaj1s27"
-            }
           }
         }
       },
@@ -811,6 +811,17 @@
             "type" : "string",
             "x-stoplight" : {
               "id" : "dnaum9kuks01l"
+            }
+          }
+        }
+      },
+      "inline_response_200_2" : {
+        "type" : "object",
+        "properties" : {
+          "cart_id" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "p8v4te9qcovk3"
             }
           }
         }
