@@ -375,6 +375,35 @@
           }
         }
       }
+    },
+    "/cart/update" : {
+      "put" : {
+        "tags" : [ ],
+        "summary" : "Update Cart",
+        "description" : "Update the quantity of a product in the user's cart.",
+        "operationId" : "put-cart-update",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "integer"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "2XX" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CartItem"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components" : {
