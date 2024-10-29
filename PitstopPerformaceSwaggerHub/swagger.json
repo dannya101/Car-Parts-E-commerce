@@ -627,6 +627,57 @@
           }
         }
       }
+    },
+    "/admin/products" : {
+      "post" : {
+        "tags" : [ ],
+        "summary" : "Create Product",
+        "description" : "Create a new product.",
+        "operationId" : "post-admin-products",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "2XX" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/admin/products/{id}" : {
+      "put" : {
+        "tags" : [ ],
+        "summary" : "Your PUT endpoint",
+        "operationId" : "put-admin-products-id",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "2XX" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components" : {
