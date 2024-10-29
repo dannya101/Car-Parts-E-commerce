@@ -653,7 +653,8 @@
     "/admin/products/{id}" : {
       "put" : {
         "tags" : [ ],
-        "summary" : "Your PUT endpoint",
+        "summary" : "Update Product",
+        "description" : "Update an existing product by productID.",
         "operationId" : "put-admin-products-id",
         "parameters" : [ {
           "name" : "id",
