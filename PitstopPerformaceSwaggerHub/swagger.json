@@ -22,7 +22,7 @@
         "parameters" : [ ],
         "responses" : {
           "200" : {
-            "description" : "OK",
+            "description" : "Users retrieved",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -33,6 +33,9 @@
                 }
               }
             }
+          },
+          "400" : {
+            "description" : "Unable to retrieve users"
           }
         }
       },
@@ -74,7 +77,10 @@
         } ],
         "responses" : {
           "201" : {
-            "description" : "Created"
+            "description" : "User Created"
+          },
+          "400" : {
+            "description" : "Unable to create User"
           }
         }
       }
@@ -87,7 +93,7 @@
         "operationId" : "get-products",
         "responses" : {
           "200" : {
-            "description" : "OK",
+            "description" : "Products retrieved",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -98,6 +104,9 @@
                 }
               }
             }
+          },
+          "400" : {
+            "description" : "Unable to retrieve products"
           }
         }
       }
@@ -120,7 +129,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "OK",
+            "description" : "Product retrieved by ID",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -128,6 +137,9 @@
                 }
               }
             }
+          },
+          "400" : {
+            "description" : "Product not found"
           }
         }
       }
@@ -140,7 +152,7 @@
         "operationId" : "get-products-categories",
         "responses" : {
           "200" : {
-            "description" : "OK",
+            "description" : "Retrieved parts category",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -151,6 +163,9 @@
                 }
               }
             }
+          },
+          "400" : {
+            "description" : "Could not find part categories"
           }
         }
       }
@@ -173,7 +188,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "OK",
+            "description" : "Found products by part category",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -184,6 +199,9 @@
                 }
               }
             }
+          },
+          "400" : {
+            "description" : "Could not find products in part category"
           }
         }
       }
@@ -699,6 +717,108 @@
             "description" : "Success"
           }
         }
+      }
+    },
+    "/search/{search_terms}" : {
+      "get" : {
+        "tags" : [ ],
+        "summary" : "Get search based on string",
+        "description" : "Perform a product search with search string",
+        "operationId" : "get-search-search_terms",
+        "parameters" : [ {
+          "name" : "search_terms",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/support/ticket" : {
+      "get" : {
+        "tags" : [ ],
+        "summary" : "Get Support Ticket",
+        "description" : "Get the list of support tickets.",
+        "operationId" : "get-support-ticket",
+        "responses" : { }
+      },
+      "post" : {
+        "tags" : [ ],
+        "summary" : "Create Support Ticket",
+        "description" : "Create a new support ticket.",
+        "operationId" : "post-support-ticket",
+        "responses" : { }
+      }
+    },
+    "/support/ticket/{id}/reply" : {
+      "post" : {
+        "tags" : [ ],
+        "summary" : "Reply to Support Ticket",
+        "description" : "Reply to a support ticket.",
+        "operationId" : "post-support-ticket-id-reply",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : { }
+      }
+    },
+    "/support/ticket/{id}/close" : {
+      "post" : {
+        "tags" : [ ],
+        "summary" : "Close a Support Ticket",
+        "description" : "Close a support ticket.",
+        "operationId" : "post-support-ticket-id-close",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : { }
       }
     }
   },
@@ -1390,6 +1510,20 @@
             "type" : "string",
             "x-stoplight" : {
               "id" : "gu89vy5lpza1k"
+            }
+          }
+        }
+      },
+      "inline_response_200_2" : {
+        "type" : "object",
+        "properties" : {
+          "products" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Product"
+            },
+            "x-stoplight" : {
+              "id" : "ryegb3wdjj5l1"
             }
           }
         }
