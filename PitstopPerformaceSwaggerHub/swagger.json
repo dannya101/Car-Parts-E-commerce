@@ -2,7 +2,7 @@
   "openapi" : "3.0.0",
   "info" : {
     "title" : "Pit-Stop Performance API",
-    "description" : "The API for Pit-Stop Performance",
+    "description" : "The API for Pit-Stop Performance \n- Part 1: Project Overview - Pit-Stop performance is a web application that provides users with a selection of car parts for sale. Users can create accounts to order an assortment of offered parts. The user will have a persistent cart as well as the ability to see all previous orders. \n- Part 5: Additional Considerations - The webserver uses JWT authentication for secure communication. Standard Responses will contain status codes in the 200's, when an error is encountered, a 400 code will be sent when the input data is invalid",
     "version" : "1.0.0"
   },
   "servers" : [ {
@@ -298,12 +298,58 @@
         }
       }
     },
-    "/cart" : {
+    "/orders" : {
       "get" : {
-        "tags" : [ ],
+        "tags" : [ "Orders" ],
+        "summary" : "Get all orders",
+        "description" : "Get a list of all orders made by the user.",
+        "operationId" : "get-orders",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/order/{user_id}" : {
+      "get" : {
+        "tags" : [ "Orders" ],
+        "summary" : "Get order by ID",
+        "description" : "Get details of a specific order.",
+        "operationId" : "get-order-id",
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/cart/{user_id}" : {
+      "get" : {
+        "tags" : [ "Cart" ],
         "summary" : "Get Cart by ID",
         "description" : "Get the current user's cart details.",
         "operationId" : "get-cart",
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -318,37 +364,9 @@
         }
       }
     },
-    "/orders" : {
-      "get" : {
-        "tags" : [ ],
-        "summary" : "Get all orders",
-        "description" : "Get a list of all orders made by the user.",
-        "operationId" : "get-orders",
-        "responses" : { }
-      }
-    },
-    "/order/{id}" : {
-      "get" : {
-        "tags" : [ ],
-        "summary" : "Get order by ID",
-        "description" : "Get details of a specific order.",
-        "operationId" : "get-order-id",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : { }
-      }
-    },
     "/cart/add" : {
       "post" : {
-        "tags" : [ ],
+        "tags" : [ "Cart" ],
         "summary" : "Add to cart",
         "description" : "Add a product to the user's cart.",
         "operationId" : "post-cart-add",
@@ -378,7 +396,7 @@
     },
     "/cart/update" : {
       "put" : {
-        "tags" : [ ],
+        "tags" : [ "Cart" ],
         "summary" : "Update Cart",
         "description" : "Update the quantity of a product in the user's cart.",
         "operationId" : "put-cart-update",
@@ -386,7 +404,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "type" : "integer"
+                "$ref" : "#/components/schemas/cart_update_body"
               }
             }
           }
@@ -401,6 +419,203 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/cart/remove/{productId}" : {
+      "delete" : {
+        "tags" : [ "Cart" ],
+        "summary" : "Delete CartItem",
+        "description" : " Remove a product from the cart.",
+        "operationId" : "delete-cart-remove-productId",
+        "parameters" : [ {
+          "name" : "productId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "2XX" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Cart"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cart/clear" : {
+      "delete" : {
+        "tags" : [ "Cart" ],
+        "summary" : "Clear user cart",
+        "description" : "Clears the entire cart.",
+        "operationId" : "delete-cart-clear",
+        "responses" : {
+          "2XX" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Cart"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/checkout" : {
+      "post" : {
+        "tags" : [ "Checkout" ],
+        "summary" : "Begin Checkout Process",
+        "operationId" : "post-checkout",
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/checkout/address" : {
+      "post" : {
+        "tags" : [ "Checkout" ],
+        "summary" : "Add Shipping Address",
+        "operationId" : "post-checkout-address",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/checkout_address_body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/checkout/shipping-method" : {
+      "post" : {
+        "tags" : [ "Checkout" ],
+        "summary" : "Select Shipping Method for Order",
+        "operationId" : "post-checkout-shipping-method",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/checkout_shippingmethod_body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/checkout/payment-method" : {
+      "post" : {
+        "tags" : [ "Checkout" ],
+        "summary" : "Select Payment Method for Order",
+        "operationId" : "post-checkout-payment-method",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/checkout_paymentmethod_body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/checkout/complete" : {
+      "post" : {
+        "tags" : [ "Checkout" ],
+        "summary" : "Finalize Checkout",
+        "operationId" : "post-checkout-complete",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/checkout_complete_body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      }
+    },
+    "/checkout/order-summary" : {
+      "get" : {
+        "tags" : [ "Checkout" ],
+        "summary" : "Your GET endpoint",
+        "operationId" : "get-checkout-order-summary",
+        "parameters" : [ {
+          "name" : "auth_type",
+          "in" : "header",
+          "description" : "Authentication Type",
+          "required" : false,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "auth_token",
+          "in" : "header",
+          "description" : "Authentication Token",
+          "required" : false,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "orderID",
+          "in" : "query",
+          "description" : "ID of order",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
           }
         }
       }
@@ -777,6 +992,46 @@
           }
         }
       },
+      "Payment" : {
+        "title" : "Payment",
+        "type" : "object",
+        "properties" : {
+          "payment_id" : {
+            "type" : "string"
+          },
+          "order_id" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "qgb2xcsuu8xou"
+            }
+          },
+          "checkout_session_id" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "n8z6an8c1n7tr"
+            }
+          },
+          "status" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "3jmkwfkr023wn"
+            }
+          },
+          "total_price" : {
+            "type" : "number",
+            "format" : "float",
+            "x-stoplight" : {
+              "id" : "uit4aerq377ph"
+            }
+          },
+          "created_at" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "t4i44fyuq9x5p"
+            }
+          }
+        }
+      },
       "auth_login_body" : {
         "type" : "object",
         "properties" : {
@@ -870,6 +1125,190 @@
             "type" : "string",
             "x-stoplight" : {
               "id" : "dnaum9kuks01l"
+            }
+          }
+        }
+      },
+      "cart_update_body" : {
+        "type" : "object",
+        "properties" : {
+          "quantity" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "mi8rm2v3psdtz"
+            }
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "auth_type" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "z96ibpfoolgh0"
+            }
+          },
+          "auth_token" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "xxx13yeacthvs"
+            }
+          }
+        }
+      },
+      "checkoutaddress_address" : {
+        "type" : "object",
+        "properties" : {
+          "street_address" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "be8ay34agb72b"
+            }
+          },
+          "city" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "017nh5bz5r7cu"
+            }
+          },
+          "state" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "yqh6zhpdz1wo3"
+            }
+          },
+          "postal_code" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "xgji7yk75ergp"
+            }
+          },
+          "country" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "dngx1za87uutx"
+            }
+          }
+        }
+      },
+      "checkout_address_body" : {
+        "type" : "object",
+        "properties" : {
+          "auth_type" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "lbzzrmxt8wq4l"
+            }
+          },
+          "auth_token" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "93d677x6afe1u"
+            }
+          },
+          "address" : {
+            "$ref" : "#/components/schemas/checkoutaddress_address"
+          }
+        }
+      },
+      "checkout_shippingmethod_body" : {
+        "type" : "object",
+        "properties" : {
+          "auth_type" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "4in5scjm5be89"
+            }
+          },
+          "auth_token" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "v8jbls9j4myev"
+            }
+          },
+          "checkout_session_id" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "rl8u5sby3uldz"
+            }
+          }
+        }
+      },
+      "checkoutpaymentmethod_payment_method" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "rpluie36reffb"
+            }
+          },
+          "card_number" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "4jhutxuhu1syr"
+            }
+          },
+          "expiration_date" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "emtwlgr9j12qo"
+            }
+          },
+          "cvv" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "jpsijemx75b6y"
+            }
+          }
+        }
+      },
+      "checkout_paymentmethod_body" : {
+        "type" : "object",
+        "properties" : {
+          "auth_type" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "x3a4gtjhxmtxe"
+            }
+          },
+          "auth_token" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "5vir23vo1scag"
+            }
+          },
+          "checkout_session_id" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "vovu7jnzs4ps9"
+            }
+          },
+          "payment_method" : {
+            "$ref" : "#/components/schemas/checkoutpaymentmethod_payment_method"
+          }
+        }
+      },
+      "checkout_complete_body" : {
+        "type" : "object",
+        "properties" : {
+          "auth_type" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "4jzg0iuuypmd1"
+            }
+          },
+          "auth_token" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "c8ms7fr85ivyz"
+            }
+          },
+          "checkout_session_id" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "gu89vy5lpza1k"
             }
           }
         }
