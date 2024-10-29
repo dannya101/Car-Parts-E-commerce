@@ -678,6 +678,50 @@
             }
           }
         }
+      },
+      "delete" : {
+        "tags" : [ ],
+        "summary" : "Delete Product",
+        "description" : "Delete a product from listing.\r\n",
+        "operationId" : "delete-admin-products-id",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "2XX" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/admin/inventory" : {
+      "get" : {
+        "tags" : [ ],
+        "summary" : "Get Inventory",
+        "description" : "Get a list of all inventory items.",
+        "operationId" : "get-admin-inventory",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
