@@ -1,0 +1,822 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Pit-Stop Performance API",
+    "description" : "The API for Pit-Stop Performance",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/DAGUILAR7299_1/CE561Team/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://virtserver.swaggerhub.com/DAGUILAR7299_1/Daniel/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "paths" : {
+    "/users" : {
+      "get" : {
+        "tags" : [ "Users" ],
+        "summary" : "Retrieve List of Users",
+        "description" : "Get list of all users",
+        "operationId" : "get-users",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Users" ],
+        "summary" : "Register New User",
+        "description" : "Register new user. Requires name, email, and hashed password.",
+        "operationId" : "post-users",
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "query",
+          "description" : "User Name",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "email",
+          "in" : "query",
+          "description" : "Email",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "password",
+          "in" : "query",
+          "description" : "User Password",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Created"
+          }
+        }
+      }
+    },
+    "/products" : {
+      "get" : {
+        "tags" : [ "Products" ],
+        "summary" : "Get all products",
+        "description" : "Get all products",
+        "operationId" : "get-products",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}" : {
+      "get" : {
+        "tags" : [ "Products" ],
+        "summary" : "Get product by ID",
+        "description" : "Get product by specified ID",
+        "operationId" : "get-products-id",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/partcategories" : {
+      "get" : {
+        "tags" : [ "Products" ],
+        "summary" : "Get list of product categories",
+        "description" : "Get list of product categories by part",
+        "operationId" : "get-products-categories",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PartCategory"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{part_category_id}" : {
+      "get" : {
+        "tags" : [ "Products" ],
+        "summary" : "Get product by part ID",
+        "description" : "Get a list of products from specified part-category-id",
+        "operationId" : "get-products-part-id",
+        "parameters" : [ {
+          "name" : "part_category_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{brand_category_id}" : {
+      "get" : {
+        "tags" : [ "Products" ],
+        "summary" : "Get product by brand ID",
+        "description" : "Get a list of products from specified brand-category-id",
+        "operationId" : "get-products-brand-id",
+        "parameters" : [ {
+          "name" : "brand_category_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login" : {
+      "post" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "User login authentication",
+        "operationId" : "post-auth-login",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/auth_login_body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout" : {
+      "post" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "User logout Authentication",
+        "operationId" : "post-auth-logout",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/auth_logout_body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/auth/refresh-token" : {
+      "post" : {
+        "tags" : [ "Authentication" ],
+        "summary" : "Request Authentication Token Refresh",
+        "operationId" : "post-auth-refresh-token",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/auth_refreshtoken_body"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cart" : {
+      "get" : {
+        "tags" : [ ],
+        "summary" : "Your GET endpoint",
+        "description" : "Get the current user's cart details.",
+        "operationId" : "get-cart",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_2"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders" : {
+      "get" : {
+        "tags" : [ ],
+        "summary" : "Get all orders",
+        "description" : "Get a list of all orders made by the user.",
+        "operationId" : "get-orders",
+        "responses" : { }
+      }
+    },
+    "/order/{id}" : {
+      "get" : {
+        "tags" : [ ],
+        "summary" : "Get order by ID",
+        "description" : "Get details of a specific order.",
+        "operationId" : "get-order-id",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : { }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "ApiResponse" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "message" : {
+            "type" : "string",
+            "example" : "everything is ok"
+          }
+        }
+      },
+      "User" : {
+        "title" : "User",
+        "required" : [ "email", "is_admin", "password-hashed", "user_id", "username" ],
+        "type" : "object",
+        "properties" : {
+          "user_id" : {
+            "type" : "integer"
+          },
+          "username" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "30zmg1oqv56zu"
+            }
+          },
+          "email" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "curj0mttzr59t"
+            }
+          },
+          "password-hashed" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "bwzu3pj295sr7"
+            }
+          },
+          "is_admin" : {
+            "type" : "boolean",
+            "x-stoplight" : {
+              "id" : "tfpkfzm8m0nei"
+            }
+          },
+          "created_at" : {
+            "type" : "string",
+            "description" : "Time the user was created",
+            "x-stoplight" : {
+              "id" : "qpw8f3cqtljkv"
+            }
+          }
+        },
+        "description" : "Each user has an ID as its primary key, a name and email for the user profile, and a hashed password."
+      },
+      "Product" : {
+        "title" : "Product",
+        "type" : "object",
+        "properties" : {
+          "product_id" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "o41eirc8m70dq"
+            }
+          },
+          "description" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "lk8b0ih78xz1d"
+            }
+          },
+          "price" : {
+            "type" : "number",
+            "format" : "float",
+            "x-stoplight" : {
+              "id" : "rc9iv43wjdg9x"
+            }
+          },
+          "part_category_id" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "e7rvxzl23c19b"
+            }
+          },
+          "brand_category_id" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "b53bwhfhsupt7"
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "x-stoplight" : {
+                "id" : "i8l0qehhf9z5q"
+              }
+            },
+            "x-stoplight" : {
+              "id" : "uooi8wwp3aisc"
+            }
+          },
+          "images" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "x-stoplight" : {
+                "id" : "7ecg91om562a8"
+              }
+            },
+            "x-stoplight" : {
+              "id" : "747cjk4ns6d6a"
+            }
+          },
+          "thumbnail" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "875o5lezm1jno"
+            }
+          }
+        },
+        "description" : "Each Product needs a name and description to identify what it is. Each product has a price. The part_category_id describes what kind of part it is. The brand_category_id describes what brand of car the part is associated with. The tags list contains terms that the search function will look for. The images list contains URL's for images of the part. The thumbnail contains the URL for the part's thumbnail."
+      },
+      "Order" : {
+        "title" : "Order",
+        "type" : "object",
+        "properties" : {
+          "order_id" : {
+            "type" : "integer"
+          },
+          "user_id" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "8c8l6wprx51rv"
+            }
+          },
+          "shipping_address_id" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "dexk0ojblhlr7"
+            }
+          },
+          "order_status" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "ohm83jae6df20"
+            }
+          },
+          "date-time" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "4hvar10q3uvpk"
+            }
+          },
+          "total_price" : {
+            "type" : "number",
+            "format" : "float",
+            "x-stoplight" : {
+              "id" : "qs01ywdvane3o"
+            }
+          },
+          "created_at" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "sk22q4tprv2i8"
+            }
+          }
+        },
+        "description" : "Each Order has an id and a list of product id's the user has ordered. date-time describes what date and time the order was made."
+      },
+      "OrderItem" : {
+        "title" : "OrderItem",
+        "type" : "object",
+        "properties" : {
+          "order_item_id" : {
+            "type" : "integer"
+          },
+          "order_id" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "f1qn0k8pyf0cw"
+            }
+          },
+          "product_id" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "p4au6awrg64mk"
+            }
+          },
+          "quantity" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "c7ajngmwsnzey"
+            }
+          },
+          "price" : {
+            "type" : "number",
+            "format" : "float",
+            "x-stoplight" : {
+              "id" : "w0vn6egbf82wz"
+            }
+          }
+        }
+      },
+      "PartCategory" : {
+        "title" : "PartCategory",
+        "type" : "object",
+        "properties" : {
+          "part_category_id" : {
+            "type" : "integer"
+          },
+          "part_type_name" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "1z0g941ak7gya"
+            }
+          },
+          "part_description" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "de2z5yib9x03w"
+            }
+          }
+        }
+      },
+      "BrandCategory" : {
+        "title" : "BrandCategory",
+        "type" : "object",
+        "properties" : {
+          "brand_category_id" : {
+            "type" : "integer"
+          },
+          "brand_name" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "bjfs6ar9lintm"
+            }
+          },
+          "brand_description" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "dh9f76wd61a1g"
+            }
+          }
+        }
+      },
+      "Cart" : {
+        "title" : "Cart",
+        "type" : "object",
+        "properties" : {
+          "cart_id" : {
+            "type" : "integer"
+          },
+          "user_id" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "tio83ibgcp6xc"
+            }
+          },
+          "created_at" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "b1orcb0aouw16"
+            }
+          }
+        }
+      },
+      "CartItem" : {
+        "title" : "CartItem",
+        "type" : "object",
+        "properties" : {
+          "cart_item_id" : {
+            "type" : "integer"
+          },
+          "cart_id" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "45utyx5o3ap2d"
+            }
+          },
+          "product_id" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "85u0xk7qba6jq"
+            }
+          },
+          "quantity" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "3okvydiwc86et"
+            }
+          },
+          "price" : {
+            "type" : "number",
+            "x-stoplight" : {
+              "id" : "47ki7gvyraavs"
+            }
+          }
+        }
+      },
+      "Address" : {
+        "title" : "Address",
+        "type" : "object",
+        "properties" : {
+          "address_id" : {
+            "type" : "string"
+          },
+          "user_id" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "bm53pim1ch9yy"
+            }
+          },
+          "street_address" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "7oep2ycfnro3t"
+            }
+          },
+          "city" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "32q1tnxh3dua5"
+            }
+          },
+          "state" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "72vq1ywy1admr"
+            }
+          },
+          "postal-code" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "virkefdz2e54q"
+            }
+          },
+          "country" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "relimdjz3e3v7"
+            }
+          },
+          "is_billing" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "tc7xlmpm2fjbg"
+            }
+          },
+          "is_shipping" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "o0jb5fmx1urms"
+            }
+          }
+        }
+      },
+      "auth_login_body" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "ggt2e3kwuo2qh"
+            }
+          },
+          "password" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "k213k6i8dp1et"
+            }
+          }
+        }
+      },
+      "inline_response_200" : {
+        "type" : "object",
+        "properties" : {
+          "access_token" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "twvxcrgrkagt8"
+            }
+          },
+          "refresh_token" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "pigjgchtf012m"
+            }
+          },
+          "expires_in" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "wn6h99nku5ys5"
+            }
+          },
+          "token_type" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "qv5luve9nmlgg"
+            }
+          }
+        }
+      },
+      "auth_logout_body" : {
+        "type" : "object",
+        "properties" : {
+          "auth_type" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "4k6jehw7ps6fh"
+            }
+          },
+          "" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "nxl4xqcv3i821"
+            }
+          }
+        }
+      },
+      "auth_refreshtoken_body" : {
+        "type" : "object",
+        "properties" : {
+          "refresh_token" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "vynlifnn4j1ll"
+            }
+          }
+        }
+      },
+      "inline_response_200_1" : {
+        "type" : "object",
+        "properties" : {
+          "access_token" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "fs103tmegj757"
+            }
+          },
+          "expires_in" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "t1u1scliq86n4"
+            }
+          },
+          "token_type" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "dnaum9kuks01l"
+            }
+          }
+        }
+      },
+      "inline_response_200_2" : {
+        "type" : "object",
+        "properties" : {
+          "cart_id" : {
+            "type" : "integer",
+            "x-stoplight" : {
+              "id" : "p8v4te9qcovk3"
+            }
+          }
+        }
+      }
+    }
+  }
+}
