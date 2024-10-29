@@ -2,7 +2,7 @@
   "openapi" : "3.0.0",
   "info" : {
     "title" : "Pit-Stop Performance API",
-    "description" : "The API for Pit-Stop Performance \n- Part 1: Project Overview - Pit-Stop performance is a web application that provides users with a selection of car parts for sale. Users can create accounts to order an assortment of offered parts. The user will have a persistent cart as well as the ability to see all previous orders. \n- Part 5: Additional Considerations - The webserver uses JWT authentication for secure communication. Standard Responses will contain status codes in the 200's, when an error is encountered, a 400 code will be sent when the input data is invalid",
+    "description" : "The API for Pit-Stop Performance \n- Part 1: Project Overview - Pit-Stop performance is a web application that provides users with a selection of car parts for sale. Users can create accounts to order an assortment of offered parts. The user will have a dynamic cart as well as the ability to see all previous orders. \n- Part 5: Additional Considerations - The webserver uses JWT authentication for secure communication. We are potentially planning to use middleware including CORS for handling cross-origin requests and logging for tracking request details. Standard Responses will contain status codes in the 200's, when an error is encountered, a 400 code will be sent when the input data is invalid. The API will be tested using Postman for manual testing, along with automated unit and integration tests to ensure endpoints function as expected across various scenarios.",
     "version" : "1.0.0"
   },
   "servers" : [ {
@@ -699,25 +699,6 @@
             "description" : "Success"
           }
         }
-      }
-    },
-    "/search/{search_string}" : {
-      "get" : {
-        "tags" : [ ],
-        "summary" : "Get product search",
-        "description" : "Perform a product search with user string parameter.",
-        "operationId" : "get-search",
-        "parameters" : [ {
-          "name" : "search_string",
-          "in" : "path",
-          "required" : true,
-          "style" : "simple",
-          "explode" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : { }
       }
     }
   },
