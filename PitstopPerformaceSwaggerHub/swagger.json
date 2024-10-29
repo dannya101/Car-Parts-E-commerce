@@ -630,7 +630,7 @@
     },
     "/admin/products" : {
       "post" : {
-        "tags" : [ ],
+        "tags" : [ "admin" ],
         "summary" : "Create Product",
         "description" : "Create a new product.",
         "operationId" : "post-admin-products",
@@ -652,7 +652,7 @@
     },
     "/admin/products/{id}" : {
       "put" : {
-        "tags" : [ ],
+        "tags" : [ "admin" ],
         "summary" : "Update Product",
         "description" : "Update an existing product by productID.",
         "operationId" : "put-admin-products-id",
@@ -680,7 +680,7 @@
         }
       },
       "delete" : {
-        "tags" : [ ],
+        "tags" : [ "admin" ],
         "summary" : "Delete Product",
         "description" : "Delete a product from listing.\r\n",
         "operationId" : "delete-admin-products-id",
