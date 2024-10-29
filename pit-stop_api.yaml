@@ -1,0 +1,875 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: 'https://virtserver.swaggerhub.com/DAGUILAR7299_1/CE561Team/1.0.0'
+  - description: SwaggerHub API Auto Mocking
+    url: 'https://virtserver.swaggerhub.com/DAGUILAR7299_1/Daniel/1.0.0'
+info:
+  version: 1.0.0
+  title: Pit-Stop Performance API
+  description: "The API for Pit-Stop Performance
+  \n- Part 1: Project Overview - Pit-Stop performance is a web application that provides users with a selection of car parts for sale. Users can create accounts to order an assortment of offered parts. The user will have a persistent cart as well as the ability to see all previous orders.
+  \n- Part 5: Additional Considerations - The webserver uses JWT authentication for secure communication. Standard Responses will contain status codes in the 200's, when an error is encountered, a 400 code will be sent when the input data is invalid"
+  
+paths:
+  /users:
+    get:
+      summary: Retrieve List of Users
+      tags:
+        - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+      operationId: get-users
+      parameters: []
+      description: Get list of all users
+    post:
+      summary: Register New User
+      tags:
+        - Users
+      responses:
+        '201':
+          description: Created
+      operationId: post-users
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: username
+          description: User Name
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: email
+          description: Email
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: password
+          description: User Password
+          required: true
+      description: 'Register new user. Requires name, email, and hashed password.'
+    parameters: []
+  /products:
+    get:
+      summary: Get all products
+      tags:
+        - Products
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+      operationId: get-products
+      description: Get all products
+  '/products/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get product by ID
+      tags:
+        - Products
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Product'
+      operationId: get-products-id
+      parameters: []
+      description: Get product by specified ID
+  /products/partcategories:
+    get:
+      summary: Get list of product categories
+      tags:
+        - Products
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartCategory'
+      operationId: get-products-categories
+      description: Get list of product categories by part
+    parameters: []
+  '/products/{part_category_id}':
+    parameters:
+      - schema:
+          type: string
+        name: part_category_id
+        in: path
+        required: true
+    get:
+      summary: Get product by part ID
+      tags:
+        - Products
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+      operationId: get-products-part-id
+      description: Get a list of products from specified part-category-id
+  '/products/{brand_category_id}':
+    parameters:
+      - schema:
+          type: string
+        name: brand_category_id
+        in: path
+        required: true
+    get:
+      summary: Get product by brand ID
+      tags:
+        - Products
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+      operationId: get-products-brand-id
+      description: Get a list of products from specified brand-category-id
+  /auth/login:
+    post:
+      summary: User login authentication
+      tags:
+        - Authentication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    x-stoplight:
+                      id: twvxcrgrkagt8
+                  refresh_token:
+                    type: string
+                    x-stoplight:
+                      id: pigjgchtf012m
+                  expires_in:
+                    type: integer
+                    x-stoplight:
+                      id: wn6h99nku5ys5
+                  token_type:
+                    type: string
+                    x-stoplight:
+                      id: qv5luve9nmlgg
+      operationId: post-auth-login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  x-stoplight:
+                    id: ggt2e3kwuo2qh
+                password:
+                  type: string
+                  x-stoplight:
+                    id: k213k6i8dp1et
+  /auth/logout:
+    post:
+      summary: User logout Authentication
+      tags:
+        - Authentication
+      responses:
+        '200':
+          description: OK
+      operationId: post-auth-logout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_type:
+                  type: string
+                  x-stoplight:
+                    id: 4k6jehw7ps6fh
+                '':
+                  type: string
+                  x-stoplight:
+                    id: nxl4xqcv3i821
+  /auth/refresh-token:
+    post:
+      summary: Request Authentication Token Refresh
+      tags:
+        - Authentication
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    x-stoplight:
+                      id: fs103tmegj757
+                  expires_in:
+                    type: integer
+                    x-stoplight:
+                      id: t1u1scliq86n4
+                  token_type:
+                    type: string
+                    x-stoplight:
+                      id: dnaum9kuks01l
+      operationId: post-auth-refresh-token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  x-stoplight:
+                    id: vynlifnn4j1ll
+  /orders:
+    get:
+      summary: Get all orders
+      tags:
+        - Orders
+      responses:
+        '200':
+          description: OK
+      operationId: get-orders
+      description: Get a list of all orders made by the user.
+  '/order/{user_id}':
+    parameters:
+      - schema:
+          type: string
+        name: user_id
+        in: path
+        required: true
+    get:
+      summary: Get order by ID
+      tags:
+        - Orders
+      responses:
+        '200':
+          description: OK
+      operationId: get-order-id
+      description: Get details of a specific order.
+  '/cart/{user_id}':
+    parameters:
+      - schema:
+          type: string
+        name: user_id
+        in: path
+        required: true
+    get:
+      summary: Get Cart by ID
+      tags:
+        - Cart
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Cart'
+      operationId: get-cart
+      description: Get the current user's cart details.
+  /cart/add:
+    post:
+      summary: Add to cart
+      tags:
+        - Cart
+      responses:
+        2XX:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+      operationId: post-cart-add
+      description: Add a product to the user's cart.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/CartItem'
+  /cart/update:
+    put:
+      summary: Update Cart
+      tags:
+        - Cart
+      responses:
+        2XX:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/CartItem'
+      operationId: put-cart-update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: string
+                  x-stoplight:
+                    id: mi8rm2v3psdtz
+      description: Update the quantity of a product in the user's cart.
+  '/cart/remove/{productId}':
+    parameters:
+      - schema:
+          type: string
+        name: productId
+        in: path
+        required: true
+    delete:
+      summary: Delete CartItem
+      tags:
+        - Cart
+      responses:
+        2XX:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Cart'
+      operationId: delete-cart-remove-productId
+      description: ' Remove a product from the cart.'
+      parameters: []
+  /cart/clear:
+    delete:
+      summary: Clear user cart
+      tags:
+        - Cart
+      responses:
+        2XX:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Cart'
+      operationId: delete-cart-clear
+      description: Clears the entire cart.
+  /checkout:
+    post:
+      summary: Begin Checkout Process
+      tags:
+        - Checkout
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  auth_type:
+                    type: string
+                    x-stoplight:
+                      id: z96ibpfoolgh0
+                  auth_token:
+                    type: string
+                    x-stoplight:
+                      id: xxx13yeacthvs
+      operationId: post-checkout
+  /checkout/address:
+    post:
+      summary: Add Shipping Address
+      tags:
+        - Checkout
+      responses:
+        '200':
+          description: OK
+          content: {}
+      operationId: post-checkout-address
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_type:
+                  type: string
+                  x-stoplight:
+                    id: lbzzrmxt8wq4l
+                auth_token:
+                  type: string
+                  x-stoplight:
+                    id: 93d677x6afe1u
+                address:
+                  type: object
+                  x-stoplight:
+                    id: 8nsdy24hv0f69
+                  properties:
+                    street_address:
+                      type: string
+                      x-stoplight:
+                        id: be8ay34agb72b
+                    city:
+                      type: string
+                      x-stoplight:
+                        id: 017nh5bz5r7cu
+                    state:
+                      type: string
+                      x-stoplight:
+                        id: yqh6zhpdz1wo3
+                    postal_code:
+                      type: string
+                      x-stoplight:
+                        id: xgji7yk75ergp
+                    country:
+                      type: string
+                      x-stoplight:
+                        id: dngx1za87uutx
+  /checkout/shipping-method:
+    post:
+      summary: Select Shipping Method for Order
+      tags: 
+        - Checkout
+      responses:
+        '200':
+          description: OK
+      operationId: post-checkout-shipping-method
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_type:
+                  type: string
+                  x-stoplight:
+                    id: 4in5scjm5be89
+                auth_token:
+                  type: string
+                  x-stoplight:
+                    id: v8jbls9j4myev
+                checkout_session_id:
+                  type: string
+                  x-stoplight:
+                    id: rl8u5sby3uldz
+  /checkout/payment-method:
+    post:
+      summary: Select Payment Method for Order
+      tags: 
+        - Checkout
+      responses:
+        '200':
+          description: OK
+      operationId: post-checkout-payment-method
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_type:
+                  type: string
+                  x-stoplight:
+                    id: x3a4gtjhxmtxe
+                auth_token:
+                  type: string
+                  x-stoplight:
+                    id: 5vir23vo1scag
+                checkout_session_id:
+                  type: string
+                  x-stoplight:
+                    id: vovu7jnzs4ps9
+                payment_method:
+                  type: object
+                  x-stoplight:
+                    id: zjcdz9q59mnzi
+                  properties:
+                    type:
+                      type: string
+                      x-stoplight:
+                        id: rpluie36reffb
+                    card_number:
+                      type: string
+                      x-stoplight:
+                        id: 4jhutxuhu1syr
+                    expiration_date:
+                      type: string
+                      x-stoplight:
+                        id: emtwlgr9j12qo
+                    cvv:
+                      type: string
+                      x-stoplight:
+                        id: jpsijemx75b6y
+  /checkout/complete:
+    post:
+      summary: Finalize Checkout
+      tags: 
+        - Checkout
+      responses:
+        '201':
+          description: Created
+      operationId: post-checkout-complete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth_type:
+                  type: string
+                  x-stoplight:
+                    id: 4jzg0iuuypmd1
+                auth_token:
+                  type: string
+                  x-stoplight:
+                    id: c8ms7fr85ivyz
+                checkout_session_id:
+                  type: string
+                  x-stoplight:
+                    id: gu89vy5lpza1k
+  /checkout/order-summary:
+    get:
+      summary: Your GET endpoint
+      tags: 
+        - Checkout
+      responses:
+        '200':
+          description: OK
+      operationId: get-checkout-order-summary
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: auth_type
+          description: Authentication Type
+        - schema:
+            type: string
+          in: header
+          name: auth_token
+          description: Authentication Token
+        - schema:
+            type: integer
+          in: query
+          name: orderID
+          description: ID of order
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+          example: everything is ok
+    User:
+      title: User
+      type: object
+      description: 'Each user has an ID as its primary key, a name and email for the user profile, and a hashed password.'
+      required:
+        - user_id
+        - username
+        - email
+        - password-hashed
+        - is_admin
+      properties:
+        user_id:
+          type: integer
+        username:
+          type: string
+          x-stoplight:
+            id: 30zmg1oqv56zu
+        email:
+          type: string
+          x-stoplight:
+            id: curj0mttzr59t
+        password-hashed:
+          type: string
+          x-stoplight:
+            id: bwzu3pj295sr7
+        is_admin:
+          type: boolean
+          x-stoplight:
+            id: tfpkfzm8m0nei
+        created_at:
+          type: string
+          x-stoplight:
+            id: qpw8f3cqtljkv
+          description: Time the user was created
+    Product:
+      title: Product
+      type: object
+      description: Each Product needs a name and description to identify what it is. Each product has a price. The part_category_id describes what kind of part it is. The brand_category_id describes what brand of car the part is associated with. The tags list contains terms that the search function will look for. The images list contains URL's for images of the part. The thumbnail contains the URL for the part's thumbnail.
+      properties:
+        product_id:
+          type: integer
+        name:
+          type: string
+          x-stoplight:
+            id: o41eirc8m70dq
+        description:
+          type: string
+          x-stoplight:
+            id: lk8b0ih78xz1d
+        price:
+          type: number
+          x-stoplight:
+            id: rc9iv43wjdg9x
+          format: float
+        part_category_id:
+          type: integer
+          x-stoplight:
+            id: e7rvxzl23c19b
+        brand_category_id:
+          type: integer
+          x-stoplight:
+            id: b53bwhfhsupt7
+        tags:
+          type: array
+          x-stoplight:
+            id: uooi8wwp3aisc
+          items:
+            x-stoplight:
+              id: i8l0qehhf9z5q
+            type: string
+        images:
+          type: array
+          x-stoplight:
+            id: 747cjk4ns6d6a
+          items:
+            x-stoplight:
+              id: 7ecg91om562a8
+            type: string
+        thumbnail:
+          type: string
+          x-stoplight:
+            id: 875o5lezm1jno
+    Order:
+      title: Order
+      type: object
+      description: Each Order has an id and a list of product id's the user has ordered. date-time describes what date and time the order was made.
+      properties:
+        order_id:
+          type: integer
+        user_id:
+          type: integer
+          x-stoplight:
+            id: 8c8l6wprx51rv
+        shipping_address_id:
+          type: integer
+          x-stoplight:
+            id: dexk0ojblhlr7
+        order_status:
+          type: string
+          x-stoplight:
+            id: ohm83jae6df20
+        date-time:
+          type: string
+          x-stoplight:
+            id: 4hvar10q3uvpk
+        total_price:
+          type: number
+          x-stoplight:
+            id: qs01ywdvane3o
+          format: float
+        created_at:
+          type: string
+          x-stoplight:
+            id: sk22q4tprv2i8
+    OrderItem:
+      title: OrderItem
+      type: object
+      properties:
+        order_item_id:
+          type: integer
+        order_id:
+          type: integer
+          x-stoplight:
+            id: f1qn0k8pyf0cw
+        product_id:
+          type: integer
+          x-stoplight:
+            id: p4au6awrg64mk
+        quantity:
+          type: integer
+          x-stoplight:
+            id: c7ajngmwsnzey
+        price:
+          type: number
+          x-stoplight:
+            id: w0vn6egbf82wz
+          format: float
+    PartCategory:
+      title: PartCategory
+      type: object
+      properties:
+        part_category_id:
+          type: integer
+        part_type_name:
+          type: string
+          x-stoplight:
+            id: 1z0g941ak7gya
+        part_description:
+          type: string
+          x-stoplight:
+            id: de2z5yib9x03w
+    BrandCategory:
+      title: BrandCategory
+      type: object
+      properties:
+        brand_category_id:
+          type: integer
+        brand_name:
+          type: string
+          x-stoplight:
+            id: bjfs6ar9lintm
+        brand_description:
+          type: string
+          x-stoplight:
+            id: dh9f76wd61a1g
+    Cart:
+      title: Cart
+      type: object
+      properties:
+        cart_id:
+          type: integer
+        user_id:
+          type: integer
+          x-stoplight:
+            id: tio83ibgcp6xc
+        created_at:
+          type: string
+          x-stoplight:
+            id: b1orcb0aouw16
+        products:
+          type: array
+          x-stoplight:
+            id: jmy8bzuaj1s27
+          items:
+            $ref: '#/components/schemas/Order'
+    CartItem:
+      title: CartItem
+      type: object
+      properties:
+        cart_item_id:
+          type: integer
+        cart_id:
+          type: integer
+          x-stoplight:
+            id: 45utyx5o3ap2d
+        product_id:
+          type: integer
+          x-stoplight:
+            id: 85u0xk7qba6jq
+        quantity:
+          type: integer
+          x-stoplight:
+            id: 3okvydiwc86et
+        price:
+          type: number
+          x-stoplight:
+            id: 47ki7gvyraavs
+    Address:
+      title: Address
+      type: object
+      properties:
+        address_id:
+          type: string
+        user_id:
+          type: string
+          x-stoplight:
+            id: bm53pim1ch9yy
+        street_address:
+          type: string
+          x-stoplight:
+            id: 7oep2ycfnro3t
+        city:
+          type: string
+          x-stoplight:
+            id: 32q1tnxh3dua5
+        state:
+          type: string
+          x-stoplight:
+            id: 72vq1ywy1admr
+        postal-code:
+          type: string
+          x-stoplight:
+            id: virkefdz2e54q
+        country:
+          type: string
+          x-stoplight:
+            id: relimdjz3e3v7
+        is_billing:
+          type: string
+          x-stoplight:
+            id: tc7xlmpm2fjbg
+        is_shipping:
+          type: string
+          x-stoplight:
+            id: o0jb5fmx1urms
+    Payment:
+      title: Payment
+      type: object
+      properties:
+        payment_id:
+          type: string
+        order_id:
+          type: string
+          x-stoplight:
+            id: qgb2xcsuu8xou
+        checkout_session_id:
+          type: string
+          x-stoplight:
+            id: n8z6an8c1n7tr
+        status:
+          type: string
+          x-stoplight:
+            id: 3jmkwfkr023wn
+        total_price:
+          type: number
+          x-stoplight:
+            id: uit4aerq377ph
+          format: float
+        created_at:
+          type: string
+          x-stoplight:
+            id: t4i44fyuq9x5p
