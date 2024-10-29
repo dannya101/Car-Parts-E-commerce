@@ -580,7 +580,8 @@
     "/checkout/order-summary" : {
       "get" : {
         "tags" : [ "Checkout" ],
-        "summary" : "Your GET endpoint",
+        "summary" : "Get Order Summary",
+        "description" : "Get a summary of the order before confirming.",
         "operationId" : "get-checkout-order-summary",
         "parameters" : [ {
           "name" : "auth_type",
@@ -615,7 +616,14 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "OK"
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Cart"
+                }
+              }
+            }
           }
         }
       }
