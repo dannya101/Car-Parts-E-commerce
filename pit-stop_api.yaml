@@ -13,6 +13,36 @@ info:
     The API for Pit-Stop Performance 
     - Part 1: Project Overview - Pit-Stop performance is a web application that provides users with a selection of car parts for sale. Users can create accounts to order an assortment of offered parts. The user will have a dynamic cart as well as the ability to see all previous orders. 
 
+    - Part 4: Database Tables and relationships
+      - Users Table:
+        - Columns: user_id, username, email, password-hashed, is_admin, created_at
+        
+      - Orders Table:
+        - Columns: order_id, user_id, shipping_address_id, order_status, date-time, total_price, created_at
+        - Foreign Key: user_id references Users(user_id), shipping_address_id references Addresses(address_id)
+        
+      - Addresses Table:
+        - Columns: address_id, user_id, street_address, city, state, postal-code, country, is_billing, is_shipping
+        - Foreign Key: user_id references Users(user_id)
+      
+      - Carts Table:
+        - Columns: cart_id, user_id, created_at, cart_items
+        - Foreign Key: user_id references Users(user_id)
+        
+      - Parts Table:
+        - Columns: part_category_id, part_type_name, part_description
+        
+      - Brands Table:
+        - Columns: brand_category_id, brand_name, brand_description
+        
+      - Products Table:
+        - Columns: product_id, name, description, price, part_category_id, brand_category_id, tags, images, thumbnail
+        - Foreign Key: part_category_id references Parts(part_category_id), brand_category_id references Brands(brand_category_id)
+        
+      - Tickets Table:
+        - Columns: ticket_id, user_id, title, description, created_at, ticket_replies, is_open
+        - Foreign Key: user_id references Users(user_id)
+
     - Part 5: Additional Considerations - The webserver uses JWT authentication for secure communication. We are potentially planning to use middleware including CORS for handling cross-origin requests and logging for tracking request details. Standard Responses will contain status codes in the 200's, when an error is encountered, a 400 code will be sent when the input data is invalid. The API will be tested using Postman for manual testing, along with automated unit and integration tests to ensure endpoints function as expected across various scenarios.
 paths:
   /users:
@@ -993,6 +1023,7 @@ components:
     OrderItem:
       title: OrderItem
       type: object
+      description: 'The OrderItem model links a product, it''s quantity, and it''s price to a specific order.'
       properties:
         order_item_id:
           type: integer
@@ -1016,6 +1047,7 @@ components:
     PartCategory:
       title: PartCategory
       type: object
+      description: The PartCategory model defines each type of part and a description of the part. Multiple products can be the same type of part.
       properties:
         part_category_id:
           type: integer
@@ -1030,6 +1062,7 @@ components:
     BrandCategory:
       title: BrandCategory
       type: object
+      description: The BrandCategory model defines each brand that has products listed on the website.
       properties:
         brand_category_id:
           type: integer
@@ -1044,6 +1077,7 @@ components:
     Cart:
       title: Cart
       type: object
+      description: The Cart model defines a user's shopping cart and links the the user's id to the list of products in their cart.
       properties:
         cart_id:
           type: integer
@@ -1055,15 +1089,16 @@ components:
           type: string
           x-stoplight:
             id: b1orcb0aouw16
-        products:
+        cart_items:
           type: array
           x-stoplight:
-            id: jmy8bzuaj1s27
+            id: 69iyascbezfm7
           items:
-            $ref: '#/components/schemas/Order'
+            $ref: '#/components/schemas/CartItem'
     CartItem:
       title: CartItem
       type: object
+      description: Each product in a user's cart is saved along with the quantity and price of the item. Each item links to the cart that it belongs to.
       properties:
         cart_item_id:
           type: integer
@@ -1086,6 +1121,7 @@ components:
     Address:
       title: Address
       type: object
+      description: The Address model holds information relevant to both shipping and billing addresses. Each address links to the user it belongs to.
       properties:
         address_id:
           type: string
@@ -1124,6 +1160,7 @@ components:
     Payment:
       title: Payment
       type: object
+      description: The Payment model holds user payment information as well as which order it belongs to and the total price of the order.
       properties:
         payment_id:
           type: string
@@ -1151,6 +1188,7 @@ components:
     SupportTicket:
       title: SupportTicket
       type: object
+      description: The SupportTicket model holds the information for a support ticket. It links to the user who created it.
       properties:
         ticket_id:
           type: integer
