@@ -9,10 +9,11 @@ servers:
 info:
   version: 1.0.0
   title: Pit-Stop Performance API
-  description: "The API for Pit-Stop Performance
-  \n- Part 1: Project Overview - Pit-Stop performance is a web application that provides users with a selection of car parts for sale. Users can create accounts to order an assortment of offered parts. The user will have a persistent cart as well as the ability to see all previous orders.
-  \n- Part 5: Additional Considerations - The webserver uses JWT authentication for secure communication. Standard Responses will contain status codes in the 200's, when an error is encountered, a 400 code will be sent when the input data is invalid"
-  
+  description: |-
+    The API for Pit-Stop Performance 
+    - Part 1: Project Overview - Pit-Stop performance is a web application that provides users with a selection of car parts for sale. Users can create accounts to order an assortment of offered parts. The user will have a dynamic cart as well as the ability to see all previous orders. 
+
+    - Part 5: Additional Considerations - The webserver uses JWT authentication for secure communication. We are potentially planning to use middleware including CORS for handling cross-origin requests and logging for tracking request details. Standard Responses will contain status codes in the 200's, when an error is encountered, a 400 code will be sent when the input data is invalid. The API will be tested using Postman for manual testing, along with automated unit and integration tests to ensure endpoints function as expected across various scenarios.
 paths:
   /users:
     get:
@@ -21,13 +22,15 @@ paths:
         - Users
       responses:
         '200':
-          description: OK
+          description: Users retrieved
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+        '400':
+          description: Unable to retrieve users
       operationId: get-users
       parameters: []
       description: Get list of all users
@@ -37,7 +40,9 @@ paths:
         - Users
       responses:
         '201':
-          description: Created
+          description: User Created
+        '400':
+          description: Unable to create User
       operationId: post-users
       parameters:
         - schema:
@@ -67,15 +72,17 @@ paths:
         - Products
       responses:
         '200':
-          description: OK
+          description: Products retrieved
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+        '400':
+          description: Unable to retrieve products
       operationId: get-products
-      description: Get all products
+      description: Get list of all products
   '/products/{id}':
     parameters:
       - schema:
@@ -89,12 +96,14 @@ paths:
         - Products
       responses:
         '200':
-          description: OK
+          description: Product retrieved by ID
           content:
             application/json:
               schema:
                 type: object
                 $ref: '#/components/schemas/Product'
+        '400':
+          description: Product not found
       operationId: get-products-id
       parameters: []
       description: Get product by specified ID
@@ -105,13 +114,15 @@ paths:
         - Products
       responses:
         '200':
-          description: OK
+          description: Retrieved parts category
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/PartCategory'
+        '400':
+          description: Could not find part categories
       operationId: get-products-categories
       description: Get list of product categories by part
     parameters: []
@@ -128,13 +139,15 @@ paths:
         - Products
       responses:
         '200':
-          description: OK
+          description: Found products by part category
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+        '400':
+          description: Could not find products in part category
       operationId: get-products-part-id
       description: Get a list of products from specified part-category-id
   '/products/{brand_category_id}':
@@ -157,8 +170,33 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad Request
       operationId: get-products-brand-id
       description: Get a list of products from specified brand-category-id
+  /products/brandcategories:
+    get:
+      summary: Get list of brand categories
+      tags:
+        - Products
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    x-stoplight:
+                      id: q37b1izn9jm2o
+                    items:
+                      $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad Request
+      operationId: get-products-brandcategories
+      description: Get the list of brands
   /auth/login:
     post:
       summary: User login authentication
@@ -188,21 +226,25 @@ paths:
                     type: string
                     x-stoplight:
                       id: qv5luve9nmlgg
+        '400':
+          description: login failed
       operationId: post-auth-login
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  x-stoplight:
-                    id: ggt2e3kwuo2qh
-                password:
-                  type: string
-                  x-stoplight:
-                    id: k213k6i8dp1et
+        content: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: email
+          description: user email address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: password
+          description: user password (plain text)
+          required: true
+      description: User log in
   /auth/logout:
     post:
       summary: User logout Authentication
@@ -211,21 +253,23 @@ paths:
       responses:
         '200':
           description: OK
+        '400':
+          description: logout failed
       operationId: post-auth-logout
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                auth_type:
-                  type: string
-                  x-stoplight:
-                    id: 4k6jehw7ps6fh
-                '':
-                  type: string
-                  x-stoplight:
-                    id: nxl4xqcv3i821
+        content: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: auth_type
+          description: authorization type
+        - schema:
+            type: string
+          in: query
+          name: auth_token
+          description: authorization token
+      description: User log out
   /auth/refresh-token:
     post:
       summary: Request Authentication Token Refresh
@@ -251,17 +295,18 @@ paths:
                     type: string
                     x-stoplight:
                       id: dnaum9kuks01l
+        '400':
+          description: token refresh failed
       operationId: post-auth-refresh-token
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                refresh_token:
-                  type: string
-                  x-stoplight:
-                    id: vynlifnn4j1ll
+        content: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: refresh_token
+          description: refresh token
+      description: Request a new authentication
   /orders:
     get:
       summary: Get all orders
@@ -270,6 +315,8 @@ paths:
       responses:
         '200':
           description: OK
+        '400':
+          description: Bad Request
       operationId: get-orders
       description: Get a list of all orders made by the user.
   '/order/{user_id}':
@@ -286,6 +333,8 @@ paths:
       responses:
         '200':
           description: OK
+        '400':
+          description: Bad Request
       operationId: get-order-id
       description: Get details of a specific order.
   '/cart/{user_id}':
@@ -307,6 +356,8 @@ paths:
               schema:
                 type: object
                 $ref: '#/components/schemas/Cart'
+        '400':
+          description: Bad Request
       operationId: get-cart
       description: Get the current user's cart details.
   /cart/add:
@@ -315,46 +366,81 @@ paths:
       tags:
         - Cart
       responses:
-        2XX:
+        '200':
           description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Cart'
+        '400':
+          description: Bad Request
       operationId: post-cart-add
       description: Add a product to the user's cart.
-      parameters: []
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: cart_id
+          description: id of cart
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: product_id
+          description: id of product to add
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: quantity
+          description: quantity of product
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: price
+          description: price of product
+          required: true
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              $ref: '#/components/schemas/CartItem'
+        content: {}
   /cart/update:
     put:
       summary: Update Cart
       tags:
         - Cart
       responses:
-        2XX:
+        '200':
           description: Success
           content:
             application/json:
               schema:
                 type: object
                 $ref: '#/components/schemas/CartItem'
+        '400':
+          description: Bad Request
       operationId: put-cart-update
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                quantity:
-                  type: string
-                  x-stoplight:
-                    id: mi8rm2v3psdtz
+        content: {}
       description: Update the quantity of a product in the user's cart.
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: quantity
+          description: new quantity of product
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: product_id
+          description: product id
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: cart_id
+          description: cart id
+          required: true
   '/cart/remove/{productId}':
     parameters:
       - schema:
@@ -367,31 +453,47 @@ paths:
       tags:
         - Cart
       responses:
-        2XX:
+        '200':
           description: Success
           content:
             application/json:
               schema:
                 type: object
                 $ref: '#/components/schemas/Cart'
+        '400':
+          description: Bad Request
       operationId: delete-cart-remove-productId
       description: ' Remove a product from the cart.'
-      parameters: []
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: cart_id
+          description: cart id
+          required: true
   /cart/clear:
     delete:
       summary: Clear user cart
       tags:
         - Cart
       responses:
-        2XX:
+        '200':
           description: Success
           content:
             application/json:
               schema:
                 type: object
                 $ref: '#/components/schemas/Cart'
+        '400':
+          description: Bad Request
       operationId: delete-cart-clear
       description: Clears the entire cart.
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: user_id
+          required: true
   /checkout:
     post:
       summary: Begin Checkout Process
@@ -413,7 +515,10 @@ paths:
                     type: string
                     x-stoplight:
                       id: xxx13yeacthvs
+        '400':
+          description: Bad Request
       operationId: post-checkout
+      description: Start the checkout process
   /checkout/address:
     post:
       summary: Add Shipping Address
@@ -423,6 +528,8 @@ paths:
         '200':
           description: OK
           content: {}
+        '400':
+          description: Bad Request
       operationId: post-checkout-address
       requestBody:
         content:
@@ -463,14 +570,17 @@ paths:
                       type: string
                       x-stoplight:
                         id: dngx1za87uutx
+      description: Add shipping address
   /checkout/shipping-method:
     post:
       summary: Select Shipping Method for Order
-      tags: 
+      tags:
         - Checkout
       responses:
         '200':
           description: OK
+        '400':
+          description: Bad Request
       operationId: post-checkout-shipping-method
       requestBody:
         content:
@@ -490,14 +600,17 @@ paths:
                   type: string
                   x-stoplight:
                     id: rl8u5sby3uldz
+      description: Select the shipping method
   /checkout/payment-method:
     post:
       summary: Select Payment Method for Order
-      tags: 
+      tags:
         - Checkout
       responses:
         '200':
           description: OK
+        '400':
+          description: Bad Request
       operationId: post-checkout-payment-method
       requestBody:
         content:
@@ -538,14 +651,17 @@ paths:
                       type: string
                       x-stoplight:
                         id: jpsijemx75b6y
+      description: Select the payment method for the order
   /checkout/complete:
     post:
       summary: Finalize Checkout
-      tags: 
+      tags:
         - Checkout
       responses:
         '201':
           description: Created
+        '400':
+          description: Bad Request
       operationId: post-checkout-complete
       requestBody:
         content:
@@ -565,14 +681,22 @@ paths:
                   type: string
                   x-stoplight:
                     id: gu89vy5lpza1k
+      description: Finalize the checkout process and continue to payment
   /checkout/order-summary:
     get:
-      summary: Your GET endpoint
-      tags: 
+      summary: Get Order Summary
+      tags:
         - Checkout
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Cart'
+        '400':
+          description: Bad Request
       operationId: get-checkout-order-summary
       parameters:
         - schema:
@@ -590,6 +714,157 @@ paths:
           in: query
           name: orderID
           description: ID of order
+      description: Get a summary of the order before confirming.
+  /admin/products:
+    post:
+      summary: Create Product
+      tags:
+        - admin
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+      operationId: post-admin-products
+      description: Create a new product.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Product'
+  '/admin/products/{id}':
+    put:
+      summary: Update Product
+      tags:
+        - admin
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad Request
+      operationId: put-admin-products-id
+      parameters: []
+      description: Update an existing product by productID.
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    delete:
+      summary: Delete Product
+      tags:
+        - admin
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+      operationId: delete-admin-products-id
+      description: "Delete a product from listing.\r\n"
+  '/search/{search_terms}':
+    parameters:
+      - schema:
+          type: string
+        name: search_terms
+        in: path
+        required: true
+    get:
+      summary: Get search based on string
+      tags:
+        - Search
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    x-stoplight:
+                      id: x8izfaltp5yp2
+                    items:
+                      $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad Request
+      operationId: get-search-search_terms
+      description: Perform a product search with search string
+  /support/ticket:
+    post:
+      summary: Create Support Ticket
+      tags:
+        - Support
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+      operationId: post-support-ticket
+      description: Create a new support ticket.
+    get:
+      summary: Get Support Ticket
+      tags:
+        - Support
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticket:
+                    type: object
+                    $ref: '#/components/schemas/SupportTicket'
+        '400':
+          description: Bad Request
+      operationId: get-support-ticket
+      description: Get the list of support tickets.
+  /support/ticket/reply:
+    parameters: []
+    post:
+      summary: Reply to Support Ticket
+      tags:
+        - Support
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+      operationId: post-support-ticket-id-reply
+      description: Reply to a support ticket.
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: ticket_id
+          description: id for ticket
+        - schema:
+            type: string
+          in: query
+          name: reply
+          description: reply string
+  /support/ticket/close:
+    parameters: []
+    post:
+      summary: Close a Support Ticket
+      tags:
+        - Support
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+      operationId: post-support-ticket-id-close
+      description: Close a support ticket.
 components:
   schemas:
     ApiResponse:
@@ -873,3 +1148,37 @@ components:
           type: string
           x-stoplight:
             id: t4i44fyuq9x5p
+    SupportTicket:
+      title: SupportTicket
+      type: object
+      properties:
+        ticket_id:
+          type: integer
+        user_id:
+          type: integer
+          x-stoplight:
+            id: h4gujup1sptr3
+        title:
+          type: string
+          x-stoplight:
+            id: 1x6zb6vzh4jrh
+        description:
+          type: string
+          x-stoplight:
+            id: zbxzubj5vhri3
+        created_at:
+          type: string
+          x-stoplight:
+            id: my9e2s9dcrofo
+        ticket_replies:
+          type: array
+          x-stoplight:
+            id: qlbd1xvk40y3q
+          items:
+            x-stoplight:
+              id: 2zbtvk2rbznh3
+            type: string
+        is_open:
+          type: boolean
+          x-stoplight:
+            id: wnlb8nnafjd3b
