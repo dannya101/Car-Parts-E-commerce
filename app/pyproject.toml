@@ -25,6 +25,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
+    "fastapi[all]>=0.115.4",
     "pre-commit>=4.0.1",
 ]
 
