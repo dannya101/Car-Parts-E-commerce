@@ -1,0 +1,31 @@
+from typing import List
+from pydantic import BaseModel
+
+class Product(BaseModel):
+    id: int
+    name: str
+    description: str
+    price: float
+    part_category_id: int
+    brand_category_id: int
+    tags: List[str]
+    images: List[str]
+    thumbnail: str
+
+    class Config:
+        from_attributes = True
+
+
+class ProductResponse(BaseModel):
+    id: int
+    name: str
+    description: str
+    price: float
+    part_category_id: int
+    brand_category_id: int
+    tags: List[str]
+    images: List[str]
+    thumbnail: str
+
+    class Config:
+        from_attributes = True
