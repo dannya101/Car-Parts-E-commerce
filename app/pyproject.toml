@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "Pit-Stop_Performance"
+name = "app"
 dynamic = ["version"]
 description = 'E-Comerce application api'
 readme = "README.md"
@@ -24,7 +24,9 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = []
+dependencies = [
+    "pre-commit>=4.0.1",
+]
 
 [project.urls]
 Documentation = "https://github.com/U.N. Owen/app#readme"
