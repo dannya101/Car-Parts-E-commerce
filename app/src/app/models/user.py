@@ -1,9 +1,11 @@
 from datetime import UTC, datetime
 
+from passlib.context import CryptContext
 from sqlalchemy import Boolean, Column, DateTime, Integer, String
 
 from app.core.database import Base
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class User(Base):
     __tablename__ = "users"
@@ -16,3 +18,8 @@ class User(Base):
     is_verified = Column(Boolean, default=False)
     verification_code = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.now(UTC))
+
+
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
