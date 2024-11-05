@@ -1,16 +1,40 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+
+from sqlalchemy.orm import Session
+
+import app.services.product as product_service
+from app.schemas.product import Product
+from app.dependencies import get_db
+
 
 router = APIRouter()
 
 
 @router.get("/")
-def get_all_products():
-    pass
+def get_all_products(db: Session = Depends(get_db)):
+    products = product_service.get_all_products(db)
+
+    if not products:
+        raise HTTPException(
+            status_code=400,
+            detail="No Products Found!",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return products
 
 
 @router.get("/{id}")
-def get_product_by_id():
-    pass
+def get_product_by_id(product_id: int, db: Session = Depends(get_db)):
+    product = product_service.get_product_by_id(db=db, product_id=product_id)
+    if not product:
+        raise HTTPException(
+            status_code=400,
+            detail="Product not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return product
 
 
 @router.get("/partcategories")
