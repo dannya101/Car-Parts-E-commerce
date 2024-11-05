@@ -1,16 +1,18 @@
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 import app.services.user as user_service
-from app.core.auth import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
+from app.core.auth import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, get_current_user
 from app.dependencies import get_db
 from app.schemas.token import Token
 from app.schemas.user import UserCreate, UserResponse
-
+from app.models.user import User
 router = APIRouter()
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/token")
 
 
 @router.post("/register", response_model=UserResponse)
@@ -34,8 +36,9 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.get("/me")
-def read_user():
-    pass
+def read_current_user(current_user: User = Depends(get_current_user)):
+    return current_user
+
 
 
 @router.post("/verify-email/{verification_code}")
