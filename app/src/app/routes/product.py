@@ -38,8 +38,17 @@ def get_product_by_id(product_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/partcategories")
-def get_part_categories():
-    pass
+def get_part_categories(db: Session = Depends(get_db)):
+    part_categories = product_service.get_all_part_categories(db)
+
+    if not part_categories:
+        raise HTTPException(
+            status_code=400,
+            detail="Part Categories Not Found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return part_categories
 
 
 @router.get("/{part_cagegory_id}")
@@ -53,5 +62,14 @@ def get_product_by_brand():
 
 
 @router.get("/brandcategories")
-def get_brand_categories():
-    pass
+def get_brand_categories(db: Session = Depends(get_db)):
+    brand_categories = product_service.get_all_part_categories(db)
+
+    if not brand_categories:
+        raise HTTPException(
+            status_code=400,
+            detail="Brand Categories Not Found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return brand_categories
