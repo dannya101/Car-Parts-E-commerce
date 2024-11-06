@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 import app.services.product as product_service
-from app.schemas.product import Product
 from app.dependencies import get_db
 
 

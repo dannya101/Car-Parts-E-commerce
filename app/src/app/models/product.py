@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 from app.core.database import Base
 
+import json
+
 class PartCategory(Base):
     __tablename__ = "part_categories"
 
@@ -36,3 +38,15 @@ class Product(Base):
 
     part_category: Mapped["PartCategory"] = relationship("PartCategory", back_populates="products")
     brand_category: Mapped["BrandCategory"] = relationship("BrandCategory", back_populates="products")
+
+    def set_tags(self, tags: list):
+        self.tags = json.dumps(tags)
+
+    def get_tags(self):
+        return json.loads(self.tags) if self.tags else []
+
+    def set_images(self, images: list):
+        self.images = json.dumps(images)
+
+    def get_images(self):
+        return json.loads(self.images) if self.images else []

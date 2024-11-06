@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
 
 class PartCategory(BaseModel):
     id: int
@@ -17,17 +17,37 @@ class BrandCategory(BaseModel):
     class Config:
         orm_mode = True
 
-class Product(BaseModel):
+class ProductBase(BaseModel):
 
-    id: int
     name: str
     description: str
     price: float = Field(..., gt=0)
-    part_category_id: int
-    brand_category_id: int
     tags: List[str] = []
     images: List[str] = []
     thumbnail: str
+    part_category_id: int
+    brand_category_id: int
+
+
+class ProductCreate(ProductBase):
+
+    pass
+
+class ProductRead(ProductBase):
+    product_id: int
+
+    class Config:
+        orm_mode: True
+
+class ProductUpdate(BaseModel):
+    name: Optional[str]
+    description: Optional[str]
+    price: Optional[float]
+    part_category_id: Optional[int]
+    brand_category_id: Optional[int]
+    tags: Optional[List[str]]
+    images: Optional[List[str]]
+    thumbnail: Optional[str]
 
     class Config:
         orm_mode = True
