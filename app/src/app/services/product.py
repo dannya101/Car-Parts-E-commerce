@@ -58,15 +58,20 @@ def create_new_product(db: Session, product: ProductCreate):
 
     return new_product
 
+#Update existing product
 def modify_product(db: Session, product_id: int, product_update: ProductUpdate):
+
+    #Get relevant product
     product = db.query(Product).filter(Product.id == product_id).first()
 
+    #Raise 400 Exception if product is not in DB
     if not product:
         raise HTTPException(
             status_code=400,
             detail="No Product Found!"
         )
 
+    #Populate the data that needs to update
     if product_update.name is not None:
         product.name = product_update.name
     if product_update.description is not None:
@@ -89,9 +94,11 @@ def modify_product(db: Session, product_id: int, product_update: ProductUpdate):
 
     return product
 
+#Delete existing product
 def delete_product(db: Session, product_id: int):
     product = get_product_by_id(db=db, product_id=product_id)
 
+    #Raise 400 Exception if product is not in DB
     if not product:
         raise HTTPException(
             status_code=400,

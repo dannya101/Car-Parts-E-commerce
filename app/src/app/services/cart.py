@@ -6,6 +6,7 @@ from app.schemas.cart import CartItemCreate, CartItemUpdate, CartResponse
 
 import json
 
+#Turn a Cart object into a list of items with product, quantity, and total_price
 def get_products_from_cart(db: Session, cart: Cart):
     cart_items = db.query(CartItem).filter(CartItem.cart_id == Cart.id).all()
 
@@ -37,6 +38,7 @@ def get_products_from_cart(db: Session, cart: Cart):
 
     return {"items": items, "total_price": total_price}
 
+#Get cart from DB and return the items within it
 def get_or_create_cart(db: Session, user_id: int):
     cart = db.query(Cart).filter(Cart.user_id == user_id).first()
 
@@ -50,6 +52,7 @@ def get_or_create_cart(db: Session, user_id: int):
 
     return cart_data
 
+#Get Cart object from user_id
 def get_cart_by_user_id(db: Session, user_id: int):
     cart = db.query(Cart).filter(Cart.user_id == user_id).first()
 
@@ -61,14 +64,16 @@ def get_cart_by_user_id(db: Session, user_id: int):
 
     return cart
 
+#Add a product to the cart respond with items in cart
 def add_product_to_cart(db: Session, item: CartItemCreate, user_id: int):
     cart = get_cart_by_user_id(db, user_id)
 
     product = db.query(Product).filter(Product.id == item.product_id).first()
 
+    #Raise 400 Exception when product is not found
     if not product:
         raise HTTPException(
-            status_code=404,
+            status_code=400,
             detail="Product Not Found"
         )
 
@@ -94,6 +99,7 @@ def add_product_to_cart(db: Session, item: CartItemCreate, user_id: int):
 
     return cart_data
 
+#Update the quantity value of a product in cart responds with items list
 def update_cart_item_quantity(db: Session, item: CartItemUpdate, user_id: int):
     cart_item = db.query(CartItem).filter(CartItem.product_id == item.product_id).first()
 
@@ -109,6 +115,7 @@ def update_cart_item_quantity(db: Session, item: CartItemUpdate, user_id: int):
 
     return cart_data
 
+#Remove a product from the cart responds with items list
 def remove_product_from_cart(db: Session, product_id: int, user_id):
     cart = db.query(Cart).filter(Cart.user_id == user_id).first()
 
@@ -127,6 +134,7 @@ def remove_product_from_cart(db: Session, product_id: int, user_id):
 
     return cart_data
 
+#Clear all items from the cart
 def clear_cart(db: Session, user_id: int):
     cart = get_cart_by_user_id(db=db, user_id=user_id)
 
