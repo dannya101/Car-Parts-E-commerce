@@ -1,7 +1,16 @@
 from pydantic import BaseModel
-from typing import List, Dict
+from typing import List
 
 from datetime import datetime
+
+from app.schemas.product import Product
+
+class CartItem(BaseModel):
+    product: Product
+    quantity: int
+
+    class Config:
+        orm_mode = True
 
 class CartItemBase(BaseModel):
     product_id: int
@@ -18,6 +27,13 @@ class CartItemUpdate(BaseModel):
 class CartItemResponse(CartItemBase):
     id: int
     price: float
+
+    class Config:
+        orm_mode = True
+
+class Cart(BaseModel):
+    items: List[CartItem]
+    total_price: float = 0
 
     class Config:
         orm_mode = True

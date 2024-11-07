@@ -7,6 +7,7 @@ from app.schemas.product import ProductCreate, ProductUpdate
 
 import json
 
+#CRUD operations
 def get_product_by_id(db: Session, product_id: int):
     return db.query(Product).filter(Product.id == product_id).first()
 
@@ -28,10 +29,15 @@ def get_all_part_categories(db: Session):
 def get_all_brand_categories(db: Session):
     return db.query(BrandCategory).all()
 
+
+#Create new product - run by admin/products/
 def create_new_product(db: Session, product: ProductCreate):
+
+    #Raise Exception 400 if product is not found in DB
     if get_product_by_name(db, product.name):
         raise HTTPException(status_code=400, detail="Product Already has that name")
 
+    #Populate the new product model
     new_product = Product(
         name=product.name,
         description=product.description,
@@ -41,9 +47,11 @@ def create_new_product(db: Session, product: ProductCreate):
         thumbnail=product.thumbnail
     )
 
+    #Populate the tags and images list
     new_product.set_tags(product.tags)
     new_product.set_images(product.images)
 
+    #Add changes to the DB
     db.add(new_product)
     db.commit()
     db.refresh(new_product)

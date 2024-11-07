@@ -51,3 +51,9 @@ class ProductUpdate(BaseModel):
 
     class Config:
         orm_mode = True
+
+class Product(ProductBase):
+    id: int
+
+    class Config:
+        orm_mode = True

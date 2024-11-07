@@ -4,14 +4,38 @@ from app.models.cart import Cart, CartItem
 from app.models.product import Product
 from app.schemas.cart import CartItemCreate, CartItemUpdate, CartResponse
 
+import json
+
 def get_products_from_cart(db: Session, cart: Cart):
     cart_items = db.query(CartItem).filter(CartItem.cart_id == Cart.id).all()
 
-    products = []
+    items = []
+    total_price = 0
     for item in cart_items:
-        products.append(db.query(Product).filter(Product.id == item.product_id).first())
+        product = db.query(Product).filter(Product.id == item.product_id).first()
+        if product:
 
-    return products
+            tags = json.loads(product.tags) if isinstance(product.tags, str) else product.tags
+            images = json.loads(product.images) if isinstance(product.images, str) else product.images
+
+            items.append({
+                "product": {
+                    "id": product.id,
+                    "name": product.name,
+                    "description": product.description,
+                    "price": product.price,
+                    "tags": tags,
+                    "images": images,
+                    "thumbnail": product.thumbnail,
+                    "part_category_id": product.part_category_id,
+                    "brand_category_id": product.brand_category_id
+                },
+                "quantity": item.quantity
+            })
+
+            total_price += product.price * item.quantity
+
+    return {"items": items, "total_price": total_price}
 
 def get_or_create_cart(db: Session, user_id: int):
     cart = db.query(Cart).filter(Cart.user_id == user_id).first()
@@ -22,7 +46,9 @@ def get_or_create_cart(db: Session, user_id: int):
         db.commit()
         db.refresh(cart)
 
-    return cart
+    cart_data = get_products_from_cart(db=db, cart=cart)
+
+    return cart_data
 
 def get_cart_by_user_id(db: Session, user_id: int):
     cart = db.query(Cart).filter(Cart.user_id == user_id).first()
@@ -36,7 +62,7 @@ def get_cart_by_user_id(db: Session, user_id: int):
     return cart
 
 def add_product_to_cart(db: Session, item: CartItemCreate, user_id: int):
-    cart = get_or_create_cart(db, user_id)
+    cart = get_cart_by_user_id(db, user_id)
 
     product = db.query(Product).filter(Product.id == item.product_id).first()
 
@@ -63,7 +89,10 @@ def add_product_to_cart(db: Session, item: CartItemCreate, user_id: int):
     db.commit()
     db.refresh(cart)
 
-    return cart
+    cart_data = get_products_from_cart(db=db, cart=cart)
+
+
+    return cart_data
 
 def update_cart_item_quantity(db: Session, item: CartItemUpdate, user_id: int):
     cart_item = db.query(CartItem).filter(CartItem.product_id == item.product_id).first()
@@ -76,7 +105,9 @@ def update_cart_item_quantity(db: Session, item: CartItemUpdate, user_id: int):
     db.commit()
     db.refresh(cart_item)
 
-    return cart_item.cart
+    cart_data = get_products_from_cart(db=db, cart=cart_item.cart)
+
+    return cart_data
 
 def remove_product_from_cart(db: Session, product_id: int, user_id):
     cart = db.query(Cart).filter(Cart.user_id == user_id).first()
@@ -92,7 +123,9 @@ def remove_product_from_cart(db: Session, product_id: int, user_id):
     db.delete(cart_item)
     db.commit()
 
-    return cart
+    cart_data = get_products_from_cart(db=db, cart=cart)
+
+    return cart_data
 
 def clear_cart(db: Session, user_id: int):
     cart = get_cart_by_user_id(db=db, user_id=user_id)
@@ -107,4 +140,6 @@ def clear_cart(db: Session, user_id: int):
     db.commit()
     db.refresh(cart)
 
-    return cart
+    cart_data = get_products_from_cart(db=db, cart=cart)
+
+    return {"detail": "Cart Cleared"}
