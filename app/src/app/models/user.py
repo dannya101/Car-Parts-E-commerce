@@ -2,6 +2,7 @@ from datetime import UTC, datetime
 
 from passlib.context import CryptContext
 from sqlalchemy import Boolean, Column, DateTime, Integer, String
+from sqlalchemy.orm import relationship
 
 from app.core.database import Base
 
@@ -18,6 +19,8 @@ class User(Base):
     is_verified = Column(Boolean, default=False)
     verification_code = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.now(UTC))
+
+    cart = relationship("Cart", back_populates="user", uselist=False)
 
 
 
