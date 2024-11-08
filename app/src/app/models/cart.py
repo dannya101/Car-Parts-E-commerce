@@ -13,6 +13,7 @@ class Cart(Base):
 
     user = relationship("User", back_populates="cart")
     items = relationship("CartItem", back_populates="cart")
+    order = relationship("Order", back_populates="cart", uselist=False)
 
 class CartItem(Base):
     __tablename__ = "cart_items"

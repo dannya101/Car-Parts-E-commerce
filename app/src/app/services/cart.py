@@ -90,8 +90,13 @@ def add_product_to_cart(db: Session, item: CartItemCreate, user_id: int):
             )
 
         db.add(new_item)
+        db.flush()
 
     db.commit()
+    if cart_item:
+        db.refresh(cart_item)
+    else:
+        db.refresh(new_item)
     db.refresh(cart)
 
     cart_data = get_products_from_cart(db=db, cart=cart)

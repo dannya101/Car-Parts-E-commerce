@@ -1,8 +1,8 @@
 from datetime import UTC, datetime
-
+from typing import List
 from passlib.context import CryptContext
 from sqlalchemy import Boolean, Column, DateTime, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped
 
 from app.core.database import Base
 
@@ -20,8 +20,9 @@ class User(Base):
     verification_code = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.now(UTC))
 
+    orders = relationship("Order", back_populates="user")
     cart = relationship("Cart", back_populates="user", uselist=False)
-
+    addresses = relationship("Address", back_populates="user")
 
 
 def get_password_hash(password):
