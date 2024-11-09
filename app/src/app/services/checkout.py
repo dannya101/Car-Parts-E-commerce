@@ -78,6 +78,9 @@ def update_order_address_in_db(order: Order, db: Session):
 def get_order_items_in_order(order_id: int, db: Session):
     return db.query(OrderItem).filter(OrderItem.order_id == order_id).all()
 
+def get_all_user_orders(user_id: int, db: Session):
+    return db.query(Order).filter(Order.user_id == user_id).all()
+
 
 #create a new pending order with users cart as order items
 def start_checkout(user_id: int, db: Session):

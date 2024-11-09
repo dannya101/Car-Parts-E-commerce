@@ -1,8 +1,7 @@
 from datetime import UTC, datetime
-from typing import List
 from passlib.context import CryptContext
 from sqlalchemy import Boolean, Column, DateTime, Integer, String
-from sqlalchemy.orm import relationship, Mapped
+from sqlalchemy.orm import relationship
 
 from app.core.database import Base
 
@@ -23,7 +22,10 @@ class User(Base):
     orders = relationship("Order", back_populates="user")
     cart = relationship("Cart", back_populates="user", uselist=False)
     addresses = relationship("Address", back_populates="user")
+    tickets = relationship("SupportTicket", back_populates="user")
 
 
 def get_password_hash(password):
     return pwd_context.hash(password)
+
+from app.models.support import SupportTicket
