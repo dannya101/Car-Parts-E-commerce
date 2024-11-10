@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from sqlalchemy import delete
 from app.models.support import SupportTicket, TicketReplies
+# from app.models.support import SupportTicket
 from app.schemas.support import SupportTicketBase
 
 
@@ -41,4 +42,17 @@ def close_the_ticket(support_ticket_id: int, db: Session):
 
     db.delete(ticket)
     db.commit()
-    return f"Resolved ticket: {support_ticket_id}"
+    return f"Resolved ticket with id of {support_ticket_id}"
+
+def add_reply_to_db(admin_reply: TicketReplies, db: Session):
+    db.add(admin_reply)
+    db.commit()
+    db.refresh(admin_reply)
+    return admin_reply
+
+def reply_to_ticket(support_ticket_id: int, reply: str, user_id: int, db:Session):
+    new_reply = TicketReplies(ticket_id=support_ticket_id, user_id=user_id,content= reply)
+    addedReply = add_reply_to_db(admin_reply=new_reply, db=db)
+    # db.query(SupportTicket).filter(SupportTicket.id == support_ticket_id).update({'ticket_reply_content': reply})
+    # db.commit()
+    return addedReply

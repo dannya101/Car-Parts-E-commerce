@@ -20,15 +20,17 @@ def create_support_ticket(ticket_creator: SupportTicketBase, current_user: User 
 
 @router.get("/ticket")
 def get_support_ticket(ticket_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return support_service.get_support_ticket_by_id(support_ticket_id=ticket_id, user_id=current_user.id, db=db)
+    ticket = support_service.get_support_ticket_by_id(support_ticket_id=ticket_id, user_id=current_user.id, db=db)
+    return ticket
 
 @router.get("/ticket/all")
 def get_all_user_tickets(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return support_service.get_all_support_tickets_by_user_id(user_id=current_user.id, db=db)
 
 @router.post("/ticket/reply")
-def reply_to_ticket():
-    pass
+def reply_to_ticket(ticket_id: int, reply: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    the_reply = support_service.reply_to_ticket(support_ticket_id=ticket_id, reply=reply, user_id=current_user.id,db=db)
+    return the_reply
 
 
 @router.post("/ticket/close")

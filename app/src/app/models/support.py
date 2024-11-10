@@ -12,9 +12,11 @@ class SupportTicket(Base):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
     title: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[str] = mapped_column(String)
+    # support_ticket_created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
     ticket_replies: Mapped[str] = mapped_column(String, ForeignKey("ticket_replies.id"))
-
+    # ticket_reply_content: Mapped[str] = mapped_column(String, nullable=False)
+    # ticket_reply_created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
     user = relationship("User", back_populates="tickets")
     ticket_replies = relationship("TicketReplies", back_populates="ticket")
 
@@ -31,4 +33,4 @@ class TicketReplies(Base):
     user = relationship("User")
     ticket = relationship("SupportTicket", back_populates="ticket_replies")
 
-from app.models.user import User
+# from app.models.user import User
