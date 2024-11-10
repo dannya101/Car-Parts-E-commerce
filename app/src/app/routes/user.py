@@ -40,6 +40,10 @@ def read_current_user(current_user: User = Depends(get_current_user)):
     return current_user
 
 
+@router.post("/logout")
+def logout_current_user(current_user: User = Depends(get_current_user)):
+    return {"message": "Logged Out: Remove JWT from storage"}
+
 
 @router.post("/verify-email/{verification_code}")
 def verify_email():
