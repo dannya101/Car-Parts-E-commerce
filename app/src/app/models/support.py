@@ -18,7 +18,7 @@ class SupportTicket(Base):
     # ticket_reply_content: Mapped[str] = mapped_column(String, nullable=False)
     # ticket_reply_created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
     user = relationship("User", back_populates="tickets")
-    ticket_replies = relationship("TicketReplies", back_populates="ticket")
+    ticket_replies = relationship("TicketReplies", back_populates="ticket",cascade="all, delete-orphan")
 
 
 class TicketReplies(Base):
