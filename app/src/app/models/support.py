@@ -12,7 +12,7 @@ class SupportTicket(Base):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
     title: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[str] = mapped_column(String)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(UTC))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
     ticket_replies: Mapped[str] = mapped_column(String, ForeignKey("ticket_replies.id"))
 
     user = relationship("User", back_populates="tickets")
@@ -26,7 +26,7 @@ class TicketReplies(Base):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
     ticket_id: Mapped[int] = mapped_column(Integer, ForeignKey("support_tickets.id"), nullable=False)
     content: Mapped[str] = mapped_column(String, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(UTC))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
 
     user = relationship("User")
     ticket = relationship("SupportTicket", back_populates="ticket_replies")

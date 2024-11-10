@@ -4,8 +4,7 @@ from typing import List, Optional
 class SupportTicketBase(BaseModel):
     title: str
     description: str
-
+    
+    #didnt think I needed this
     # class Config:
     #     orm_mode = True
-
-    #didnt think I needed this
