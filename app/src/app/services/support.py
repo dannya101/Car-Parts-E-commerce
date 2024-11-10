@@ -41,6 +41,9 @@ def close_the_ticket(support_ticket_id: int, db: Session):
         raise HTTPException(status_code=404, detail=f"Ticket {support_ticket_id} not valid")
 
     db.delete(ticket)
+    reply_ticket = db.query(TicketReplies).filter(TicketReplies.ticket_id == support_ticket_id).all()
+    for reply in reply_ticket:
+        db.delete(reply)
     db.commit()
     return f"Resolved ticket with id of {support_ticket_id}"
 
