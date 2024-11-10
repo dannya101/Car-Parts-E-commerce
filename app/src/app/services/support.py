@@ -17,7 +17,7 @@ def add_support_ticket_to_db(support_ticket: SupportTicket, db: Session):
     db.commit()
     db.refresh(support_ticket)
 
-    return SupportTicket
+    return support_ticket
 
 def create_support_ticket(support_ticket_creator: SupportTicketBase, user_id: int, db: Session):
     new_ticket = SupportTicket(
