@@ -3,41 +3,14 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from sqlalchemy import delete
 from app.models.support import SupportTicket, TicketReplies
-# from app.models.support import SupportTicket
 from app.schemas.support import SupportTicketBase
-
-
-#CRUD
-def add_and_commit(db: Session, obj):
-    """Add an object to the DB and commit."""
-    db.add(obj)
-    db.commit()
-    db.refresh(obj)
-    return obj
-
-def commit_and_refresh(db: Session, obj):
-    """Commit and refresh an object."""
-    db.commit()
-    db.refresh(obj)
-    return obj
-
-def delete_and_commit(db: Session, obj):
-    """Delete an object and commit."""
-    db.delete(obj)
-    db.commit()
-
-def get_ticket_by_id(db: Session, ticket_id: int):
-    """Retrieve a support ticket by ID."""
-    return db.query(SupportTicket).filter(SupportTicket.id == ticket_id).first()
-
-def get_tickets_by_user_id(db: Session, user_id: int):
-    """Retrieve all support tickets for a user."""
-    return db.query(SupportTicket).filter(SupportTicket.user_id == user_id).all()
-
-def get_ticket_replies_by_ticket_id(db: Session, ticket_id: int):
-    """Retrieve all replies associated with a support ticket."""
-    return db.query(TicketReplies).filter(TicketReplies.ticket_id == ticket_id).all()
-
+from app.crud import (
+    add_and_commit,
+    delete_and_commit,
+    get_ticket_by_id,
+    get_tickets_by_user_id,
+    get_ticket_replies_by_ticket_id
+)
 
 #get all support tickets
 def get_all_support_tickets_by_user_id(user_id: int, db: Session):
