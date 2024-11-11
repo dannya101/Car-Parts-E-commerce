@@ -9,25 +9,14 @@ from app.core.security import verify_password
 from app.models.user import User
 from app.schemas.user import UserCreate
 
+from app.crud import (
+    add_and_commit,
+    get_user,
+    get_user_by_username,
+    get_user_by_email,
+)
+
 settings = get_settings()
-
-#CRUD Operations
-def add_and_commit(db: Session, obj):
-    """Add an object to the DB, commit, and refresh it."""
-    db.add(obj)
-    db.commit()
-    db.refresh(obj)
-    return obj
-
-def get_user(db: Session, user_id: int):
-    return db.query(User).filter(User.id == user_id).first()
-
-def get_user_by_username(db: Session, username: str):
-    return db.query(User).filter(User.username == username).first()
-
-def get_user_by_email(db: Session, email: str):
-    return db.query(User).filter(User.email == email).first()
-
 
 #Register
 def create_user(db: Session, user: UserCreate):

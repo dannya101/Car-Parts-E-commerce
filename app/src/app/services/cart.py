@@ -5,51 +5,16 @@ from app.models.product import Product
 from app.schemas.cart import CartItemCreate, CartItemUpdate
 import json
 
-# --- CRUD Functions ---
-
-# Get a cart by user ID
-def get_cart_by_user_id(user_id: int, db: Session):
-    cart = db.query(Cart).filter(Cart.user_id == user_id).first()
-    if not cart:
-        cart = Cart(user_id=user_id)
-        db.add(cart)
-        db.commit()
-        db.refresh(cart)
-    return cart
-
-# Get cart items by cart ID
-def get_cart_items_by_cart_id(cart_id: int, db: Session):
-    return db.query(CartItem).filter(CartItem.cart_id == cart_id).all()
-
-# Get a product by product ID
-def get_product_by_id(product_id: int, db: Session):
-    return db.query(Product).filter(Product.id == product_id).first()
-
-# Get a cart item by cart ID and product ID
-def get_cart_item_by_cart_and_product(cart_id: int, product_id: int, db: Session):
-    return db.query(CartItem).filter(CartItem.cart_id == cart_id, CartItem.product_id == product_id).first()
-
-# Add a new cart item to the database
-def add_cart_item_to_db(cart_item: CartItem, db: Session):
-    db.add(cart_item)
-    db.commit()
-    db.refresh(cart_item)
-
-# Update a cart item quantity in the database
-def update_cart_item_quantity_in_db(cart_item: CartItem, quantity: int, db: Session):
-    cart_item.quantity = quantity
-    db.commit()
-    db.refresh(cart_item)
-
-# Delete a cart item from the database
-def delete_cart_item_from_db(cart_item: CartItem, db: Session):
-    db.delete(cart_item)
-    db.commit()
-
-# Delete all items from a cart
-def clear_cart_items_in_db(cart_id: int, db: Session):
-    db.query(CartItem).filter(CartItem.cart_id == cart_id).delete()
-    db.commit()
+from app.crud import (
+    get_cart_by_user_id,
+    get_cart_items_by_cart_id,
+    get_product_by_id,
+    get_cart_item_by_cart_and_product,
+    add_cart_item_to_db,
+    update_cart_item_quantity_in_db,
+    delete_cart_item_from_db,
+    clear_cart_items_in_db
+)
 
 
 # --- Helper Functions ---

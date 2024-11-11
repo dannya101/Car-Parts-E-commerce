@@ -9,57 +9,31 @@ from app.models.order import Order, OrderItem
 from app.models.cart import Cart, CartItem
 from app.models.address import Address
 
+from app.crud import (
+    get_cart_by_user_id,
+    get_cart_items_by_cart_id,
+    add_order_item_to_db,
+    add_order_to_db,
+    get_all_addressses,
+    get_address_by_user_and_id,
+    get_pending_order_from_db,
+    get_order_items_in_order,
+    get_all_user_orders,
+    commit_and_refresh,
+    add_and_commit,
+    delete_and_commit
+)
 
-#CRUD
-def get_cart_by_user_id(user_id: int, db: Session):
-    return db.query(Cart).filter(Cart.user_id == user_id).first()
 
-def get_cart_items_by_cart_id(cart_id: int, db: Session):
-    return db.query(CartItem).filter(CartItem.cart_id == cart_id).all()
-
-def add_order_item_to_db(order_item: OrderItem, db: Session):
-    db.add(order_item)
-    db.commit()
-    db.refresh(order_item)
-    return
-
-def add_order_to_db(order: Order, db: Session):
-    db.add(order)
-    db.commit()
-    db.refresh(order)
-    return
-
-def get_all_addressses(user_id: int, db: Session):
-    addresses = db.query(Address).filter(Address.user_id == user_id).all()
-    return addresses
-
-def delete_address_from_db(address: Address, db: Session):
-    db.delete(address)
-    db.commit()
-    return
-
-def get_address_by_user_and_id(user_id: int, address_id: int, db: Session):
-    return db.query(Address).filter(Address.user_id == user_id, Address.id == address_id).first()
-
-def get_pending_order_from_db(user_id: int, db: Session):
-    return db.query(Order).filter(Order.user_id == user_id, Order.status == "Pending").first()
-
-def set_order_shipping_address_in_db(address_id: int, order: Order, db: Session):
-    order.shipping_address_id = address_id
-    db.commit()
-    db.refresh(order)
-    return
-
-def set_order_billing_address_in_db(address_id: int, order: Order, db: Session):
-    order.billing_address_id = address_id
-    db.commit()
-    db.refresh(order)
-    return
-
+def update_order_address_in_db(order: Order, db: Session):
+    if order.billing_address and order.shipping_address:
+        order.status = "Complete"
+        return commit_and_refresh(db, order)
+    else:
+        raise HTTPException(status_code=400, detail="Order not ready for completion")
+    
 def set_order_address_in_db(address_new: Address, order: Order, db: Session):
-    db.add(address_new)
-    db.commit()
-    db.refresh(address_new)
+    address_new = add_and_commit(db, address_new)
 
     if address_new.is_shipping:
         set_order_shipping_address_in_db(address_id=address_new.id, order=order, db=db)
@@ -69,21 +43,23 @@ def set_order_address_in_db(address_new: Address, order: Order, db: Session):
 
     return
 
-def update_order_address_in_db(order: Order, db: Session):
-    if order.billing_address and order.shipping_address:
-        order.status = "Complete"
-    else:
-        raise HTTPException(status_code=400, detail="Order not ready for completion")
+def set_order_shipping_address_in_db(address_id: int, order: Order, db: Session):
+    order.shipping_address_id = address_id
+    return commit_and_refresh(db, order)
 
-    db.commit()
-    db.refresh(order)
+def set_order_billing_address_in_db(address_id: int, order: Order, db: Session):
+    order.billing_address_id = address_id
+    return commit_and_refresh(db, order)
 
-def get_order_items_in_order(order_id: int, db: Session):
-    return db.query(OrderItem).filter(OrderItem.order_id == order_id).all()
+def delete_address_from_db(address: Address, db: Session):
+    delete_and_commit(db, address)
+    return
 
-def get_all_user_orders(user_id: int, db: Session):
-    return db.query(Order).filter(Order.user_id == user_id).all()
+def add_order_item_to_db(order_item: OrderItem, db: Session):
+    return add_and_commit(db, order_item)
 
+def add_order_to_db(order: Order, db: Session):
+    return add_and_commit(db, order)
 
 #create a new pending order with users cart as order items
 def start_checkout(user_id: int, db: Session):
