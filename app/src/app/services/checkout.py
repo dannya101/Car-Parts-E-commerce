@@ -38,6 +38,9 @@ def delete_address_from_db(address: Address, db: Session):
     db.commit()
     return
 
+def get_address_by_user_and_id(user_id: int, address_id: int, db: Session):
+    return db.query(Address).filter(Address.user_id == user_id, Address.id == address_id).first()
+
 def get_pending_order_from_db(user_id: int, db: Session):
     return db.query(Order).filter(Order.user_id == user_id, Order.status == "Pending").first()
 
@@ -103,7 +106,7 @@ def start_checkout(user_id: int, db: Session):
     return order
 
 def delete_address(address_id: int, user_id: int, db: Session):
-    address = db.query(Address).filter(Address.user_id == user_id, Address.id == address_id).first()
+    address = get_address_by_user_and_id(user_id=user_id, address_id=address_id, db=db)
 
     if not address:
         raise HTTPException(status_code=400, detail="Could not find address with that id")

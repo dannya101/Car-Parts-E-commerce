@@ -12,6 +12,13 @@ from app.schemas.user import UserCreate
 settings = get_settings()
 
 #CRUD Operations
+def add_and_commit(db: Session, obj):
+    """Add an object to the DB, commit, and refresh it."""
+    db.add(obj)
+    db.commit()
+    db.refresh(obj)
+    return obj
+
 def get_user(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
 
@@ -37,13 +44,7 @@ def create_user(db: Session, user: UserCreate):
         verification_code=verification_code
     )
 
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-
-    #TODO: add email verification
-
-    return db_user
+    return add_and_commit(db, db_user)
 
 def authenticate_user(db: Session, username:str, password:str):
     user = get_user_by_username(db, username)

@@ -8,6 +8,21 @@ from app.schemas.product import ProductCreate, ProductUpdate
 import json
 
 #CRUD operations
+def add_and_commit(db: Session, obj):
+    db.add(obj)
+    db.commit()
+    db.refresh(obj)
+    return obj
+
+def commit_and_refresh(db: Session, obj):
+    db.commit()
+    db.refresh(obj)
+    return obj
+
+def delete_and_commit(db: Session, obj):
+    db.delete(obj)
+    db.commit()
+
 def get_product_by_id(db: Session, product_id: int):
     return db.query(Product).filter(Product.id == product_id).first()
 
@@ -52,17 +67,13 @@ def create_new_product(db: Session, product: ProductCreate):
     new_product.set_images(product.images)
 
     #Add changes to the DB
-    db.add(new_product)
-    db.commit()
-    db.refresh(new_product)
-
-    return new_product
+    return add_and_commit(db, new_product)
 
 #Update existing product
 def modify_product(db: Session, product_id: int, product_update: ProductUpdate):
 
     #Get relevant product
-    product = db.query(Product).filter(Product.id == product_id).first()
+    product = get_product_by_id(db, product_id)
 
     #Raise 400 Exception if product is not in DB
     if not product:
@@ -89,10 +100,7 @@ def modify_product(db: Session, product_id: int, product_update: ProductUpdate):
     if product_update.thumbnail is not None:
         product.thumbnail = product_update.thumbnail
 
-    db.commit()
-    db.refresh(product)
-
-    return product
+    return commit_and_refresh(db, product)
 
 #Delete existing product
 def delete_product(db: Session, product_id: int):
@@ -105,7 +113,6 @@ def delete_product(db: Session, product_id: int):
             detail="No Product Found!"
         )
 
-    db.delete(product)
-    db.commit()
+    delete_and_commit(db, product)
 
     return {"detail": "Product Deleted Successfully"}
