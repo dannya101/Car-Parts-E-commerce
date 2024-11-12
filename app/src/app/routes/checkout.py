@@ -27,18 +27,30 @@ def get_all_addresses(current_user: User = Depends(get_current_user), db: Sessio
 
 @router.delete("/address")
 def remove_address(address_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    getAddress = checkout_service.get_address_by_user_and_id(user_id=current_user.id, address_id=address_id, db=db)
+    if getAddress is None:
+        return {"message": "That is an invalid address"}
     checkout_service.delete_address(address_id=address_id, user_id=current_user.id, db=db)
-    return {"message": "Address Deleted"}
+    return {"message": "Address Deleted",
+            "address" : getAddress}
 
 @router.post("/address/setshipping")
 def set_shipping_address(address_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     checkout_service.set_shipping_address(address_id=address_id, user_id=current_user.id, db=db)
-    return {"message": "Set shipping address"}
+    getAddress = checkout_service.get_address_by_user_and_id(user_id=current_user.id, address_id=address_id, db=db)
+    if getAddress is None:
+        return {"message": "That is an invalid address"}
+    return {"message": "Set shipping address" ,
+            "address" : {getAddress}}
 
 @router.post("/address/setbilling")
 def set_billing_address(address_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     checkout_service.set_billing_address(address_id=address_id, user_id=current_user.id, db=db)
-    return {"message": "Set billing address"}
+    getAddress = checkout_service.get_address_by_user_and_id(user_id=current_user.id, address_id=address_id, db=db)
+    if getAddress is None:
+        return {"message": "That is an invalid address"}
+    return {"message": "Set billing address",
+            "address" : {getAddress}}
 
 @router.post("/address")
 def add_address(address: AddressSchema, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
