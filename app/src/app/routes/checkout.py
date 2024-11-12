@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 import app.services.checkout as checkout_service
@@ -23,6 +23,7 @@ def start_checkout(current_user: User = Depends(get_current_user), db: Session =
 
 @router.get("/address/all")
 def get_all_addresses(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    
     return checkout_service.get_all_addressses(user_id=current_user.id, db=db)
 
 @router.delete("/address")
@@ -59,13 +60,19 @@ def add_address(address: AddressSchema, current_user: User = Depends(get_current
 
 
 @router.post("/shipping-method")
-def select_shipping_method():
-    pass
+def select_shipping_method(shipping_method: str = Query(default="Regular Shipping(3-5 Days)",
+                                                         enum=["Regular Shipping(3-5 Days)", "Next Day Shipping(1-2 Days)",
+                                                            "Priority Shipping(1 Day)"])):
+
+    return {"selected shipping method": shipping_method} 
 
 
 @router.post("/payment-method")
-def select_payment_method():
-    pass
+def select_payment_method(payment_method: str = Query(default="Card",
+                                                         enum=["Card", "Cashapp",
+                                                            "Venmo"])):
+
+    return {"selected payment method": payment_method} 
 
 
 @router.post("/complete")
