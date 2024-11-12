@@ -17,8 +17,9 @@ router = APIRouter()
 @router.post("/")
 def start_checkout(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     order = checkout_service.start_checkout(user_id=current_user.id, db=db)
+    cart = cart_service.get_or_create_cart(db=db, user_id=current_user.id)
     cart_service.clear_cart(user_id=current_user.id, db=db)
-    return order
+    return cart
 
 @router.get("/address/all")
 def get_all_addresses(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
