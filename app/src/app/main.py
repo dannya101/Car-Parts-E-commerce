@@ -10,8 +10,3 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 app.include_router(api_router)
-
-
-@app.get("/")
-async def root():
-    return {"Hello": "World"}
