@@ -23,7 +23,7 @@ def get_all_products(db: Session = Depends(get_db)):
     return products
 
 
-@router.get("/{id}")
+@router.get("/get")
 def get_product_by_id(product_id: int, db: Session = Depends(get_db)):
     product = product_service.get_product_by_id(db=db, product_id=product_id)
     if not product:
@@ -62,7 +62,7 @@ def get_product_by_brand():
 
 @router.get("/brandcategories")
 def get_brand_categories(db: Session = Depends(get_db)):
-    brand_categories = product_service.get_all_part_categories(db)
+    brand_categories = product_service.get_all_brand_categories(db)
 
     if not brand_categories:
         raise HTTPException(

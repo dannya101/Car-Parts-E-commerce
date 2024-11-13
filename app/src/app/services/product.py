@@ -47,13 +47,20 @@ def create_new_product(db: Session, product: ProductCreate):
 def modify_product(db: Session, product_id: int, product_update: ProductUpdate):
 
     #Get relevant product
-    product = get_product_by_id(db, product_id)
+    product = get_product_by_id(db=db, product_id=product_id)
 
     #Raise 400 Exception if product is not in DB
     if not product:
         raise HTTPException(
             status_code=400,
             detail="No Product Found!"
+        )
+    
+    existing_product = db.query(Product).filter(Product.name == product_update.name).first()
+    if existing_product:
+        raise HTTPException(
+            status_code=400,
+            detail="Product name invalid, Product Already Exists"
         )
 
     #Populate the data that needs to update
