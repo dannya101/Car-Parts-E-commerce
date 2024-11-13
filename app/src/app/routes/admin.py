@@ -5,12 +5,20 @@ from sqlalchemy.orm import Session
 import app.services.product as product_service
 from app.dependencies import get_db
 from app.models.product import Product
-from app.schemas.product import ProductCreate, ProductUpdate
+from app.schemas.product import ProductCreate, ProductUpdate, PartCategoryCreate, BrandCategoryCreate
 
 router = APIRouter()
 
 #TODO: Add routes for creating new brand and part categories.
 #TODO: Add routes for deleteing brand and part categories
+
+@router.post("/add-part-category")
+def add_part_category(new_part: PartCategoryCreate, db: Session = Depends(get_db)):
+    return product_service.add_new_part_category(db=db, part=new_part)
+
+@router.post("/add-brand-category")
+def add_brand_category(new_brand: BrandCategoryCreate, db: Session = Depends(get_db)):
+    return product_service.add_new_brand_category(db=db, brand=new_brand)
 
 @router.post("/products")
 def create_product(product: ProductCreate, db: Session = Depends(get_db)):

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
 from app.models.product import Product, PartCategory, BrandCategory
-from app.schemas.product import ProductCreate, ProductUpdate
+from app.schemas.product import ProductCreate, ProductUpdate, PartCategoryCreate, BrandCategoryCreate
 
 import json
 from app.crud import (
@@ -16,7 +16,9 @@ from app.crud import (
     get_product_by_name,
     get_all_products,
     get_all_part_categories,
-    get_all_brand_categories
+    get_all_brand_categories,
+    get_part_category_by_name,
+    get_brand_category_by_name
 )
 
 #Create new product - run by admin/products/
@@ -55,7 +57,7 @@ def modify_product(db: Session, product_id: int, product_update: ProductUpdate):
             status_code=400,
             detail="No Product Found!"
         )
-    
+
     existing_product = db.query(Product).filter(Product.name == product_update.name).first()
     if existing_product:
         raise HTTPException(
@@ -97,3 +99,27 @@ def delete_product(db: Session, product_id: int):
     delete_and_commit(db, product)
 
     return {"detail": "Product Deleted Successfully"}
+
+def add_new_part_category(db: Session, part: PartCategoryCreate):
+    if get_part_category_by_name(db=db, name=part.part_type_name):
+        raise HTTPException(status_code=400, detail="Part Category Already Exists")
+
+    new_part = PartCategory(
+        part_type_name = part.part_type_name,
+        part_type_description = part.part_type_description
+    )
+
+    add_and_commit(db=db, obj=new_part)
+    return get_part_category_by_name(name=part.part_type_name, db=db)
+
+def add_new_brand_category(db: Session, brand: BrandCategoryCreate):
+    if get_brand_category_by_name(db=db, name=brand.brand_type_name):
+        raise HTTPException(status_code=400, detail="Brand Already Exists")
+
+    new_brand = BrandCategory(
+        brand_type_name = brand.brand_type_name,
+        brand_type_description = brand.brand_type_description
+    )
+
+    add_and_commit(db=db, obj=new_brand)
+    return get_brand_category_by_name(db=db, name=brand.brand_type_name)

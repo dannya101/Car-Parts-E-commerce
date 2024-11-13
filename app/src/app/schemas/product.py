@@ -9,8 +9,22 @@ class PartCategory(BaseModel):
     class Config:
         orm_mode = True
 
+class PartCategoryCreate(BaseModel):
+    part_type_name: str
+    part_type_description: str
+
+    class Config:
+        orm_mode = True
+
 class BrandCategory(BaseModel):
     id: int
+    brand_type_name: str
+    brand_type_description: str
+
+    class Config:
+        orm_mode = True
+
+class BrandCategoryCreate(BaseModel):
     brand_type_name: str
     brand_type_description: str
 

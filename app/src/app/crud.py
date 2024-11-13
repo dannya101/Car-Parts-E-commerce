@@ -71,6 +71,12 @@ def get_all_part_categories(db: Session):
 def get_all_brand_categories(db: Session):
     return db.query(BrandCategory).all()
 
+def get_part_category_by_name(db: Session, name: str):
+    return db.query(PartCategory).filter(PartCategory.part_type_name == name).first()
+
+def get_brand_category_by_name(db: Session, name: str):
+    return db.query(BrandCategory).filter(BrandCategory.brand_type_name == name).first()
+
 #checkout crud
 def get_cart_by_user_id(user_id: int, db: Session):
     return db.query(Cart).filter(Cart.user_id == user_id).first()
