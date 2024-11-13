@@ -31,7 +31,7 @@ def update_order_address_in_db(order: Order, db: Session):
         return commit_and_refresh(db, order)
     else:
         raise HTTPException(status_code=400, detail="Order not ready for completion")
-    
+
 def set_order_address_in_db(address_new: Address, order: Order, db: Session):
     address_new = add_and_commit(db, address_new)
 
@@ -70,7 +70,7 @@ def start_checkout(user_id: int, db: Session):
 
     total_price = sum(item.quantity * item.product.price for item in cart.items)
 
-    order = Order(user_id=user_id, cart_id=cart.id, status="Pending", total_price=total_price)
+    order = Order(user_id=user_id, cart_id=cart.id, shipping_method="Regular Shipping(3-5 Days)", payment_method="Card", status="Pending", total_price=total_price)
     add_order_to_db(order=order, db=db)
 
     cart_items = get_cart_items_by_cart_id(cart_id=cart.id, db=db)
