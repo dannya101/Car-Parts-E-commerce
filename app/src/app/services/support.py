@@ -46,7 +46,7 @@ def close_the_ticket(support_ticket_id: int, db: Session):
     for reply in reply_ticket:
         delete_and_commit(db, reply)
     delete_and_commit(db, ticket)
-    return f"Resolved ticket with id of {support_ticket_id}"
+    return {"message": "Resolved ticket with id of {support_ticket_id}"}
 
 def add_reply_to_db(admin_reply: TicketReplies, db: Session):
     return add_and_commit(db, admin_reply)
