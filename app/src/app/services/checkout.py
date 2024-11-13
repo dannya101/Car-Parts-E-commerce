@@ -112,12 +112,9 @@ def set_billing_address(address_id: int, user_id: int, db: Session):
 def set_shipping_method(shipping_selected: str, user_id: int, db: Session):
     return
 def set_payment_method(payment_selected: str, user_id: int, db: Session):
-    getCart = get_cart_by_user_id(user_id=user_id, db=db)
-    if not getCart or not getCart.items:
-        raise HTTPException(status_code=400, detail="Cart is empty or does not exist")
-    
-    order = Order(user_id=user_id, cart=getCart, payment_method=payment_selected)
-    add_order_to_db(order=order, db=db)
+    order = get_pending_order_from_db(user_id=user_id, db=db)
+    order.payment_method = payment_selected 
+    commit_and_refresh(db, order) 
     return
 
 def add_address(address: AddressSchema, user_id: int, db: Session):

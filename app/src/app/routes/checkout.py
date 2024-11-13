@@ -77,8 +77,10 @@ def select_payment_method(payment_method: str = Query(default="Card",
                                                             "Venmo"]), 
     current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
 
-    checkout_service.set_payment_method(payment_selected=payment_method, user_id=current_user, db=db)
-    return {"selected payment method": payment_method} 
+    checkout_service.set_payment_method(payment_selected=payment_method, user_id=current_user.id, db=db)
+    getOrder = checkout_service.get_pending_order_from_db(user_id=current_user.id, db=db)
+    return {"selected payment method": payment_method,
+            "Cart": getOrder} 
 
 
 @router.post("/complete")
