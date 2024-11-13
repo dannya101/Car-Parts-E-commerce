@@ -66,9 +66,10 @@ def select_shipping_method(
         "Priority Shipping(1 Day)"]), 
     current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
 
-    
-
-    return {"selected shipping method": shipping_method} 
+    checkout_service.set_shipping_method(shipping_selected=shipping_method, user_id=current_user.id, db=db)
+    getOrder = checkout_service.get_pending_order_from_db(user_id=current_user.id, db=db)
+    return {"selected shipping method": shipping_method,
+            "Order": getOrder} 
 
 
 @router.post("/payment-method")
@@ -80,7 +81,7 @@ def select_payment_method(payment_method: str = Query(default="Card",
     checkout_service.set_payment_method(payment_selected=payment_method, user_id=current_user.id, db=db)
     getOrder = checkout_service.get_pending_order_from_db(user_id=current_user.id, db=db)
     return {"selected payment method": payment_method,
-            "Cart": getOrder} 
+            "Order": getOrder} 
 
 
 @router.post("/complete")

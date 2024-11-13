@@ -110,6 +110,9 @@ def set_billing_address(address_id: int, user_id: int, db: Session):
     return
 
 def set_shipping_method(shipping_selected: str, user_id: int, db: Session):
+    order = get_pending_order_from_db(user_id=user_id, db=db)
+    order.shipping_method = shipping_selected 
+    commit_and_refresh(db, order) 
     return
 def set_payment_method(payment_selected: str, user_id: int, db: Session):
     order = get_pending_order_from_db(user_id=user_id, db=db)
