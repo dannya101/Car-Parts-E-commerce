@@ -60,9 +60,13 @@ def add_address(address: AddressSchema, current_user: User = Depends(get_current
 
 
 @router.post("/shipping-method")
-def select_shipping_method(shipping_method: str = Query(default="Regular Shipping(3-5 Days)",
-                                                         enum=["Regular Shipping(3-5 Days)", "Next Day Shipping(1-2 Days)",
-                                                            "Priority Shipping(1 Day)"])):
+def select_shipping_method(
+    shipping_method: str = Query(default="Regular Shipping(3-5 Days)",
+        enum=["Regular Shipping(3-5 Days)", "Next Day Shipping(1-2 Days)",
+        "Priority Shipping(1 Day)"]), 
+    current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+
+    
 
     return {"selected shipping method": shipping_method} 
 
@@ -70,8 +74,10 @@ def select_shipping_method(shipping_method: str = Query(default="Regular Shippin
 @router.post("/payment-method")
 def select_payment_method(payment_method: str = Query(default="Card",
                                                          enum=["Card", "Cashapp",
-                                                            "Venmo"])):
+                                                            "Venmo"]), 
+    current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
 
+    checkout_service.set_payment_method(payment_selected=payment_method, user_id=current_user, db=db)
     return {"selected payment method": payment_method} 
 
 

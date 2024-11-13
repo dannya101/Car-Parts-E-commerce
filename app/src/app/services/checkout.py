@@ -70,7 +70,7 @@ def start_checkout(user_id: int, db: Session):
 
     total_price = sum(item.quantity * item.product.price for item in cart.items)
 
-    order = Order(user_id=user_id, cart_id=cart.id, status="Pending", total_price=total_price)
+    order = Order(user_id=user_id, cart_id=cart.id, status="Pending", total_price=total_price, shipping_method=None, payment_method=None)
     add_order_to_db(order=order, db=db)
 
     cart_items = get_cart_items_by_cart_id(cart_id=cart.id, db=db)
@@ -107,6 +107,17 @@ def set_billing_address(address_id: int, user_id: int, db: Session):
         raise HTTPException(status_code=400, detail="No pending order found")
 
     set_order_billing_address_in_db(address_id=address_id, order=order, db=db)
+    return
+
+def set_shipping_method(shipping_selected: str, user_id: int, db: Session):
+    return
+def set_payment_method(payment_selected: str, user_id: int, db: Session):
+    getCart = get_cart_by_user_id(user_id=user_id, db=db)
+    if not getCart or not getCart.items:
+        raise HTTPException(status_code=400, detail="Cart is empty or does not exist")
+    
+    order = Order(user_id=user_id, cart=getCart, payment_method=payment_selected)
+    add_order_to_db(order=order, db=db)
     return
 
 def add_address(address: AddressSchema, user_id: int, db: Session):
