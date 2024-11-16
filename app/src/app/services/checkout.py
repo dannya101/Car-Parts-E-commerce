@@ -12,8 +12,6 @@ from app.models.address import Address
 from app.crud import (
     get_cart_by_user_id,
     get_cart_items_by_cart_id,
-    add_order_item_to_db,
-    add_order_to_db,
     get_all_addressses,
     get_address_by_user_and_id,
     get_pending_order_from_db,
