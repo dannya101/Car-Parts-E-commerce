@@ -49,17 +49,6 @@ def get_part_categories(db: Session = Depends(get_db)):
 
     return part_categories
 
-
-@router.get("/{part_cagegory_id}")
-def get_product_by_part():
-    pass
-
-
-@router.get("/{brand_category_id}")
-def get_product_by_brand():
-    pass
-
-
 @router.get("/brandcategories")
 def get_brand_categories(db: Session = Depends(get_db)):
     brand_categories = product_service.get_all_brand_categories(db)
@@ -72,3 +61,12 @@ def get_brand_categories(db: Session = Depends(get_db)):
         )
 
     return brand_categories
+
+@router.get("/{part_cagegory_id}")
+def get_product_by_part():
+    pass
+
+
+@router.get("/{brand_category_id}")
+def get_product_by_brand():
+    pass
