@@ -24,7 +24,7 @@ def get_all_user_orders(current_user: User = Depends(get_current_user), db: Sess
 
 
 @router.get("/{order_id}")
-def get_order_by_id(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    order = db.query(Order).filter(Order.user_id == current_user.id).first()
+def get_order_by_id(order_id: int, db: Session = Depends(get_db)):
+    order = db.query(Order).filter(Order.id == order_id).first()
 
     return order
