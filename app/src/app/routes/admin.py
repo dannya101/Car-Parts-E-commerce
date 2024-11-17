@@ -9,8 +9,6 @@ from app.schemas.product import ProductCreate, ProductUpdate, PartCategoryCreate
 
 router = APIRouter()
 
-#TODO: Add routes for creating new brand and part categories.
-#TODO: Add routes for deleteing brand and part categories
 
 @router.post("/add-part-category")
 def add_part_category(new_part: PartCategoryCreate, db: Session = Depends(get_db)):
