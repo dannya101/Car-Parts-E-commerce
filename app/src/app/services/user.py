@@ -25,11 +25,11 @@ def verify_user_email(db: Session, current_user: User, verification_code: str):
     if not user:
         raise HTTPException(status_code=400, detail="Invalid verification code.")
     
-    if user.is_email_verified:
+    if user.is_verified:
         raise HTTPException(status_code=400, detail="Email is already verified.")
     
     # Mark the email as verified
-    user.is_email_verified = True
+    user.is_verified = True
     user.verification_code = None  # Clear the code after successful verification
     db.commit()
     return {"message": "Email verified successfully."}
