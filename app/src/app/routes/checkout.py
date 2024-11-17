@@ -23,8 +23,15 @@ def start_checkout(current_user: User = Depends(get_current_user), db: Session =
 
 @router.get("/address/all")
 def get_all_addresses(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    
-    return checkout_service.get_all_addressses(user_id=current_user.id, db=db)
+    addresses = checkout_service.get_all_addressses(user_id=current_user.id, db=db)
+
+    if not addresses:
+        raise HTTPException(
+            status_code=400,
+            detail="No addresses found"
+        )
+
+    return addresses
 
 @router.delete("/address")
 def remove_address(address_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
