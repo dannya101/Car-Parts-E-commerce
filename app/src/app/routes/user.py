@@ -54,7 +54,6 @@ def logout_current_user(current_user: User = Depends(get_current_user),  db:Sess
 
 
 @router.post("/verify-email")
-def verify_email(current_user: User = Depends(get_current_user),  db:Session=Depends(get_db)):
-    user = db.query(User).filter(User.id == current_user.id).first()
-    return {"Email": user.email}
+def verify_email(verification_code: str, current_user: User = Depends(get_current_user),  db:Session=Depends(get_db)):
+    return user_service.verify_user_email(db=db, current_user=current_user, verification_code=verification_code)
     

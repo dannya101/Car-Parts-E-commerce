@@ -18,6 +18,22 @@ from app.crud import (
 
 settings = get_settings()
 
+def verify_user_email(db: Session, current_user: User, verification_code: str):
+    # Check if a user with the given verification code exists
+    user = db.query(User).filter(User.verification_code == verification_code).first()
+    
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid verification code.")
+    
+    if user.is_email_verified:
+        raise HTTPException(status_code=400, detail="Email is already verified.")
+    
+    # Mark the email as verified
+    user.is_email_verified = True
+    user.verification_code = None  # Clear the code after successful verification
+    db.commit()
+    return {"message": "Email verified successfully."}
+
 def create_user(db: Session, user: UserCreate):
     """
     Registers a new user by adding them to the database.
@@ -44,6 +60,8 @@ def create_user(db: Session, user: UserCreate):
         password_hash = password_hash,
         verification_code=verification_code
     )
+
+    #TODO: Send verification code URL to users email
 
     return add_and_commit(db, db_user)
 
