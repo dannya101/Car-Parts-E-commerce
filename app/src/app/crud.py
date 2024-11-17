@@ -246,6 +246,32 @@ def get_brand_category_by_name(db: Session, name: str):
     """
     return db.query(BrandCategory).filter(BrandCategory.brand_type_name == name).first()
 
+def get_products_by_part_category_id(db: Session, part_category_id: int):
+    """
+    Retrieve a product by its part category id.
+
+    Parameters:
+        db (Session): The database session.
+        part_category_id (int): The id of the part category.
+
+    Returns:
+        Product objects or None if not found.
+    """
+    return db.query(Product).filter(Product.part_category_id == part_category_id).all()
+
+def get_products_by_brand_category_by_id(db: Session, brand_category_id: int):
+    """
+    Retrieve a product by its brand category id.
+
+    Parameters:
+        db (Session): The database session.
+        brand_category_id (int): The id of the brand category.
+
+    Returns:
+        Product object or None if not found.
+    """
+    return db.query(Product).filter(Product.brand_category_id == brand_category_id).all()
+
 #Checkout CRUD
 def get_cart_by_user_id(user_id: int, db: Session):
     """
