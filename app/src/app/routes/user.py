@@ -41,10 +41,20 @@ def read_current_user(current_user: User = Depends(get_current_user)):
 
 
 @router.post("/logout")
-def logout_current_user(current_user: User = Depends(get_current_user)):
+def logout_current_user(current_user: User = Depends(get_current_user),  db:Session=Depends(get_db)):
     return {"message": "Logged Out: Remove JWT from storage"}
+#  try:
+#         blacklist_token(token=access_token, db=db)
+#         response.delete_cookie(key="refresh_token")
+
+#         return {"message": "Logged out successfully"}
+
+#     except JWTError:
+#         raise HTTPException(status_code=400, detail="Invalid token.")
 
 
-@router.post("/verify-email/{verification_code}")
-def verify_email():
-    pass
+@router.post("/verify-email")
+def verify_email(current_user: User = Depends(get_current_user),  db:Session=Depends(get_db)):
+    user = db.query(User).filter(User.id == current_user.id).first()
+    return {"Email": user.email}
+    
