@@ -21,14 +21,24 @@ from app.crud import (
     get_brand_category_by_name
 )
 
-#Create new product - run by admin/products/
 def create_new_product(db: Session, product: ProductCreate):
+    """
+    Creates a new product entry in the database.
 
-    #Raise Exception 400 if product is not found in DB
+    Parameters:
+        db (Session): The database session.
+        product (ProductCreate): The product schema with details for the new product.
+
+    Returns:
+        Product: The newly created product.
+
+    Raises:
+        HTTPException: If a product with the same name already exists.
+    """
+
     if get_product_by_name(db, product.name):
         raise HTTPException(status_code=400, detail="Product Already has that name")
 
-    #Populate the new product model
     new_product = Product(
         name=product.name,
         description=product.description,
@@ -38,20 +48,29 @@ def create_new_product(db: Session, product: ProductCreate):
         thumbnail=product.thumbnail
     )
 
-    #Populate the tags and images list
     new_product.set_tags(product.tags)
     new_product.set_images(product.images)
 
-    #Add changes to the DB
     return add_and_commit(db, new_product)
 
-#Update existing product
 def modify_product(db: Session, product_id: int, product_update: ProductUpdate):
+    """
+    Updates an existing product in the database.
 
-    #Get relevant product
+    Parameters:
+        db (Session): The database session.
+        product_id (int): The ID of the product to update.
+        product_update (ProductUpdate): The schema containing updated product details.
+
+    Returns:
+        Product: The updated product.
+
+    Raises:
+        HTTPException: If the product does not exist or if the new name already exists.
+    """
+
     product = get_product_by_id(db=db, product_id=product_id)
 
-    #Raise 400 Exception if product is not in DB
     if not product:
         raise HTTPException(
             status_code=400,
@@ -65,7 +84,6 @@ def modify_product(db: Session, product_id: int, product_update: ProductUpdate):
             detail="Product name invalid, Product Already Exists"
         )
 
-    #Populate the data that needs to update
     if product_update.name is not None:
         product.name = product_update.name
     if product_update.description is not None:
@@ -85,11 +103,22 @@ def modify_product(db: Session, product_id: int, product_update: ProductUpdate):
 
     return commit_and_refresh(db, product)
 
-#Delete existing product
 def delete_product(db: Session, product_id: int):
+    """
+    Deletes a product from the database.
+
+    Parameters:
+        db (Session): The database session.
+        product_id (int): The ID of the product to delete.
+
+    Returns:
+        dict: A success message.
+
+    Raises:
+        HTTPException: If the product does not exist.
+    """
     product = get_product_by_id(db=db, product_id=product_id)
 
-    #Raise 400 Exception if product is not in DB
     if not product:
         raise HTTPException(
             status_code=400,
@@ -101,6 +130,19 @@ def delete_product(db: Session, product_id: int):
     return {"detail": "Product Deleted Successfully"}
 
 def add_new_part_category(db: Session, part: PartCategoryCreate):
+    """
+    Adds a new part category to the database.
+
+    Parameters:
+        db (Session): The database session.
+        part (PartCategoryCreate): The schema for the new part category.
+
+    Returns:
+        PartCategory: The newly created part category.
+
+    Raises:
+        HTTPException: If the part category already exists.
+    """
     if get_part_category_by_name(db=db, name=part.part_type_name):
         raise HTTPException(status_code=400, detail="Part Category Already Exists")
 
@@ -113,6 +155,19 @@ def add_new_part_category(db: Session, part: PartCategoryCreate):
     return get_part_category_by_name(name=part.part_type_name, db=db)
 
 def add_new_brand_category(db: Session, brand: BrandCategoryCreate):
+    """
+    Adds a new brand category to the database.
+
+    Parameters:
+        db (Session): The database session.
+        brand (BrandCategoryCreate): The schema for the new brand category.
+
+    Returns:
+        BrandCategory: The newly created brand category.
+
+    Raises:
+        HTTPException: If the brand category already exists.
+    """
     if get_brand_category_by_name(db=db, name=brand.brand_type_name):
         raise HTTPException(status_code=400, detail="Brand Already Exists")
 
