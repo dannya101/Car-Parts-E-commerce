@@ -38,7 +38,6 @@ def create_support_ticket(support_ticket_creator: SupportTicketBase, user_id: in
 
 def close_the_ticket(support_ticket_id: int, db: Session):
     ticket = get_ticket_by_id(db, support_ticket_id)
-    # print(f"theTicket {ticket}")
     if not ticket:
         raise HTTPException(status_code=404, detail=f"Ticket {support_ticket_id} not valid")
 
@@ -54,6 +53,4 @@ def add_reply_to_db(admin_reply: TicketReplies, db: Session):
 def reply_to_ticket(support_ticket_id: int, reply: str, user_id: int, db:Session):
     new_reply = TicketReplies(ticket_id=support_ticket_id, user_id=user_id,content= reply)
     addedReply = add_reply_to_db(admin_reply=new_reply, db=db)
-    # db.query(SupportTicket).filter(SupportTicket.id == support_ticket_id).update({'ticket_reply_content': reply})
-    # db.commit()
     return addedReply
