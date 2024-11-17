@@ -2,3 +2,4 @@
 .mypy_cache
 __pychache__/
 *.pyc
+app.log
