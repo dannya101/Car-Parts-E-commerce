@@ -486,3 +486,17 @@ def clear_cart_items_in_db(cart_id: int, db: Session):
     """
     db.query(CartItem).filter(CartItem.cart_id == cart_id).delete()
     db.commit()
+
+#Order CRUD
+def get_order_by_id_crud(order_id: int, db: Session):
+    """
+    Retrieve an Order by Its ID.
+
+    - **Parameters**:
+        - `order_id` (int): The ID of the order to retrieve.
+        - `db` (Session): The database session to use.
+
+    - **Returns**:
+        - `Order`: The order object corresponding to the provided order ID, or `None` if not found.
+    """
+    return db.query(Order).filter(Order.id == order_id).first()

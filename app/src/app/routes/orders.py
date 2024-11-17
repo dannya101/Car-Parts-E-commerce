@@ -8,6 +8,10 @@ from app.models.order import Order
 
 import app.services.checkout as checkout_service
 
+from app.crud import (
+    get_order_by_id_crud
+)
+
 
 router = APIRouter()
 
@@ -86,7 +90,7 @@ def get_order_by_id(order_id: int, db: Session = Depends(get_db)):
         "detail": "Order ID not valid"
     }
     """
-    order = db.query(Order).filter(Order.id == order_id).first()
+    order = get_order_by_id_crud(order_id, db)
     if order is None:
         raise HTTPException(status_code=400, detail="Order ID not valid")
     return order
