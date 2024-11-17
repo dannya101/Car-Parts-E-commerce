@@ -18,8 +18,20 @@ from app.crud import (
 
 settings = get_settings()
 
-#Register
 def create_user(db: Session, user: UserCreate):
+    """
+    Registers a new user by adding them to the database.
+
+    Parameters:
+        db (Session): The database session.
+        user (UserCreate): Schema containing user details (username, email, password).
+
+    Returns:
+        User: The newly created user.
+
+    Raises:
+        HTTPException: If the username or email is already registered.
+    """
     if get_user_by_username(db, user.username) or get_user_by_email(db, user.email):
         raise HTTPException(status_code=400, detail="Username or Email is already registered")
 
@@ -36,6 +48,17 @@ def create_user(db: Session, user: UserCreate):
     return add_and_commit(db, db_user)
 
 def authenticate_user(db: Session, username:str, password:str):
+    """
+    Authenticates a user by verifying their username and password.
+
+    Parameters:
+        db (Session): The database session.
+        username (str): The user's username.
+        password (str): The plain text password provided by the user.
+
+    Returns:
+        User: The authenticated user if credentials are correct, otherwise None.
+    """
     user = get_user_by_username(db, username)
 
     if not user:
