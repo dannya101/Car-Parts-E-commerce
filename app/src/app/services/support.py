@@ -38,7 +38,7 @@ def create_support_ticket(support_ticket_creator: SupportTicketBase, user_id: in
 
 def close_the_ticket(support_ticket_id: int, db: Session):
     ticket = get_ticket_by_id(db, support_ticket_id)
-    print(f"theTicket {ticket}")
+    # print(f"theTicket {ticket}")
     if not ticket:
         raise HTTPException(status_code=404, detail=f"Ticket {support_ticket_id} not valid")
 
@@ -46,7 +46,7 @@ def close_the_ticket(support_ticket_id: int, db: Session):
     for reply in reply_ticket:
         delete_and_commit(db, reply)
     delete_and_commit(db, ticket)
-    return {"message": "Resolved ticket with id of {support_ticket_id}"}
+    return 
 
 def add_reply_to_db(admin_reply: TicketReplies, db: Session):
     return add_and_commit(db, admin_reply)

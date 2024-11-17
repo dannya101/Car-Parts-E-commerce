@@ -36,4 +36,5 @@ def reply_to_ticket(ticket_id: int, reply: str, current_user: User = Depends(get
 
 @router.post("/ticket/close")
 def close_ticket(ticket_id: int, db: Session = Depends(get_db)):
-    return support_service.close_the_ticket(support_ticket_id=ticket_id, db=db)
+    support_service.close_the_ticket(support_ticket_id=ticket_id, db=db)
+    return {"message": f"Closed ticket with ID: {ticket_id}"}
