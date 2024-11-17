@@ -61,8 +61,6 @@ def create_user(db: Session, user: UserCreate):
         verification_code=verification_code
     )
 
-    #TODO: Send verification code URL to users email
-
     return add_and_commit(db, db_user)
 
 def authenticate_user(db: Session, username:str, password:str):
