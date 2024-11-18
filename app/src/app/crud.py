@@ -3,7 +3,6 @@ from app.models.cart import Cart, CartItem
 from app.models.product import Product
 from app.models.user import User
 from app.models.order import Order, OrderItem
-from app.models.cart import Cart, CartItem
 from app.models.address import Address
 from app.models.product import Product, PartCategory, BrandCategory
 from app.models.support import SupportTicket, TicketReplies
