@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from passlib.hash import bcrypt
 from sqlalchemy.orm import Session
 
-from app.core.config import get_settings
+from app.core.config import get_settings, send_verification_email
 from app.core.security import verify_password
 from app.models.user import User
 from app.schemas.user import UserCreate
@@ -18,16 +18,16 @@ from app.crud import (
 
 settings = get_settings()
 
-def verify_user_email(db: Session, current_user: User, verification_code: str):
+def verify_user_email(db: Session, verification_code: str):
     # Check if a user with the given verification code exists
     user = db.query(User).filter(User.verification_code == verification_code).first()
-    
+
     if not user:
         raise HTTPException(status_code=400, detail="Invalid verification code.")
-    
+
     if user.is_verified:
         raise HTTPException(status_code=400, detail="Email is already verified.")
-    
+
     # Mark the email as verified
     user.is_verified = True
     user.verification_code = None  # Clear the code after successful verification
@@ -60,6 +60,10 @@ def create_user(db: Session, user: UserCreate):
         password_hash = password_hash,
         verification_code=verification_code
     )
+
+    #Send verification email if email address is not example.com
+    if not user.email.endswith('@example.com'):
+        send_verification_email(to_email=user.email, verification_code=verification_code)
 
     return add_and_commit(db, db_user)
 

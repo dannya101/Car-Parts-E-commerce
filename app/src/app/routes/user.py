@@ -210,8 +210,8 @@ def logout_current_user(current_user: User = Depends(get_current_user),  db:Sess
 #         raise HTTPException(status_code=400, detail="Invalid token.")
 
 
-@router.post("/verify-email")
-def verify_email(verification_code: str, current_user: User = Depends(get_current_user),  db:Session=Depends(get_db)):
+@router.get("/verify-email")
+def verify_email(verification_code: str,  db:Session=Depends(get_db)):
     """
     Verify the User's Email Address
 
@@ -263,4 +263,4 @@ def verify_email(verification_code: str, current_user: User = Depends(get_curren
     - **Use Case**:
         - Verifying the email address to complete the registration process or enable email-related features.
     """
-    return user_service.verify_user_email(db=db, current_user=current_user, verification_code=verification_code)
+    return user_service.verify_user_email(db=db, verification_code=verification_code)
