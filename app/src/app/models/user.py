@@ -27,5 +27,3 @@ class User(Base):
 
 def get_password_hash(password):
     return pwd_context.hash(password)
-
-from app.models.support import SupportTicket

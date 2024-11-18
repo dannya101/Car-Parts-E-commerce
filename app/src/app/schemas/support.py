@@ -5,6 +5,5 @@ class SupportTicketBase(BaseModel):
     title: str
     description: str
     
-    #didnt think I needed this
-    # class Config:
-    #     orm_mode = True
+    class Config:
+        orm_mode = True
