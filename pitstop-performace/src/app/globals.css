@@ -70,3 +70,52 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .text-border {
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 1;
+  }
+  33% {
+    opacity: 0;
+  }
+  66% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-background {
+  animation: fadeInOut 30s ease-in-out infinite;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.delay-2000 {
+  animation-delay: 10s;
+}
+
+.delay-4000 {
+  animation-delay: 20s;
+}
+
+/* Background images for each layer */
+.fade-background:nth-child(1) {
+  background-image: url('/bg1.png');
+}
+
+.fade-background:nth-child(2) {
+  background-image: url('/bg2.png');
+}
+
+.fade-background:nth-child(3) {
+  background-image: url('/bg3.png');
+}
