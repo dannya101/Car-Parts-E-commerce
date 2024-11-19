@@ -6,7 +6,7 @@ import CreateTicketForm from "@/components/createticketform";
 import ViewTicketForm from "@/components/viewticketform";
 
 export default function Support() {
-    const [tabValue, setTabValue] = useState("support")
+    const [tabValue, setTabValue] = useState("submit")
 
     const handleTicketSubmit = (subject:string, description:string) => {
         console.log("Ticket Submitted: ", subject, description);
