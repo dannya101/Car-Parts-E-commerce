@@ -41,6 +41,16 @@ export default function LoginForm({onSubmit}: any) {
             >
                 Login
             </button>
+
+            {/* Forgot Password Link */}
+            <div className="text-center mt-2">
+                <a
+                    href="/forgot-password"
+                    className="text-sm text-blue-400 hover:underline"
+                >
+                    Forgot your password?
+                </a>
+            </div>
         </form>
     );
 }
