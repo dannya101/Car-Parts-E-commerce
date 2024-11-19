@@ -10,8 +10,8 @@ export default function navbar() {
   ];
 
   return (
-    <div className="bg-primary text-primary-foreground">
-      <div className="container mx-auto flex items-center justify-between py-4">
+    <div className="bg-primary text-primary-foreground h-16 flex items-center">
+      <div className="container mx-auto flex justify-between">
 
         {/*LOGO*/}
         <img src="/webname.svg" alt="logo" width={465} height={62}/>

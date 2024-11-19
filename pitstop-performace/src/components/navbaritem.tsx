@@ -9,11 +9,11 @@ interface NavbarItemProps {
 
 export default function NavbarItem({navLink}:NavbarItemProps){
     return (
-        <Link 
-            key={navLink.label}
-            href={navLink.link}
-        >
-            <Button>{navLink.label}</Button>
-        </Link>
+            <Button 
+            asChild
+            className="h-full flex bg-navbutton text-navbutton-foreground hover:bg-navbutton-foreground hover:text-white transition-colors duration-300 px-4"
+            >
+                <Link href={navLink.link}>{navLink.label}</Link>
+            </Button>
     )
 }
