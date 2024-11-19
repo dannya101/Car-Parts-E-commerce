@@ -11,6 +11,8 @@ export default function LoginForm({onSubmit}: any) {
 
     return (
         <form onSubmit={handleSubmit}>
+
+            {/*Email*/}
             <div className="mb-4">
                 <label htmlFor="loginEmail" className="block text-sm font-medium text-white">Email</label>
                 <input
@@ -23,6 +25,7 @@ export default function LoginForm({onSubmit}: any) {
                 />
             </div>
 
+            {/*Password*/}
             <div className="mb-4">
                 <label htmlFor="loginPassword" className="block text-sm font-medium text-white">Password</label>
                 <input
@@ -35,6 +38,7 @@ export default function LoginForm({onSubmit}: any) {
                 />
             </div>
 
+            {/*Submit*/}
             <button
                 type="submit"
                 className="w-full bg-blue-500 text-white p-2 rounded"

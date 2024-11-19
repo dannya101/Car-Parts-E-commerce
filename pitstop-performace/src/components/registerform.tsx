@@ -16,6 +16,8 @@ export default function RegisterForm({ onSubmit }: any) {
 
     return (
         <form onSubmit={handleSubmit}>
+
+            {/*Email*/}
             <div className="mb-4">
                 <label htmlFor="registerEmail" className="block text-sm font-medium text-white">Email</label>
                 <input
@@ -28,6 +30,7 @@ export default function RegisterForm({ onSubmit }: any) {
                 />
             </div>
 
+            {/*Password*/}
             <div className="mb-4">
                 <label htmlFor="registerPassword" className="block text-sm font-medium text-white">Password</label>
                 <input
@@ -40,6 +43,7 @@ export default function RegisterForm({ onSubmit }: any) {
                 />
             </div>
 
+            {/*Confirm Password*/}
             <div className="mb-4">
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-white">Confirm Password</label>
                 <input
@@ -52,6 +56,7 @@ export default function RegisterForm({ onSubmit }: any) {
                 />
             </div>
 
+            {/*Register*/}
             <button
                 type="submit"
                 className="w-full bg-green-500 text-white p-2 rounded"
