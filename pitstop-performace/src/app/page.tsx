@@ -3,19 +3,17 @@ import { SelectScrollable } from "@/components/selectbutton";
 
 
 export default function Home() {
+  const picConfigs = 'absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1/2 h-96 fade-background animate-fade-in';
   return (
-
-    <div className="relative min-h-screen">
-        <div className="absolute top-1/2 right-20 w-96 h-96 fade-background animate-fade-in"></div>
-        <div className="absolute top-1/2 right-20 w-96 h-96 fade-background animate-fade-in delay-2000"></div>
-        <div className="absolute top-1/2 right-20 w-96 h-96 fade-background animate-fade-in delay-4000"></div>
+    <div className="">
+      <div style={{position : "fixed"}} className={`${picConfigs}`}/>
+      <div style={{position : "fixed"}} className={`${picConfigs} delay-2000`}/>
+      <div style={{position : "fixed"}} className={`${picConfigs} delay-4000`}/>
       <div className="relative z-10 p-8">
         <h1 className="text-white text-5xl text-border font-bold flex justify-center">Home Page</h1>
       </div>
-      <div className="relative top-1/3 z-10">
+      <div className="relative z-10 flex flex-row items-center space-x-40 pt-28 pl-96">
         <SelectScrollable/>
-      </div>
-      <div className="top-1/3">
         <SelectScrollable/>
       </div>
     </div>
