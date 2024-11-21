@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { SelectScrollable} from "@/components/selectbutton";
+import { SelectScrollableResult } from "@/components/selectresult";
 import {Searchbutton} from "@/components/searchbutton"
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       </div>
       <div className="relative z-10 flex flex-row justify-center items-center space-x-40 pt-20">
         <SelectScrollable/>
+        {/* <SelectScrollableResult/> */}
         <Searchbutton/>
       </div>
     </div>
