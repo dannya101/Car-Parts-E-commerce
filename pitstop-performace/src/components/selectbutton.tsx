@@ -9,11 +9,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { SelectScrollableResult } from "./selectresult";
+import { useState } from "react";
 
 export function SelectScrollable() {
+  let boolVal = true;
+  const [value, setValue] = useState("");
+  const handleChange = (newValue: string) => {
+    setValue(newValue);
+  };
   return (
-    <Select>
-      <SelectTrigger className="w-[150px] bg-white  border-solid border-2 border-black">
+    <>
+    <Select onValueChange={handleChange}>
+      <SelectTrigger className="w-[150px] bg-white border-solid border-2 border-black">
         <SelectValue placeholder="Make" />
       </SelectTrigger>
       <SelectContent>
@@ -25,5 +33,9 @@ export function SelectScrollable() {
           <SelectItem value="Tesla">Tesla</SelectItem>
       </SelectContent>
     </Select>
+    {/* {value && <SelectScrollableResult selectedModel={value}/>} */}
+    
+    </>
   )
 }
+
