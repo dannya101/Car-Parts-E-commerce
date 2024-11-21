@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/selectbutton"
-import { buttonVariants } from "@/components/ui/selectbutton"
+import { Button } from "@/components/ui/selectbuttondesign"
+import { buttonVariants } from "@/components/ui/selectbuttondesign"
 import Link from "next/link"
 
 
