@@ -10,7 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-<<<<<<< Updated upstream
 interface SelectScrollableResultProps {
   selectedModel: string;
 }
@@ -44,54 +43,3 @@ export function SelectScrollableResult({ selectedModel }: SelectScrollableResult
     </Select>
   );
 }
-=======
-export function SelectScrollableResult() {
-
-    // const handleClick = () => {
-    //   if(selectedModel === ("Honda"))
-    //   {
-    //     return (
-    //       <Select>
-    //         <SelectTrigger className="w-[150px] bg-white border-solid border-2 border-black">
-    //           <SelectValue placeholder="Model" />
-    //         </SelectTrigger>
-  
-    //         <SelectContent>
-    //             <SelectItem value="Accord">Honda</SelectItem>
-    //             <SelectItem value="Odyssey">Ford</SelectItem>
-    //             <SelectItem value="Civic">Toyota</SelectItem>
-    //             <SelectItem value=".">Lexus</SelectItem>
-    //             <SelectItem value=".">Acura</SelectItem>
-    //             <SelectItem value=".">Tesla</SelectItem>
-    //         </SelectContent>
-    //       </Select>)
-    //   } 
-    //   else if(selectedModel === "Toyota"){
-    //     return (
-    //       <Select>
-    //         <SelectTrigger className="w-[150px] bg-white border-solid border-2 border-black">
-    //           <SelectValue placeholder="Model" />
-    //         </SelectTrigger>
-  
-    //         <SelectContent>
-    //             <SelectItem value="Camry">Honda</SelectItem>
-    //             <SelectItem value="Corolla">Ford</SelectItem>
-    //             <SelectItem value="Tacoma">Toyota</SelectItem>
-    //             <SelectItem value="Supra">Lexus</SelectItem>
-    //             <SelectItem value=".">Acura</SelectItem>
-    //             <SelectItem value="">Tesla</SelectItem>
-    //         </SelectContent>
-    //       </Select>)
-    //   }
-    // };
-  
-    return(
-      <Select>
-        <SelectTrigger disabled={true} className="w-[150px] bg-white border-solid border-2 border-black">
-          <SelectValue placeholder="Model" />
-        </SelectTrigger>
-  
-      </Select>
-    )
-  }
->>>>>>> Stashed changes

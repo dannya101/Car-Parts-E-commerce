@@ -10,7 +10,7 @@ import {
 export default function About() {
     return (
         <div>
-           <Card className="absolute w-[700px] left-1/4 top-1/4">
+           <Card className="relative left-1/4 w-[700px]">
                 <CardHeader>
                     <CardTitle>About Us: The Story Of Pitstop Performance</CardTitle>
                     <CardDescription>
@@ -27,8 +27,6 @@ export default function About() {
                         We're proud to be your reliable pit stop for all your car part needs!
                     </CardDescription>
                 </CardHeader>
-                <CardFooter className="flex justify-between">
-                </CardFooter>
             </Card>
         </div>
     )
