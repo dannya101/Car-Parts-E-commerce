@@ -15,11 +15,10 @@ export default function Home() {
         {/* <h1 className="text-white text-5xl text-border font-bold flex justify-center">Pitstop Performance</h1> */}
         <img src="/webname.svg" alt="logo" width={600} height={309}/>
       </div>
-      <div className="relative z-10 flex flex-row items-center space-x-40 pt-20 pl-96">
+      <div className="relative z-10 flex flex-row justify-center items-center space-x-40 pt-20">
         <SelectScrollable/>
         {/* <SelectScrollableResult/> */}
         <Searchbutton/>
-
       </div>
     </div>
   );
