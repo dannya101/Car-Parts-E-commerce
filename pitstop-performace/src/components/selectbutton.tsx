@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react"
 
 import {
@@ -14,7 +15,7 @@ import { useState } from "react";
 
 export function SelectScrollable() {
   let boolVal = true;
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string>("");
   const handleChange = (newValue: string) => {
     setValue(newValue);
   };
@@ -33,7 +34,7 @@ export function SelectScrollable() {
           <SelectItem value="Tesla">Tesla</SelectItem>
       </SelectContent>
     </Select>
-    {/* {value && <SelectScrollableResult selectedModel={value}/>} */}
+    { value && <SelectScrollableResult selectedModel={value}/> }
     
     </>
   )
