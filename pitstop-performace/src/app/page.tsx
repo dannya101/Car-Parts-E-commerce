@@ -17,8 +17,6 @@ export default function Home() {
       </div>
       <div className="relative z-10 flex flex-row justify-center items-center space-x-40 pt-20 select-none">
         <SelectScrollable/>
-        {/* <SelectScrollableResult/> */}
-        <Searchbutton/>
       </div>
     </div>
   );

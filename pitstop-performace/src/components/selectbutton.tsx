@@ -1,4 +1,3 @@
-"use client"
 "use client";
 import * as React from "react"
 import {
@@ -12,16 +11,23 @@ import {
 } from "@/components/ui/select"
 import { SelectScrollableResult } from "./selectresult";
 import { useState } from "react";
+import { Searchbutton } from "./searchbutton";
 
 export function SelectScrollable() {
-  let boolVal = true;
-  const [value, setValue] = useState<string>("");
-  const handleChange = (newValue: string) => {
-    setValue(newValue);
+  const [selectedModel, setSelectedModel] = useState<string>("");
+  const [selectedMake, setSelectedMake] = useState<string>("");
+
+  const handleModelChange = (newValue: string) => {
+    setSelectedModel(newValue);
   };
+
+  const handleMakeChange = (newValue: string) => {
+    setSelectedMake(newValue);
+  }
+
   return (
     <>
-    <Select onValueChange={handleChange}>
+    <Select onValueChange={handleMakeChange}>
       <SelectTrigger className="w-[150px] bg-white border-solid border-2 border-black">
         <SelectValue placeholder="Make" />
       </SelectTrigger>
@@ -34,8 +40,8 @@ export function SelectScrollable() {
           <SelectItem value="Tesla">Tesla</SelectItem>
       </SelectContent>
     </Select>
-    { value && <SelectScrollableResult selectedModel={value}/> }
-    
+    { selectedMake && <SelectScrollableResult selectedMake={selectedMake} onModelSelect={handleModelChange}/> }
+    { selectedMake && selectedModel && <Searchbutton selectedMake={selectedMake} selectedModel={selectedModel}/>}
     </>
   )
 }

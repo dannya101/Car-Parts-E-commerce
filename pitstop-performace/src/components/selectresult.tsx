@@ -11,10 +11,11 @@ import {
 } from "@/components/ui/select"
 
 interface SelectScrollableResultProps {
-  selectedModel: string;
+  selectedMake: string;
+  onModelSelect: (model: string) => void;
 }
 
-export function SelectScrollableResult({ selectedModel }: SelectScrollableResultProps) {
+export function SelectScrollableResult({ selectedMake, onModelSelect }: SelectScrollableResultProps) {
   const carModelsByMake: Record<string, string[]> = {
     Honda: ["Accord", "Civic", "CR-V", "Odyssey", "Prelude"],
     Ford: ["Explorer", "F-150", "Focus", "Mustang", "Ranger"],
@@ -27,9 +28,9 @@ export function SelectScrollableResult({ selectedModel }: SelectScrollableResult
     return carModelsByMake[make] || [];
   }
   
-  const models = getModels(selectedModel);
+  const models = getModels(selectedMake);
   return (
-    <Select>
+    <Select onValueChange={onModelSelect}>
       <SelectTrigger className="w-[150px] bg-white border-solid border-2 border-black">
         <SelectValue placeholder="Model" />
       </SelectTrigger>
