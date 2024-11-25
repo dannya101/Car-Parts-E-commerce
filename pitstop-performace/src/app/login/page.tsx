@@ -4,57 +4,11 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LoginForm from "../../components/loginform";
 import RegisterForm from "../../components/registerform";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
     const [tabValue, setTabValue] = useState("login")
-
-    const handleLoginSubmit = async (username:string, password:string) => {
-        try {
-            const response = await fetch("http://localhost:8000/users/token", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: new URLSearchParams({
-                    username: username,
-                    password: password,
-                }).toString(),
-            });
-
-            const data = await response.json();
-            if(response.ok) {
-                console.log("Login Successful: ", data);
-                sessionStorage.setItem("access_token", data.access_token);
-            } else {
-                console.error("Login Failed: ", data);
-            }
-        }
-        catch(error) {
-            console.error("Error Logging In: ", error)
-        }
-    };
-
-    const handleRegisterSubmit = async (username:string, email:string, password:string) => {
-        try {
-            const response = await fetch("http://localhost:8000/users/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ username, email, password }),
-            });
-
-            const data = await response.json();
-            if(response.ok) {
-                console.log("Registration Successful: ", data);
-            } else {
-                console.error("Registration Failed: ", data);
-            }
-        } catch(error) {
-            console.error("Error Registering: ", error);
-        }
-    };
-
+    const router = useRouter();
 
     return (
             <div className="max-w-md mx-auto p-4 pt-20">
@@ -70,11 +24,11 @@ export default function Login() {
                         </TabsList>
 
                         <TabsContent value="login">
-                            <LoginForm onSubmit={handleLoginSubmit} />
+                            <LoginForm />
                         </TabsContent>
 
                         <TabsContent value="register">
-                            <RegisterForm onSubmit={handleRegisterSubmit} />
+                            <RegisterForm />
                         </TabsContent>
                     </div>
                 </Tabs>

@@ -1,12 +1,59 @@
-import {useState} from "react"
+import {useState} from "react";
+import {useRouter} from "next/navigation";
+import { useAuth } from "@/context/authcontext";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LoginForm({onSubmit}: any) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const {isAuthenticated, setIsAuthenticated} = useAuth();
+    const {toast} = useToast();
+    const router = useRouter();
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        onSubmit(username, password);
+        handleLoginSubmit(username, password);
+    };
+
+    const handleLoginSubmit = async (username:string, password:string) => {
+        try {
+            const response = await fetch("http://localhost:8000/users/token", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                    username: username,
+                    password: password,
+                }).toString(),
+            });
+
+            const data = await response.json();
+            if(response.ok) {
+                console.log("Login Successful: ", data);
+                sessionStorage.setItem("access_token", data.access_token);
+                setIsAuthenticated(true);
+                toast({
+                    title: "Login Successful",
+                    description: "Access Token Has Been Stored In Session",
+                });
+                router.push("/");
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Login Failed",
+                    description: "Username or Password is incorrect. Try Again or Register a New Account",
+                });
+            }
+        }
+        catch(error) {
+            console.error("Error Logging In: ", error);
+            toast({
+                variant: "destructive",
+                title: "Login Failed",
+                description: "System Error: Try Again",
+            });
+        }
     };
 
     return (

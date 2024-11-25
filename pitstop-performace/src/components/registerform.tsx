@@ -1,10 +1,12 @@
 import { useState } from "react";
+import {useRouter} from "next/navigation";
 
 export default function RegisterForm({ onSubmit }: any) {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const router = useRouter();
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -12,8 +14,30 @@ export default function RegisterForm({ onSubmit }: any) {
             alert("Passwords do not match.");
             return;
         }
-        onSubmit(username, email, password);
+        handleRegisterSubmit(username, email, password);
     };
+
+    const handleRegisterSubmit = async (username:string, email:string, password:string) => {
+        try {
+            const response = await fetch("http://localhost:8000/users/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, email, password }),
+            });
+
+            const data = await response.json();
+            if(response.ok) {
+                console.log("Registration Successful: ", data);
+            } else {
+                console.error("Registration Failed: ", data);
+            }
+        } catch(error) {
+            console.error("Error Registering: ", error);
+        }
+    };
+
 
     return (
         <form onSubmit={handleSubmit}>
