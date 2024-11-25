@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 export default function RegisterForm({ onSubmit }: any) {
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -11,11 +12,24 @@ export default function RegisterForm({ onSubmit }: any) {
             alert("Passwords do not match.");
             return;
         }
-        onSubmit(email, password);
+        onSubmit(username, email, password);
     };
 
     return (
         <form onSubmit={handleSubmit}>
+
+            {/*Username*/}
+            <div className="mb-4">
+                <label htmlFor="registerUsername" className="block text-sm font-medium text-white">Username</label>
+                <input
+                    type="string"
+                    id="registerUsername"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full mt-1 p-2 border border-gray-300 rounded"
+                    required
+                />
+            </div>
 
             {/*Email*/}
             <div className="mb-4">

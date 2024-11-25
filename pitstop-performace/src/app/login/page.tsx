@@ -8,14 +8,51 @@ import RegisterForm from "../../components/registerform";
 export default function Login() {
     const [tabValue, setTabValue] = useState("login")
 
-    const handleLoginSubmit = (email:string, password:string) => {
-        // Handle login logic here (e.g., authenticate user)
-        console.log("Logging in with:", email, password);
+    const handleLoginSubmit = async (username:string, password:string) => {
+        try {
+            const response = await fetch("http://localhost:8000/users/token", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                    username: username,
+                    password: password,
+                }).toString(),
+            });
+
+            const data = await response.json();
+            if(response.ok) {
+                console.log("Login Successful: ", data);
+                sessionStorage.setItem("access_token", data.access_token);
+            } else {
+                console.error("Login Failed: ", data);
+            }
+        }
+        catch(error) {
+            console.error("Error Logging In: ", error)
+        }
     };
 
-    const handleRegisterSubmit = (email:string, password:string) => {
-        // Handle registration logic here (e.g., create new user)
-        console.log("Registering with:", email, password);
+    const handleRegisterSubmit = async (username:string, email:string, password:string) => {
+        try {
+            const response = await fetch("http://localhost:8000/users/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, email, password }),
+            });
+
+            const data = await response.json();
+            if(response.ok) {
+                console.log("Registration Successful: ", data);
+            } else {
+                console.error("Registration Failed: ", data);
+            }
+        } catch(error) {
+            console.error("Error Registering: ", error);
+        }
     };
 
 

@@ -1,25 +1,25 @@
 import {useState} from "react"
 
 export default function LoginForm({onSubmit}: any) {
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        onSubmit(email, password);
+        onSubmit(username, password);
     };
 
     return (
         <form onSubmit={handleSubmit}>
 
-            {/*Email*/}
+            {/*Username*/}
             <div className="mb-4">
-                <label htmlFor="loginEmail" className="block text-sm font-medium text-white">Email</label>
+                <label htmlFor="loginUsername" className="block text-sm font-medium text-white">Username</label>
                 <input
-                    type="email"
-                    id="loginEmail"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="string"
+                    id="loginUsername"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className="w-full mt-1 p-2 border border-gray-300 rounded"
                     required
                 />
