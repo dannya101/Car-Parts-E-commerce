@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 
 from fastapi import HTTPException
 
-from app.models.product import Product, PartCategory, BrandCategory
-from app.schemas.product import ProductCreate, ProductUpdate, PartCategoryCreate, BrandCategoryCreate
+from app.models.product import Product, PartCategory, BrandCategory, ModelCategory
+from app.schemas.product import ProductCreate, ProductUpdate, PartCategoryCreate, BrandCategoryCreate, ModelCategoryCreate
 
 import json
 from app.crud import (
@@ -17,8 +17,10 @@ from app.crud import (
     get_all_products,
     get_all_part_categories,
     get_all_brand_categories,
+    get_all_model_categories,
     get_part_category_by_name,
     get_brand_category_by_name,
+    get_model_category_by_name,
     get_products_by_brand_category_by_id,
     get_products_by_part_category_id
 )
@@ -47,6 +49,7 @@ def create_new_product(db: Session, product: ProductCreate):
         price=product.price,
         part_category_id=product.part_category_id,
         brand_category_id=product.brand_category_id,
+        model_category_id=product.model_category_id,
         thumbnail=product.thumbnail
     )
 
@@ -180,3 +183,15 @@ def add_new_brand_category(db: Session, brand: BrandCategoryCreate):
 
     add_and_commit(db=db, obj=new_brand)
     return get_brand_category_by_name(db=db, name=brand.brand_type_name)
+
+def add_new_model_category(db: Session, model: ModelCategoryCreate):
+    if get_model_category_by_name(db=db, name=model.model_name):
+        raise HTTPException(status_code=400, detail="Model Already Exists")
+
+    new_model = ModelCategory(
+        brand_id = model.brand_id,
+        model_name = model.model_name
+    )
+
+    add_and_commit(db=db, obj=new_model)
+    return get_model_category_by_name(db=db, name=new_model.model_name)

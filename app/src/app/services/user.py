@@ -14,6 +14,7 @@ from app.crud import (
     get_user,
     get_user_by_username,
     get_user_by_email,
+    set_admin
 )
 
 settings = get_settings()

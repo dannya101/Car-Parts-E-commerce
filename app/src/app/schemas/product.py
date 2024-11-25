@@ -31,6 +31,18 @@ class BrandCategoryCreate(BaseModel):
     class Config:
         orm_mode = True
 
+class ModelCategory(BaseModel):
+    id: int
+    brand_id: int
+    model_name: str
+
+    class Config:
+        orm_mode = True
+
+class ModelCategoryCreate(BaseModel):
+    brand_id: int
+    model_name: str
+
 class ProductBase(BaseModel):
 
     name: str
@@ -41,6 +53,7 @@ class ProductBase(BaseModel):
     thumbnail: str
     part_category_id: int
     brand_category_id: int
+    model_category_id: int
 
 
 class ProductCreate(ProductBase):
@@ -59,6 +72,7 @@ class ProductUpdate(BaseModel):
     price: Optional[float]
     part_category_id: Optional[int]
     brand_category_id: Optional[int]
+    model_category_id: Optional[int]
     tags: Optional[List[str]]
     images: Optional[List[str]]
     thumbnail: Optional[str]

@@ -4,7 +4,7 @@ from app.models.product import Product
 from app.models.user import User
 from app.models.order import Order, OrderItem
 from app.models.address import Address
-from app.models.product import Product, PartCategory, BrandCategory
+from app.models.product import Product, PartCategory, BrandCategory, ModelCategory
 from app.models.support import SupportTicket, TicketReplies
 
 #CRUD Utility
@@ -88,7 +88,20 @@ def get_ticket_replies_by_ticket_id(db: Session, ticket_id: int):
     Returns:
         A list of TicketReplies objects.
     """
-    return db.query(TicketReplies).filter(TicketReplies.ticket_id == ticket_id).all()
+    replies = db.query(
+        TicketReplies.id, 
+        TicketReplies.ticket_id, 
+        TicketReplies.content, 
+        TicketReplies.created_at, 
+        User.username.label("user_name")
+    ).join(
+        User, 
+        TicketReplies.user_id == User.id
+    ).filter(
+        TicketReplies.ticket_id == ticket_id
+    ).all()
+
+    return replies
 
 #User CRUD
 def get_user(db: Session, user_id: int):
@@ -129,6 +142,14 @@ def get_user_by_email(db: Session, email: str):
         The User object or None if not found.
     """
     return db.query(User).filter(User.email == email).first()
+
+def set_admin(db:Session, user_id: int):
+    user = get_user(db=db, user_id=user_id)
+    user.is_admin = True
+
+    commit_and_refresh(db=db, obj=user)
+    return user
+    
 
 #Product CRUD
 def get_product_by_id(db: Session, product_id: int):
@@ -219,6 +240,9 @@ def get_all_brand_categories(db: Session):
     """
     return db.query(BrandCategory).all()
 
+def get_all_model_categories(db: Session):
+    return db.query(ModelCategory).all()
+
 def get_part_category_by_name(db: Session, name: str):
     """
     Retrieve a part category by its name.
@@ -244,6 +268,9 @@ def get_brand_category_by_name(db: Session, name: str):
         The BrandCategory object or None if not found.
     """
     return db.query(BrandCategory).filter(BrandCategory.brand_type_name == name).first()
+
+def get_model_category_by_name(db: Session, name: str):
+    return db.query(ModelCategory).filter(ModelCategory.model_name == name).first()
 
 def get_products_by_part_category_id(db: Session, part_category_id: int):
     """

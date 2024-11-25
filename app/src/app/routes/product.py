@@ -220,6 +220,19 @@ def get_brand_categories(db: Session = Depends(get_db)):
 
     return brand_categories
 
+@router.get("/modelcategories")
+def get_model_categories(db: Session = Depends(get_db)):
+    model_categories = product_service.get_all_model_categories(db)
+
+    if not model_categories:
+        raise HTTPException(
+            status_code=400,
+            detail="Model Categories Not Found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return model_categories
+
 @router.get("/get/partcategory")
 def get_product_by_part_category_id(part_category_id: int, db: Session = Depends(get_db)):
     """

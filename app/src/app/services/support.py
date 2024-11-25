@@ -43,7 +43,24 @@ def get_support_ticket_by_id(support_ticket_id: int, user_id: int, db: Session):
     ticket = get_ticket_by_id(db, support_ticket_id)
     if not ticket or ticket.user_id != user_id:
         raise HTTPException(status_code=404, detail=f"Ticket {support_ticket_id} not valid")
-    return ticket
+    
+    replies = get_ticket_replies_by_ticket_id(db=db, ticket_id=support_ticket_id)
+
+    data = {
+        "ticket": ticket,
+        "replies": [
+            {
+                "ticket_id": reply.ticket_id,
+                "content": reply.content,
+                "id": reply.id,
+                "user_name": reply.user_name,
+                "created_at": reply.created_at,
+            }
+            for reply in replies
+        ],
+    }
+
+    return data
 
 def add_support_ticket_to_db(support_ticket: SupportTicket, db: Session):
     """
@@ -132,4 +149,13 @@ def reply_to_ticket(support_ticket_id: int, reply: str, user_id: int, db:Session
     """
     new_reply = TicketReplies(ticket_id=support_ticket_id, user_id=user_id,content= reply)
     addedReply = add_reply_to_db(admin_reply=new_reply, db=db)
-    return addedReply
+
+    data = {
+        "id": new_reply.id,
+        "ticket_id": new_reply.ticket_id,
+        "content": new_reply.content,
+        "user_name": new_reply.user.username, 
+        "created_at": new_reply.created_at
+    }
+
+    return data

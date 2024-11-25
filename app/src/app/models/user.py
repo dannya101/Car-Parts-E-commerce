@@ -16,6 +16,7 @@ class User(Base):
     password_hash = Column(String)
     is_active = Column(Boolean, default=False)
     is_verified = Column(Boolean, default=False)
+    is_admin = Column(Boolean, default=False)
     verification_code = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.now(UTC))
 

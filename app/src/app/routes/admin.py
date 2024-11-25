@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 import app.services.product as product_service
 from app.dependencies import get_db
 from app.models.product import Product
-from app.schemas.product import ProductCreate, ProductUpdate, PartCategoryCreate, BrandCategoryCreate
+from app.schemas.product import ProductCreate, ProductUpdate, PartCategoryCreate, BrandCategoryCreate, ModelCategoryCreate
 
 router = APIRouter()
 
@@ -89,6 +89,10 @@ def add_brand_category(new_brand: BrandCategoryCreate, db: Session = Depends(get
         - This endpoint is used to add new brand categories, which can be used to organize products by their brand.
     """
     return product_service.add_new_brand_category(db=db, brand=new_brand)
+
+@router.post("/add-model-category")
+def add_model_category(new_model: ModelCategoryCreate, db: Session = Depends(get_db)):
+    return product_service.add_new_model_category(db=db, model=new_model)
 
 @router.post("/products")
 def create_product(product: ProductCreate, db: Session = Depends(get_db)):

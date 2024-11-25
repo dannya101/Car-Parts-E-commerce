@@ -6,7 +6,7 @@ from app.core.auth import get_current_user, get_db
 from app.models.user import User
 
 import app.services.support as support_service
-from app.schemas.support import SupportTicketBase
+from app.schemas.support import SupportTicketBase, TicketReply
 from datetime import UTC, datetime, timedelta
 
 
@@ -121,7 +121,7 @@ def get_all_user_tickets(current_user: User = Depends(get_current_user), db: Ses
     return {"tickets": all_tickets}
 
 @router.post("/ticket/reply")
-def reply_to_ticket(ticket_id: int, reply: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def reply_to_ticket(reply: TicketReply, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """
     Reply to a Support Ticket
 
@@ -147,7 +147,7 @@ def reply_to_ticket(ticket_id: int, reply: str, current_user: User = Depends(get
         "reply": "We are looking into your issue and will get back to you soon."
     }
     """
-    the_reply = support_service.reply_to_ticket(support_ticket_id=ticket_id, reply=reply, user_id=current_user.id,db=db)
+    the_reply = support_service.reply_to_ticket(support_ticket_id=reply.ticket_id, reply=reply.content, user_id=current_user.id,db=db)
     return the_reply
 
 

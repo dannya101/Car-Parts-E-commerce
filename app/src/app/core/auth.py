@@ -18,6 +18,8 @@ SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
+ADMIN_PASS = settings.ADMIN_PASS
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/token")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -61,3 +63,11 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         raise credentials_exception
 
     return user
+
+def check_admin_pass(password: str):
+    #hash_pwd = pwd_context.hash(password)
+    hash_pwd = password
+    if(hash_pwd == ADMIN_PASS):
+        return True
+    else:
+        return False

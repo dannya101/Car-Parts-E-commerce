@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 import app.services.user as user_service
-from app.core.auth import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, get_current_user
+from app.core.auth import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, get_current_user, check_admin_pass
 from app.dependencies import get_db
 from app.schemas.token import Token
 from app.schemas.user import UserCreate, UserResponse
@@ -255,3 +255,22 @@ def verify_email(verification_code: str,  db:Session=Depends(get_db)):
         - Verifying the email address to complete the registration process or enable email-related features.
     """
     return user_service.verify_user_email(db=db, verification_code=verification_code)
+
+@router.post("/setAdmin")
+def set_user_as_admin(password: str, current_user: User=Depends(get_current_user), db:Session=Depends(get_db)):
+    if not check_admin_pass(password=password):
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect Admin Password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    return user_service.set_admin(db=db, user_id=current_user.id)
+
+@router.get("/isAdmin")
+def is_user_admin(current_user: User=Depends(get_current_user), db:Session=Depends(get_db)):
+    user =user_service.get_user(db=db, user_id=current_user.id)
+    if(user.is_admin):
+        return {"success": "User Is Admin"}
+    else:
+        return {"fail": "User Is NOT Admin"}

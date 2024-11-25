@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     SENDER_EMAIL: str
     SENDER_PASSWORD: str
 
+    ADMIN_PASS: str
+
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
 
