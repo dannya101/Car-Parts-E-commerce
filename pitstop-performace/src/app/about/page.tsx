@@ -9,8 +9,8 @@ import {
 
 export default function About() {
     return (
-        <div>
-           <Card className="relative left-1/4 w-[700px]">
+        <div className="flex justify-center mt-16">
+           <Card className="relative w-[700px]">
                 <CardHeader>
                     <CardTitle>About Us: The Story Of Pitstop Performance</CardTitle>
                     <CardDescription>
