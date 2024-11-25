@@ -9,8 +9,38 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function navbar() {
   const {isAuthenticated, setIsAuthenticated} = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false); 
   const {toast} = useToast();
   const router = useRouter();
+
+  const checkAdmin = async () => {
+    const token = sessionStorage.getItem("access_token");
+
+    try {
+      const response = await fetch("http://localhost:8000/users/isAdmin", {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
+          },
+      });
+
+      const data = await response.json();
+
+      if(data.success) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to check admin status"
+      });
+    }
+  };
 
   const log_in_out = isAuthenticated ? (
     {label: "Logout", link: "/"}
@@ -29,14 +59,16 @@ export default function navbar() {
     const token = sessionStorage.getItem('access_token');
     if(token) {
       setIsAuthenticated(true);
+      checkAdmin();
     } else {
       setIsAuthenticated(false);
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const handleLogout = () => {
     sessionStorage.removeItem("access_token");
     setIsAuthenticated(false);
+    setIsAdmin(false);
     router.push("/");
     toast({
       title: "Logged Out",
@@ -60,6 +92,14 @@ export default function navbar() {
               handleLogout={handleLogout}
             />
           ))}
+
+        {/*ADMIN*/}
+        {isAdmin && <NavbarItem
+          key={"Admin"}
+          navLink={{label: "Admin", link: "/admin"}}
+          handleLogout={handleLogout}
+        />
+        }
 
         {/*CHECKOUT/CART*/}
         <Link href="/checkout" className="flex items-center justify-center bg-primary p-2 rounded-full hover:bg-opacity-80">
