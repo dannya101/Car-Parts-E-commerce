@@ -1,11 +1,13 @@
 import { useState } from "react";
 import {useRouter} from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 export default function RegisterForm({ onSubmit }: any) {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const {toast} = useToast();
     const router = useRouter();
 
     const handleSubmit = (e: any) => {
@@ -14,7 +16,12 @@ export default function RegisterForm({ onSubmit }: any) {
             alert("Passwords do not match.");
             return;
         }
+        toast({
+            title: "User Registered Successfully",
+            description: "Login with username and password to continue"
+        })
         handleRegisterSubmit(username, email, password);
+        onSubmit(username, email, password);
     };
 
     const handleRegisterSubmit = async (username:string, email:string, password:string) => {

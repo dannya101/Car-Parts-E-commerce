@@ -10,6 +10,7 @@ export default function Support() {
 
     const handleTicketSubmit = (subject:string, description:string) => {
         console.log("Ticket Submitted: ", subject, description);
+        setTabValue("view");
     }
 
     return (

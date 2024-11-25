@@ -10,6 +10,10 @@ export default function Login() {
     const [tabValue, setTabValue] = useState("login")
     const router = useRouter();
 
+    const handleRegisterSubmit = (username:string, email:string, password:string) => {
+        setTabValue("login");
+    }
+
     return (
             <div className="max-w-md mx-auto p-4 pt-20">
                 <h1 className="text-2xl font-semibold mb-6 text-center">Login or Register</h1>
@@ -28,7 +32,7 @@ export default function Login() {
                         </TabsContent>
 
                         <TabsContent value="register">
-                            <RegisterForm />
+                            <RegisterForm onSubmit={handleRegisterSubmit}/>
                         </TabsContent>
                     </div>
                 </Tabs>

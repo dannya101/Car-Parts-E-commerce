@@ -20,6 +20,7 @@ export default function CreateTicketForm({onSubmit}: any) {
                 title: "Must Login to View Submit a Ticket",
                 description: "Register an account or Login"
               })
+            setIsSubmitting(false);
             return;
         }
 
@@ -46,16 +47,17 @@ export default function CreateTicketForm({onSubmit}: any) {
                 throw new Error(`Failed to create ticket: ${response.statusText}`);
             }
 
-            const data = await response.json();
+            toast({
+                title: "Support Ticket Created",
+                description: "Ticket Has Been Created"
+            });
+
+            onSubmit(title, description);
 
         } catch {
             console.error("Failed to create ticket");
             return;
         } finally {
-            toast({
-                title: "Support Ticket Created",
-                description: "Ticket Has Been Created"
-              })
             setIsSubmitting(false);
         }
     };
