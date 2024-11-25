@@ -9,9 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { SelectScrollableResult } from "./selectresult";
+import { SelectScrollableResult } from "@/components/search/selectresult";
 import { useState } from "react";
-import { Searchbutton } from "./searchbutton";
+import { Searchbutton } from "@/components/search/searchbutton";
 
 export function SelectScrollable() {
   const [selectedModel, setSelectedModel] = useState<string>("");

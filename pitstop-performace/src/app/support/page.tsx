@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CreateTicketForm from "@/components/createticketform";
-import ViewTicketForm from "@/components/viewticketform";
+import CreateTicketForm from "@/components/support/createticketform";
+import ViewTicketForm from "@/components/support/viewticketform";
 
 export default function Support() {
     const [tabValue, setTabValue] = useState("submit")

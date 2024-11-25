@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import LoginForm from "../../components/loginform";
-import RegisterForm from "../../components/registerform";
+import LoginForm from "../../components/login/loginform";
+import RegisterForm from "../../components/login/registerform";
 import { useRouter } from "next/navigation";
 
 export default function Login() {

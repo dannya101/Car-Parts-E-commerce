@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckoutForm } from "@/components/checkoutform";
+import { CheckoutForm } from "@/components/checkout/checkoutform";
 
 export default function Checkout() {
     return (

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/navbar/navbar";
 import "./globals.css";
 import { AuthProvider } from "@/context/authcontext";
 import { Toaster } from "@/components/ui/toaster";
