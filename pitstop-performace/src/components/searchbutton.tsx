@@ -5,7 +5,7 @@ import Link from "next/link"
 
 
 export function Searchbutton() {
-  return <Button asChild className="w-[140px] bg-white border-solid border-2 border-black" variant={"outline"} >
+  return <Button asChild className="w-[140px] bg-white border-solid border-2 border-black select-none" variant={"outline"} >
   <Link href="/login">Search</Link>
 </Button>
 
