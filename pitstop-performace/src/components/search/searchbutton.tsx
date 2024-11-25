@@ -3,8 +3,8 @@ import { buttonVariants } from "@/components/ui/selectbuttondesign"
 import Link from "next/link"
 
 interface SearchButtonProps {
-  selectedModel: string;
-  selectedMake: string;
+  selectedModel: number;
+  selectedMake: number;
 }
 
 export function Searchbutton({ selectedModel, selectedMake }: SearchButtonProps) {
