@@ -1,9 +1,46 @@
 'use client';
 import { ProductItem } from "@/components/productitem";
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 export function CheckoutForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [cart, setCart] = useState<{ product: { name: string; price: number }; quantity: number }[]>([]);
+    const [total, setTotal] = useState<number>(0);
+
+    // Fetch cart data from the backend
+    useEffect(() => {
+        const fetchCartData = async () => {
+            const token = sessionStorage.getItem("access_token");
+
+            if(!token) {
+                console.error("Not Authenticated");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:8000/cart/", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    }
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                // Update state with cart items and total
+                setCart(data.items);
+                setTotal(data.total_price);
+                } else {
+                console.error("Error fetching cart data:", data);
+                }
+            } catch (error) {
+                console.error("Error fetching cart data:", error);
+            }
+        };
+
+        fetchCartData(); // Call the function to fetch data when the component mounts
+    }, []);  // Empty dependency array to run only once when the component mounts
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -14,14 +51,6 @@ export function CheckoutForm() {
     const handleCloseModal = () => {
         setIsModalOpen(false); // Close the modal
     };
-
-    const mockTotal = 123.45;
-    const mockCart = [
-        {id: 1, name: "Tires", price: 125.99, quantity: 4},
-        {id: 2, name: "Wheels", price: 100.99, quantity: 4},
-        {id: 3, name: "Gear Shifter", price: 25.99, quantity: 1},
-    ];
-    
   
     return (
         <div>
@@ -32,12 +61,12 @@ export function CheckoutForm() {
         {/* Product List */}
         <div className="product-list space-y-4 mb-6">
             <h2 className="text-2xl font-bold text-gray-700 mb-4">Your Cart</h2>
-            {mockCart.map((product) => (
+            {cart.map((item, index) => (
             <ProductItem
-                key={product.id}
-                name={product.name}
-                price={product.price}
-                quantity={product.quantity}
+                key={index}
+                name={item.product.name}
+                price={item.product.price}
+                quantity={item.quantity}
             />
             ))}
         </div>
@@ -45,7 +74,7 @@ export function CheckoutForm() {
         {/* Total Section */}
         <div className="total-section text-right mb-4">
             <p className="text-xl font-bold">
-            Total: <span className="text-blue-600">${mockTotal.toFixed(2)}</span>
+            Total: <span className="text-blue-600">${total.toFixed(2)}</span>
             </p>
         </div>
 
