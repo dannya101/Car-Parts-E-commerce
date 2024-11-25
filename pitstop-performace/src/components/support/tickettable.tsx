@@ -8,6 +8,7 @@ import {
     TableRow,
   } from "@/components/ui/table";
 import {useEffect, useState} from "react";
+import TicketDetail from "@/components/support/ticketdetail";
 
 interface Ticket {
     id: string;
@@ -20,6 +21,7 @@ export default function TicketTable() {
     const [tickets, setTickets] = useState<Ticket[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
 
     useEffect(() => {
         const fetchTickets = async () => {
@@ -58,6 +60,18 @@ export default function TicketTable() {
         fetchTickets();
     }, []);
 
+    const handleRowClick = (ticket: Ticket) => {
+        setSelectedTicket(ticket);
+    };
+
+    const handleBack = () => {
+        setSelectedTicket(null);
+    };
+
+    if(selectedTicket) {
+        return <TicketDetail ticket={selectedTicket} onBack={handleBack} />
+    }
+
     return (
         <Table>
             <TableCaption>My Tickets</TableCaption>
@@ -71,7 +85,7 @@ export default function TicketTable() {
             </TableHeader>
             <TableBody>
                 {tickets.map((ticket) => (
-                    <TableRow>
+                    <TableRow key={ticket.id} onClick={() => handleRowClick(ticket)} className="cursor-pointer hover:bg-gray-100">
                         <TableCell className="font-medium">{ticket.id}</TableCell>
                         <TableCell>{ticket.title}</TableCell>
                         <TableCell>{ticket.description}</TableCell>
