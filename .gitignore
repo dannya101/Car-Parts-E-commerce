@@ -3,3 +3,4 @@
 __pychache__/
 *.pyc
 app.log
+pitstop-performance/*
