@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 import CreateTicketForm from "@/components/support/createticketform";
 import ViewTicketForm from "@/components/support/viewticketform";
 
