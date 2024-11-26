@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { Button } from "./ui/navbutton";
 interface Product {
   id: number,
   name: string, 
@@ -40,7 +40,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
           products.map((product) => (
             <div
               key={product.id}
-              className="w-[330px] h-[400px] p-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+              className="relative w-[330px] h-[400px] p-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
               onClick={() => handleProductSelect(product.id)} // Return the product ID on click
             >
               <img
@@ -50,7 +50,8 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
               />
               <h3 className="text-lg font-semibold">{product.name}</h3>
               <p className="text-sm text-gray-600">{product.description}</p>
-              <p className="text-sm text-gray-600">ID: {product.id}</p>
+              <h4 className="absolute bottom-4 right-6 text-4xl font-bold">${product.price}</h4>
+              <Button className="absolute bottom-4 left-4">Add to Cart</Button>
             </div>
           ))
         ) : (
