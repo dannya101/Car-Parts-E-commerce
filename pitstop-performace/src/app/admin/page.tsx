@@ -8,6 +8,7 @@ import AddModelCategoryForm from "@/components/admin/addmodelcategoryform";
 import { useToast } from "@/hooks/use-toast";
 import ProductSelector from "@/components/productselector";
 import UpdateProductForm from "@/components/admin/updateproductform";
+import DeleteProductForm from "@/components/admin/deleteproductform";
 
 interface Product {
     id: number,
@@ -27,6 +28,7 @@ export default function Admin() {
     const [showForm, setShowForm] = useState<string | null>(null); // Track which form is visible
     const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [productList, setProductList] = useState<Product | null>(null);
     const { toast } = useToast();
 
     const handleAddPartCategory = () => {
@@ -110,6 +112,63 @@ export default function Admin() {
         return response.json();
     }
 
+    const apiGetAllProducts = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch("http://localhost:8000/product/");
+            if (!response.ok) {
+            throw new Error("Failed to fetch products");
+            }
+            const data = await response.json();
+            setProductList(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+    }
+
+    const apiGetSelectedProduct = async (id: number) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`http://localhost:8000/product/get?product_id=${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const data: Product = await response.json();
+
+            setSelectedProduct(data);
+        } catch (error) {
+            console.error("Error fetching product: ", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const apiRemoveProduct = async (id: number) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`http://localhost:8000/admin/products/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const reply = await response.json();
+
+            console.log(reply);
+        } catch (error) {
+            console.error("Error Deleting Product: ", error);
+            return;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleFormSubmit = async (data: any) => {
         setLoading(true);
     
@@ -128,6 +187,9 @@ export default function Admin() {
                 console.log("API Response:", response);
             } else if (showForm === "updateProduct") {
                 setSelectedProductId(0);
+            } else if (showForm === "deleteProduct") {
+                setSelectedProductId(null);
+                setShowForm("deleteProduct");
             }
     
             toast({
@@ -260,6 +322,7 @@ export default function Admin() {
             {showForm === "deleteProduct" && (
                 <ProductSelector onProductSelect={handleProductSelect}/>
             )}
+            {showForm === "deleteProduct" && selectedProductId && (apiRemoveProduct(selectedProductId))};
 
             {/* Optional: Display loading indicator */}
             {loading && <p className="mt-4 text-center text-gray-500">Loading...</p>}
