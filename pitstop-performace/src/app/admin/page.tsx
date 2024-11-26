@@ -1,15 +1,32 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddPartCategoryForm from "@/components/admin/addpartcategoryform";
 import AddBrandCategoryForm from "@/components/admin/addbrandcategoryform";
 import AddProductForm from "@/components/admin/addproductform"; 
 import AddModelCategoryForm from "@/components/admin/addmodelcategoryform";
 import { useToast } from "@/hooks/use-toast";
+import ProductSelector from "@/components/productselector";
+import UpdateProductForm from "@/components/admin/updateproductform";
+
+interface Product {
+    id: number,
+    name: string, 
+    description: string, 
+    price: number, 
+    tags: string[], 
+    images: string[], 
+    thumbnail: string,
+    part_category_id: number,
+    brand_category_id: number,
+    model_category_id: number
+}
 
 export default function Admin() {
     const [loading, setLoading] = useState<boolean>(false);
     const [showForm, setShowForm] = useState<string | null>(null); // Track which form is visible
+    const [selectedProductId, setSelectedProductId] = useState<number>(0);
+    const [selectedProduct, setSelectedProduct] = useState<Product>();
     const { toast } = useToast();
 
     const handleAddPartCategory = () => {
@@ -26,6 +43,19 @@ export default function Admin() {
 
     const handleAddProduct = () => {
         setShowForm("addProduct");
+    };
+
+    const handleUpdateProduct = () => {
+        setShowForm("updateProduct");
+    };
+
+    const handleDeleteProduct = () => {
+        setShowForm("deleteProduct");
+    };
+
+    const handleProductSelect = (product_id: number) => {
+        setSelectedProductId(product_id);
+        console.log("Selected Product ID: ", product_id);
     };
 
     const apiAddCategory = async (categoryType: string, data: { part_type_name?: string; part_type_description?: string; name?: string; description?: string }) => {
@@ -96,6 +126,8 @@ export default function Admin() {
             } else if (showForm === "addProduct") {
                 const response = await apiAddProduct(data);
                 console.log("API Response:", response);
+            } else if (showForm === "updateProduct") {
+                setSelectedProductId(0);
             }
     
             toast({
@@ -125,34 +157,66 @@ export default function Admin() {
 
             {/* Buttons for different actions */}
             <div className="space-y-4 mb-6">
-                <button 
-                    onClick={handleAddPartCategory} 
-                    className="bg-blue-500 text-white py-2 px-4 rounded"
-                    disabled={loading}
-                >
-                    Add Part Category
-                </button>
-                <button 
-                    onClick={handleAddBrandCategory} 
-                    className="bg-blue-500 text-white py-2 px-4 rounded"
-                    disabled={loading}
-                >
-                    Add Brand Category
-                </button>
-                <button 
-                    onClick={handleAddModelCategory} 
-                    className="bg-blue-500 text-white py-2 px-4 rounded"
-                    disabled={loading}
-                >
-                    Add Model Category
-                </button>
-                <button 
-                    onClick={handleAddProduct} 
-                    className="bg-green-500 text-white py-2 px-4 rounded"
-                    disabled={loading}
-                >
-                    Add Product
-                </button>
+
+                {/* Row 1: Part, Brand, Model Categories */}
+                <div className="flex flex-wrap gap-2">
+                    {/*Add Part Category*/}
+                    <button 
+                        onClick={handleAddPartCategory} 
+                        className="bg-blue-500 text-white py-2 px-4 rounded"
+                        disabled={loading}
+                    >
+                        Add Part Category
+                    </button>
+
+                    {/*Add Brand Category*/}
+                    <button 
+                        onClick={handleAddBrandCategory} 
+                        className="bg-blue-500 text-white py-2 px-4 rounded"
+                        disabled={loading}
+                    >
+                        Add Brand Category
+                    </button>
+
+                    {/*Add Model Category*/}
+                    <button 
+                        onClick={handleAddModelCategory} 
+                        className="bg-blue-500 text-white py-2 px-4 rounded"
+                        disabled={loading}
+                    >
+                        Add Model Category
+                    </button>
+                </div>
+
+                {/* Row 2: Product Actions */}
+                <div className="flex flex-wrap gap-2">
+                    {/*Add Product*/}
+                    <button 
+                        onClick={handleAddProduct} 
+                        className="bg-green-500 text-white py-2 px-4 rounded"
+                        disabled={loading}
+                    >
+                        Add Product
+                    </button>
+
+                    {/*Update Product*/}
+                    <button 
+                        onClick={handleUpdateProduct} 
+                        className="bg-yellow-500 text-white py-2 px-4 rounded"
+                        disabled={loading}
+                    >
+                        Update Product
+                    </button>
+
+                    {/*Delete Product*/}
+                    <button 
+                        onClick={handleDeleteProduct} 
+                        className="bg-red-500 text-white py-2 px-4 rounded"
+                        disabled={loading}
+                    >
+                        Delete Product
+                    </button>
+                </div>
             </div>
 
             {/* Form Rendering Based on Button Click */}
@@ -179,6 +243,19 @@ export default function Admin() {
                     onSubmit={(productData) => handleFormSubmit(productData)}
                     onCancel={handleCancel}
                 />
+            )}
+            {showForm === "updateProduct" && !selectedProductId && (
+                <ProductSelector onProductSelect={handleProductSelect}/>
+            )}
+            {showForm === "updateProduct" && selectedProductId && (
+                <UpdateProductForm 
+                    onSubmit={(productData) => handleFormSubmit(productData)}
+                    onCancel={handleCancel}
+                    product_id={selectedProductId}
+                />
+            )}
+            {showForm === "deleteProduct" && (
+                <ProductSelector onProductSelect={handleProductSelect}/>
             )}
 
             {/* Optional: Display loading indicator */}

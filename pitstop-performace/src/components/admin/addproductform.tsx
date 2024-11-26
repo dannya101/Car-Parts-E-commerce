@@ -21,6 +21,7 @@ export default function AddProductForm({ onSubmit, onCancel }: AddProductFormPro
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState<number>(0);
+    const [priceInput, setPriceInput] = useState<string>("");
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState("");
     const [images, setImages] = useState<string[]>([]);
@@ -115,15 +116,20 @@ export default function AddProductForm({ onSubmit, onCancel }: AddProductFormPro
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-1">Price:</label>
-                    <input
-                        type="number"
-                        value={price}
-                        onChange={(e) => setPrice(Number(e.target.value))}
-                        className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200"
-                        min="0"
-                        required
-                    />
+                <label className="block text-sm font-medium mb-1">Price:</label>
+                <input
+                    type="text"
+                    value={priceInput}
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        if (/^\d*\.?\d*$/.test(value)) { // Allow only numbers and a single decimal point
+                            setPriceInput(value);
+                            setPrice(parseFloat(value) || 0); // Update numeric state
+                        }
+                    }}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200"
+                    required
+                />
                 </div>
 
                 <div>

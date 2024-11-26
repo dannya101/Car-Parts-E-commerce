@@ -78,7 +78,7 @@ export default function navbar() {
 
   return (
     <div className="bg-primary text-primary-foreground h-16 flex items-center">
-      <div className="container mx-auto flex justify-between pr-4 pl-4">
+      <div className="container mx-auto flex justify-between pr-2 pl-2">
 
         {/*LOGO*/}
         <img src="/webname.svg" alt="logo" width={465} height={62}/>
