@@ -5,6 +5,13 @@ import {Searchbutton} from "@/components/search/searchbutton"
 
 export default function Home() {
   const picConfigs = 'absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1/2 h-96 fade-background animate-fade-in border-solid border-2';
+  //TODO add theme provider from shadcn
+  //shipixen.com: website provides visual examples of using shadcn component
+  //download prettier, add functions from prettier to package.json file
+    //for prettier.ignore add build and coverge
+  //shadcnformbuild vercel ap
+  
+
 
   return (
     <div className="">
