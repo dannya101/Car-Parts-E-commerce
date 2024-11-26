@@ -28,8 +28,14 @@ export default function Admin() {
     const [showForm, setShowForm] = useState<string | null>(null); // Track which form is visible
     const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-    const [productList, setProductList] = useState<Product | null>(null);
+    const [productList, setProductList] = useState<Product[]>([]);
     const { toast } = useToast();
+
+    useEffect(() => {
+        if(selectedProductId) {
+            apiGetSelectedProduct(selectedProductId);
+        }
+    }, [selectedProductId]);
 
     const handleAddPartCategory = () => {
         setShowForm("addPartCategory");
@@ -47,12 +53,14 @@ export default function Admin() {
         setShowForm("addProduct");
     };
 
-    const handleUpdateProduct = () => {
+    const handleUpdateProduct = async () => {
         setShowForm("updateProduct");
+        await apiGetAllProducts();
     };
 
-    const handleDeleteProduct = () => {
+    const handleDeleteProduct = async () => {
         setShowForm("deleteProduct");
+        await apiGetAllProducts();
     };
 
     const handleProductSelect = (product_id: number) => {
@@ -119,14 +127,14 @@ export default function Admin() {
             if (!response.ok) {
             throw new Error("Failed to fetch products");
             }
-            const data = await response.json();
+            const data: Product[] = await response.json();
             setProductList(data);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-    }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const apiGetSelectedProduct = async (id: number) => {
         setLoading(true);
@@ -189,7 +197,7 @@ export default function Admin() {
                 const response = await apiAddProduct(data);
                 console.log("API Response:", response);
             } else if (showForm === "updateProduct") {
-                setSelectedProductId(0);
+                setSelectedProductId(null);
             } else if (showForm === "deleteProduct" && selectedProductId) {
                 await apiRemoveProduct(selectedProductId);
                 await apiGetAllProducts();
@@ -314,8 +322,11 @@ export default function Admin() {
                     onCancel={handleCancel}
                 />
             )}
-            {showForm === "updateProduct" && !selectedProductId && (
-                <ProductSelector onProductSelect={handleProductSelect}/>
+            {showForm === "updateProduct" && !selectedProductId && productList && (
+                <ProductSelector 
+                    onProductSelect={handleProductSelect} 
+                    product_list={productList}
+                />
             )}
             {showForm === "updateProduct" && selectedProductId && (
                 <UpdateProductForm 
@@ -324,8 +335,11 @@ export default function Admin() {
                     product_id={selectedProductId}
                 />
             )}
-            {showForm === "deleteProduct" && (
-                <ProductSelector onProductSelect={handleProductSelect}/>
+            {showForm === "deleteProduct" && !selectedProductId && productList && (
+                <ProductSelector 
+                    onProductSelect={handleProductSelect}
+                    product_list={productList}
+                />
             )}
             {showForm === "deleteProduct" && selectedProductId && (
                 <DeleteProductForm 

@@ -1,12 +1,20 @@
 'use client';
 
+import ProductSelector from "@/components/productselector";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface Product {
-    id: number;
-    name: string;
-    price: number;
+    id: number,
+    name: string, 
+    description: string, 
+    price: number, 
+    tags: string[], 
+    images: string[], 
+    thumbnail: string,
+    part_category_id: number,
+    brand_category_id: number,
+    model_category_id: number
 }
 
 export default function Results() {
@@ -14,64 +22,42 @@ export default function Results() {
     const make = searchParams.get("make");
     const model = searchParams.get("model");
 
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const [productList, setProductList] = useState<Product[]>([]);
+
+    const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            if(!make || !model) {
-                setError("Missing Make or Model in search parameters");
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const response = await fetch(`http://localhost:8000/product/get/brand-model?brand_category_id=${make}&model_category_id=${model}`);
-
-                if(!response.ok) {
-                    throw new Error(`Failed to fetch products: ${response.statusText}`);
-                }
-
-                const data: Product[] = await response.json();
-                setProducts(data);
-            } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message);
-                } else {
-                    setError("An unknown error occurred");
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProducts();
+        const makeNum = Number(make);
+        const modelNum = Number(model);
+        if(makeNum && modelNum) {
+            apiGetProducts(makeNum, modelNum);
+        }
     }, [make, model]);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    const apiGetProducts = async (make: number, model: number) => {
+        try {
+            const response = await fetch(`http://localhost:8000/product/get/brand-model?brand_category_id=${make}&model_category_id=${model}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const data = await response.json();
+            setProductList(data);
+            console.log("DATA: ", data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-    if (error) {
-        return <div className="text-red-500">{error}</div>;
+    const handleProductSelect = (product_id: number) => {
+        setSelectedProductId(product_id);
+        console.log("Selected Product ID: ", product_id);
     }
 
     return (
         <div>
-            {products.length > 0 ? (
-            <ul>
-                {products.map((product) => (
-                <li key={product.id}>
-                    <div className="border p-2 my-2">
-                    <h2 className="text-lg font-bold">{product.name}</h2>
-                    <p>Price: ${product.price.toFixed(2)}</p>
-                    </div>
-                </li>
-                ))}
-            </ul>
-            ) : (
-            <p>No products found for the selected make and model.</p>
-            )}
+            <ProductSelector product_list={productList} onProductSelect={handleProductSelect}/>
         </div>
     );
 }
