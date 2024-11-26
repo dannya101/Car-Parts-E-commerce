@@ -8,33 +8,13 @@ interface DeleteProductFormProps {
     product_id: number;
 }
 
-export default function DeleteProductForm({onCancel, product_id}: DeleteProductFormProps) {
+export default function DeleteProductForm({onSubmit, onCancel, product_id}: DeleteProductFormProps) {
 
-    useEffect(() => {
-        removeProduct(product_id);
-    }, [product_id]);
-
-    const removeProduct = async (id: number) => {
-        try {
-            const response = await fetch(`http://localhost:8000/admin/products/${id}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-        
-            const reply = await response.json();
-
-            console.log(reply);
-        } catch (error) {
-            console.error("Error Deleting Product: ", error);
-            return;
-        }
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-    }
-
-    return (<></>)
+    return (
+        <div>
+            <p>Are you sure you want to delete product {product_id}?</p>
+            <button onClick={onSubmit} className="bg-red-500 text-white py-2 px-4 rounded">Confirm Delete</button>
+            <button onClick={onCancel} className="bg-gray-300 py-2 px-4 rounded">Cancel</button>
+        </div>
+    );
 }

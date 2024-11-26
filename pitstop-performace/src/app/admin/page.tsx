@@ -158,12 +158,15 @@ export default function Admin() {
                 },
             });
 
+            if(response.ok) {
+                throw new Error("Failed to delete product")
+            }
+
             const reply = await response.json();
 
-            console.log(reply);
+            console.log("Delete Response: ",reply);
         } catch (error) {
             console.error("Error Deleting Product: ", error);
-            return;
         } finally {
             setLoading(false);
         }
@@ -187,9 +190,11 @@ export default function Admin() {
                 console.log("API Response:", response);
             } else if (showForm === "updateProduct") {
                 setSelectedProductId(0);
-            } else if (showForm === "deleteProduct") {
+            } else if (showForm === "deleteProduct" && selectedProductId) {
+                await apiRemoveProduct(selectedProductId);
+                await apiGetAllProducts();
                 setSelectedProductId(null);
-                setShowForm("deleteProduct");
+                setShowForm(null);
             }
     
             toast({
@@ -322,7 +327,13 @@ export default function Admin() {
             {showForm === "deleteProduct" && (
                 <ProductSelector onProductSelect={handleProductSelect}/>
             )}
-            {showForm === "deleteProduct" && selectedProductId && (apiRemoveProduct(selectedProductId))};
+            {showForm === "deleteProduct" && selectedProductId && (
+                <DeleteProductForm 
+                    product_id={selectedProductId} 
+                    onCancel={handleCancel} 
+                    onSubmit={() => handleFormSubmit({})}
+                />
+            )}
 
             {/* Optional: Display loading indicator */}
             {loading && <p className="mt-4 text-center text-gray-500">Loading...</p>}
