@@ -19,7 +19,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ onProductSelect }): J
 
   // Fetch products from the backend
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchAllProducts = async () => {
       try {
         const response = await fetch("http://localhost:8000/product/");
         if (!response.ok) {
@@ -34,7 +34,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ onProductSelect }): J
       }
     };
 
-    fetchProducts();
+    fetchAllProducts();
   }, []);
 
   if (loading) return <div>Loading products...</div>;
@@ -48,7 +48,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ onProductSelect }): J
   return (
     <div className="flex flex-col items-center">
       <h2 className="text-2xl font-bold mb-4">Browse Products</h2>
-      <div className="grid grid-cols-3 gap-6 overflow-y-auto max-h-[80vh]">
+      <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh]">
         {products.map((product) => (
           <div
             key={product.id}
@@ -60,8 +60,9 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ onProductSelect }): J
               alt={product.name}
               className="w-full h-40 object-cover rounded-lg mb-2"
             />
-            <h3 className="text-lg font-semibold">{product.name}</h3>
-            <p className="text-sm text-gray-600">{product.description}</p>
+            <h3 className="text-lg font-semibold">Name: {product.name}</h3>
+            <p className="text-sm text-gray-600">Description: {product.description}</p>
+            <p className="text-sm text-gray-600">ID: {product.id}</p>
           </div>
         ))}
       </div>

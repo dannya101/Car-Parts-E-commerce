@@ -25,8 +25,8 @@ interface Product {
 export default function Admin() {
     const [loading, setLoading] = useState<boolean>(false);
     const [showForm, setShowForm] = useState<string | null>(null); // Track which form is visible
-    const [selectedProductId, setSelectedProductId] = useState<number>(0);
-    const [selectedProduct, setSelectedProduct] = useState<Product>();
+    const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const { toast } = useToast();
 
     const handleAddPartCategory = () => {
@@ -148,10 +148,13 @@ export default function Admin() {
     };
 
     const handleCancel = () => {
+        setSelectedProductId(null);
+        setSelectedProduct(null);
         setShowForm(null); // Close form when cancelled
     };
 
     return (
+        <>
         <div className="container p-4">
             <h1 className="text-3xl font-bold mb-6">Admin Page</h1>
 
@@ -218,7 +221,7 @@ export default function Admin() {
                     </button>
                 </div>
             </div>
-
+        </div>
             {/* Form Rendering Based on Button Click */}
             {showForm === "addPartCategory" && (
                 <AddPartCategoryForm
@@ -260,6 +263,6 @@ export default function Admin() {
 
             {/* Optional: Display loading indicator */}
             {loading && <p className="mt-4 text-center text-gray-500">Loading...</p>}
-        </div>
+        </>
     );
 }

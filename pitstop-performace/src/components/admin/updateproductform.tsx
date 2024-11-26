@@ -166,8 +166,8 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
                     required={false}
                 />
 
-                {/* Images */}
-                <label className="block text-sm font-medium mb-1">Images:</label>
+                {/* Thumbnail */}
+                <label className="block text-sm font-medium mb-1">Thumbnail</label>
                 <input
                     type="text"
                     value={thumbnail}
@@ -175,7 +175,6 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
                     className="w-full px-3 py-2 border rounded-lg"
                     placeholder="Image URL"
                 />
-                <button type="button" onClick={() => setImages([...images, thumbnail])}>Add Image</button>
 
                 {/* Category Select */}
                 <label className="block text-sm font-medium mb-1">Part Category:</label>
