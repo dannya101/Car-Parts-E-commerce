@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "./ui/navbutton";
+import { METHODS } from "http";
+import { useToast } from "@/hooks/use-toast";
+
+
 interface Product {
   id: number,
   name: string, 
@@ -31,6 +35,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
   };
 
   console.log("Products: ", products);
+  // const token = sessionStorage.getItem("access_token");
 
   return (
     <div className="flex flex-col items-center">
@@ -48,10 +53,36 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
                 alt={product.name}
                 className="w-full h-40 object-cover rounded-lg mb-2"
               />
-              <h3 className="text-lg font-semibold">{product.name}</h3>
-              <p className="text-sm text-gray-600">{product.description}</p>
+              <h3 className="text-2xl font-semibold">{product.name}</h3>
+              <p className="text-md text-gray-600">{product.description}</p>
               <h4 className="absolute bottom-4 right-6 text-4xl font-bold">${product.price}</h4>
-              <Button className="absolute bottom-4 left-4">Add to Cart</Button>
+              <Button className="absolute bottom-4 left-4"
+                onClick={() => fetch(`http://localhost:8000/cart/add`,{
+                  method:'POST',
+                  // headers: {
+                  //   "Content-Type": "application/json",
+                  //   "Authorization": `Bearer ${token}`,
+                  // },
+                  body: JSON.stringify({
+                    product_id: product.id,
+                    quantity: 1 //this needs to be changed later
+                  })
+                }).then((response) => {
+                  if (!response.ok) {
+                    throw new Error('Failed to add product to cart');
+                  }
+                  return response.json();
+                })
+                .then((data) => {
+                  console.log('Product added to cart:', data);
+                  // Optionally, display a success message or update the UI
+                })
+                .catch((error) => {
+                  console.error('Error:', error);
+                  // Optionally, display an error message to the user
+                })}>
+                  
+                  Add to Cart</Button>
             </div>
           ))
         ) : (
