@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "./ui/navbutton";
 import { METHODS } from "http";
 import { useToast } from "@/hooks/use-toast";
-
+import { AddToCartButton } from "./addToCart";
 
 interface Product {
   id: number,
@@ -56,33 +56,11 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
               <h3 className="text-2xl font-semibold">{product.name}</h3>
               <p className="text-md text-gray-600">{product.description}</p>
               <h4 className="absolute bottom-4 right-6 text-4xl font-bold">${product.price}</h4>
-              <Button className="absolute bottom-4 left-4"
-                onClick={() => fetch(`http://localhost:8000/cart/add`,{
-                  method:'POST',
-                  // headers: {
-                  //   "Content-Type": "application/json",
-                  //   "Authorization": `Bearer ${token}`,
-                  // },
-                  body: JSON.stringify({
-                    product_id: product.id,
-                    quantity: 1 //this needs to be changed later
-                  })
-                }).then((response) => {
-                  if (!response.ok) {
-                    throw new Error('Failed to add product to cart');
-                  }
-                  return response.json();
-                })
-                .then((data) => {
-                  console.log('Product added to cart:', data);
-                  // Optionally, display a success message or update the UI
-                })
-                .catch((error) => {
-                  console.error('Error:', error);
-                  // Optionally, display an error message to the user
-                })}>
+              {/* <Button className="absolute bottom-4 left-4 z-10"
+                onClick={() => cartFunction(product.id)}>
                   
-                  Add to Cart</Button>
+                  Add to Cart</Button> */}
+             <AddToCartButton productId={product.id} />
             </div>
           ))
         ) : (
