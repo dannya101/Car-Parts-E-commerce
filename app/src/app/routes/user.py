@@ -264,7 +264,7 @@ def set_user_as_admin(password: str, current_user: User=Depends(get_current_user
             detail="Incorrect Admin Password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     return user_service.set_admin(db=db, user_id=current_user.id)
 
 @router.get("/isAdmin")
