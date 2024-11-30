@@ -37,7 +37,7 @@ export function SelectScrollableResult({
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`http://localhost:8000/product/modelcategories/bybrand?brand_id=${selectedBrandId}`);
+        const response = await fetch(`http://localhost:8000/product/modelcategories/?brand_id=${selectedBrandId}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch models: ${response.statusText}`);
         }

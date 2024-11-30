@@ -3,6 +3,9 @@ import { useState } from 'react'
 import { useTransition } from 'react'
 import { Button } from './ui/navbutton'
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/authcontext"
+import { useEffect } from 'react';
+
 
 interface AddToCartButtonProps {
   productId: number
@@ -10,10 +13,10 @@ interface AddToCartButtonProps {
   
 export function AddToCartButton({ productId }: AddToCartButtonProps) {
   const [isPending, startTransition] = useTransition()
+  const {isAuthenticated, setIsAuthenticated} = useAuth();
   const { toast } = useToast()
 
-  const handleAddToCart = async(e: any) => {
-    e.preventDefault();
+  const handleAddToCart = async() => {
     const token = sessionStorage.getItem("access_token");
     if (!token) {
         toast({
@@ -22,7 +25,6 @@ export function AddToCartButton({ productId }: AddToCartButtonProps) {
         });
         return;
     }
-    // startTransition(async () => {
       try {
         const response = await fetch("http://localhost:8000/cart/add", {
             method: 'POST',
@@ -46,8 +48,8 @@ export function AddToCartButton({ productId }: AddToCartButtonProps) {
         else
         {
           toast({
-            title: "Support Ticket Created",
-            description: "Ticket Has Been Created"
+            title: "Success",
+            description: "Product Added Successfully to Cart"
         });
         }
       } catch (error) {
@@ -57,11 +59,9 @@ export function AddToCartButton({ productId }: AddToCartButtonProps) {
         })
       }
     }
-  // }
 
   return (
     <Button className="absolute bottom-4 left-4 z-10" onClick={handleAddToCart} disabled={isPending}>
-      {isPending ? 'Adding...' : 'Add to Cart'}
     </Button>
   )
 }
