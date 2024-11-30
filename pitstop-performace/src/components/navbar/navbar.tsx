@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/authcontext"
 import { useToast } from "@/hooks/use-toast";
+import { ShoppingCart } from "lucide-react";
 
 export default function navbar() {
   const {isAuthenticated, setIsAuthenticated} = useAuth();
@@ -103,7 +104,10 @@ export default function navbar() {
 
         {/*CHECKOUT/CART*/}
         <Link href="/checkout" className="flex items-center justify-center bg-primary p-2 rounded-full hover:bg-opacity-80">
-              <img src="/cart.svg" alt="Cart" width={30} height={30}/>
+              {/* <img src="/cart.svg" alt="Cart" width={30} height={30}/> */}
+              <ShoppingCart size={48} strokeWidth={3} />
+            
+
         </Link>
         </nav>
 
