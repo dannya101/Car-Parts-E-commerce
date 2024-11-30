@@ -52,7 +52,8 @@ def get_products_from_cart(db: Session, cart: Cart):
                     "images": images,
                     "thumbnail": product.thumbnail,
                     "part_category_id": product.part_category_id,
-                    "brand_category_id": product.brand_category_id
+                    "brand_category_id": product.brand_category_id,
+                    "model_category_id": product.model_category_id
                 },
                 "quantity": item.quantity
             })

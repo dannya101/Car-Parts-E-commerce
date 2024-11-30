@@ -89,13 +89,13 @@ def get_ticket_replies_by_ticket_id(db: Session, ticket_id: int):
         A list of TicketReplies objects.
     """
     replies = db.query(
-        TicketReplies.id, 
-        TicketReplies.ticket_id, 
-        TicketReplies.content, 
-        TicketReplies.created_at, 
+        TicketReplies.id,
+        TicketReplies.ticket_id,
+        TicketReplies.content,
+        TicketReplies.created_at,
         User.username.label("user_name")
     ).join(
-        User, 
+        User,
         TicketReplies.user_id == User.id
     ).filter(
         TicketReplies.ticket_id == ticket_id
@@ -149,7 +149,7 @@ def set_admin(db:Session, user_id: int):
 
     commit_and_refresh(db=db, obj=user)
     return user
-    
+
 
 #Product CRUD
 def get_product_by_id(db: Session, product_id: int):
@@ -243,6 +243,9 @@ def get_all_brand_categories(db: Session):
 def get_all_model_categories(db: Session):
     return db.query(ModelCategory).all()
 
+def get_model_categories_by_brand_id(db: Session, brand_category_id: int):
+    return db.query(ModelCategory).filter(BrandCategory.id == brand_category_id).all()
+
 def get_part_category_by_name(db: Session, name: str):
     """
     Retrieve a part category by its name.
@@ -297,6 +300,9 @@ def get_products_by_brand_category_by_id(db: Session, brand_category_id: int):
         Product object or None if not found.
     """
     return db.query(Product).filter(Product.brand_category_id == brand_category_id).all()
+
+def get_products_by_brand_and_model(db: Session, brand_category_id: int, model_category_id: int):
+    return db.query(Product).filter(Product.brand_category_id == brand_category_id and Product.model_category_id == model_category_id).all()
 
 #Checkout CRUD
 def get_cart_by_user_id(user_id: int, db: Session):
