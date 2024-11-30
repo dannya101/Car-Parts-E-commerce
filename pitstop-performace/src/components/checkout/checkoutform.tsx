@@ -2,6 +2,7 @@
 import { ProductItem } from "@/components/productitem";
 import React, { useState, useEffect } from "react"
 import { ClearCartButton } from "./clearCart";
+import { ContinueButton } from "./continueToShopButton";
 
 export function CheckoutForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,9 +83,13 @@ export function CheckoutForm() {
   
     return (
         <div>
-        <div className="">
-        <ClearCartButton />
-        </div>
+            {/* CSS needs to be added HERE to this button */}
+            <div className="">
+                <ClearCartButton />
+            </div>
+            <div className="">
+               <ContinueButton/>
+            </div>
         <form
         onSubmit={handleSubmit}
         className="checkout-form mx-auto max-w-3xl bg-white p-6 rounded-lg shadow-lg border border-gray-200"
@@ -111,9 +116,7 @@ export function CheckoutForm() {
             </p>
         </div>
 
-        {/* <div className="flex-row space-x-4 mb-4">
-        <ClearCartButton />
-        </div> */}
+        
 
         {/* Submit Button */}
         <div className="flex justify-end">
