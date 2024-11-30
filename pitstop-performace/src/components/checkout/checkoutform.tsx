@@ -52,6 +52,33 @@ export function CheckoutForm() {
     const handleCloseModal = () => {
         setIsModalOpen(false); // Close the modal
     };
+    const updateCartItem = async (index: number, newQuantity: number) => {
+        const token = sessionStorage.getItem("access_token");
+        if (!token) {
+            console.error("Not Authenticated");
+            return;
+        }
+
+        const updatedCart = [...cart];
+        updatedCart[index].quantity = newQuantity;
+
+        try {
+            const response = await fetch("http://localhost:8000/cart/update/", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    product_id: updatedCart[index].product.name, // Assuming the name is used as the ID
+                    quantity: newQuantity,
+                }),
+            });
+        }
+        catch (error) {
+            console.error("Error updating cart item:", error);
+        }
+    };
   
     return (
         <div>
@@ -71,6 +98,8 @@ export function CheckoutForm() {
                 name={item.product.name}
                 price={item.product.price}
                 quantity={item.quantity}
+                onIncrease={() => updateCartItem(index, item.quantity + 1)}
+                onDecrease={() => updateCartItem(index, item.quantity - 1)}
             />
             ))}
         </div>

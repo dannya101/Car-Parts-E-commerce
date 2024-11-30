@@ -56,10 +56,6 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
               <h3 className="text-2xl font-semibold">{product.name}</h3>
               <p className="text-md text-gray-600">{product.description}</p>
               <h4 className="absolute bottom-4 right-6 text-4xl font-bold">${product.price}</h4>
-              {/* <Button className="absolute bottom-4 left-4 z-10"
-                onClick={() => cartFunction(product.id)}>
-                  
-                  Add to Cart</Button> */}
              <AddToCartButton productId={product.id} />
             </div>
           ))
