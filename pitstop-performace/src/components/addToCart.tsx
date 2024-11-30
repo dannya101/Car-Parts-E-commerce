@@ -1,10 +1,8 @@
 'use client'
 import { useState } from 'react'
 import { useTransition } from 'react'
-import { Button } from './ui/navbutton'
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/context/authcontext"
-import { useEffect } from 'react';
+import { Button } from './ui/navbutton';
 
 
 interface AddToCartButtonProps {
@@ -13,7 +11,6 @@ interface AddToCartButtonProps {
   
 export function AddToCartButton({ productId }: AddToCartButtonProps) {
   const [isPending, startTransition] = useTransition()
-  const {isAuthenticated, setIsAuthenticated} = useAuth();
   const { toast } = useToast()
 
   const handleAddToCart = async() => {
@@ -61,7 +58,9 @@ export function AddToCartButton({ productId }: AddToCartButtonProps) {
     }
 
   return (
+      //Maybe we can use disabled feature to show there are no products in database anymore
     <Button className="absolute bottom-4 left-4 z-10" onClick={handleAddToCart} disabled={isPending}>
+      {isPending ? 'Adding...' : 'Add to Cart'}
     </Button>
   )
 }

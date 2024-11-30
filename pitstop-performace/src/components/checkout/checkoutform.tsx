@@ -1,6 +1,7 @@
 'use client';
 import { ProductItem } from "@/components/productitem";
 import React, { useState, useEffect } from "react"
+import { ClearCartButton } from "./clearCart";
 
 export function CheckoutForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,6 +55,9 @@ export function CheckoutForm() {
   
     return (
         <div>
+        <div className="">
+        <ClearCartButton />
+        </div>
         <form
         onSubmit={handleSubmit}
         className="checkout-form mx-auto max-w-3xl bg-white p-6 rounded-lg shadow-lg border border-gray-200"
@@ -78,14 +82,23 @@ export function CheckoutForm() {
             </p>
         </div>
 
+        {/* <div className="flex-row space-x-4 mb-4">
+        <ClearCartButton />
+        </div> */}
+
         {/* Submit Button */}
-        <button
+        <div className="flex justify-end">
+            <button
             type="submit"
-            className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-        >
+            className="w-80 bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+            >
             Place Order
-        </button>
+            </button>
+        </div>
+
+        
         </form>
+       
         {/* Modal */}
         {isModalOpen && (
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
