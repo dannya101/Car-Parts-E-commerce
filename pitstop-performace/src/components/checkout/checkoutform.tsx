@@ -8,7 +8,7 @@ import { Button } from '../ui/navbutton';
 
 export function CheckoutForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [cart, setCart] = useState<{ product: { name: string; price: number }; quantity: number }[]>([]);
+    const [cart, setCart] = useState<{ product: { name: string; price: number; id: number }; quantity: number }[]>([]);
     const [total, setTotal] = useState<number>(0);
 
     // Fetch cart data from the backend
@@ -65,15 +65,17 @@ export function CheckoutForm() {
         const updatedCart = [...cart];
         updatedCart[index].quantity = newQuantity;
 
+        setCart(updatedCart);
+
         try {
-            const response = await fetch("http://localhost:8000/cart/update/", {
+            const response = await fetch("http://localhost:8000/cart/update", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                    product_id: updatedCart[index].product.name, // Assuming the name is used as the ID
+                    product_id: updatedCart[index].product.id,
                     quantity: newQuantity,
                 }),
             });
