@@ -84,13 +84,6 @@ def modify_product(db: Session, product_id: int, product_update: ProductUpdate):
             detail="No Product Found!"
         )
 
-    existing_product = db.query(Product).filter(Product.name == product_update.name).first()
-    if existing_product:
-        raise HTTPException(
-            status_code=400,
-            detail="Product name invalid, Product Already Exists"
-        )
-
     if product_update.name is not None:
         product.name = product_update.name
     if product_update.description is not None:
