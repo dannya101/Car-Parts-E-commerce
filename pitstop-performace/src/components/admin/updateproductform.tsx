@@ -36,6 +36,7 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
     const [model_category_id, setModelCategory] = useState<number>(0);
     
     const [product, setProduct] = useState<Product | null>(null);
+
     const [partCategories, setPartCategories] = useState<any[]>([]);
     const [brandCategories, setBrandCategories] = useState<any[]>([]);
     const [modelCategories, setModelCategories] = useState<any[]>([]);
@@ -43,8 +44,27 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
     useEffect(() => {
         if(product_id) {
             fetchProduct(product_id);
+            fetchCategories();
         }
     }, [product_id]);
+
+    const fetchCategories = async () => {
+        try {
+            const partResponse = await fetch("http://localhost:8000/product/partcategories");
+            const brandResponse = await fetch("http://localhost:8000/product/brandcategories");
+            const modelResponse = await fetch("http://localhost:8000/product/modelcategories");
+
+            const partData = await partResponse.json();
+            const brandData = await brandResponse.json();
+            const modelData = await modelResponse.json();
+
+            setPartCategories(partData);
+            setBrandCategories(brandData);
+            setModelCategories(modelData);
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+        }
+    };
 
     const fetchProduct = async (id: number) => {
         try {
@@ -183,7 +203,12 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
                     onChange={(e) => setPartCategory(Number(e.target.value))}
                     className="w-full px-3 py-2 border rounded-lg"
                 >
-                    {/* Render options for part categories */}
+                    <option value={0}>Select Part Category</option>
+                        {partCategories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.part_type_name}
+                            </option>
+                        ))}
                 </select>
 
                 <label className="block text-sm font-medium mb-1">Brand Category:</label>
@@ -192,7 +217,12 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
                     onChange={(e) => setBrandCategory(Number(e.target.value))}
                     className="w-full px-3 py-2 border rounded-lg"
                 >
-                    {/* Render options for brand categories */}
+                    <option value={0}>Select Brand Category</option>
+                        {brandCategories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.brand_type_name}
+                            </option>
+                        ))}
                 </select>
 
                 <label className="block text-sm font-medium mb-1">Model Category:</label>
@@ -201,7 +231,12 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
                     onChange={(e) => setModelCategory(Number(e.target.value))}
                     className="w-full px-3 py-2 border rounded-lg"
                 >
-                    {/* Render options for model categories */}
+                    <option value={0}>Select Model Category</option>
+                        {modelCategories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.model_name}
+                            </option>
+                        ))}
                 </select>
 
                 {/* Submit and Cancel buttons */}
