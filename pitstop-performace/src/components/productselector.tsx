@@ -3,6 +3,8 @@ import { Button } from "./ui/navbutton";
 import { METHODS } from "http";
 import { useToast } from "@/hooks/use-toast";
 import { AddToCartButton } from "./addToCart";
+import SearchPage from "./search/implementSearch";
+
 
 interface Product {
   id: number,
@@ -39,8 +41,11 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-2xl font-bold mb-4">Browse Products</h2>
-      <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh]">
+      <div className="relative mt-4 ml-4">
+      <h2 className="text-2xl font-bold">Browse Products</h2>
+      <SearchPage/>
+      </div>
+      <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4">
         {products && products.length > 0 ? (
           products.map((product) => (
             <div
