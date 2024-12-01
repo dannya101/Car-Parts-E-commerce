@@ -40,9 +40,10 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
   };
 
   console.log("Products: ", products);
-  const filteredProducts = product_list.filter(product =>
-    product.name.toLowerCase().includes(searchResults.toLowerCase())
-  );
+  // I do not know why this is not working anymore
+  // const filteredProducts = product_list.filter(product =>
+  //   product.name.toLowerCase().includes(searchResults.toLowerCase())
+  // );
 
   const handleSearch = (query: string) => {
     setSearchResults(query);
@@ -53,7 +54,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
     <div className="flex flex-col items-center">
       <div className="relative mt-4 ml-4">
       <h2 className="text-2xl font-bold">Browse Products</h2>
-      <SearchBar onSearch={handleSearch} placeholder="Enter your search query" />
+      {/* <SearchBar onSearch={handleSearch} placeholder="Enter your search query" /> */}
       </div>
       <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4">
         {products && products.length > 0 ? (

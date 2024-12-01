@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Search } from 'lucide-react'
 import { Button } from './navbutton'
 import { Input } from './input'
+import { Link } from 'lucide-react'
 
 
 interface SearchBarProps {
