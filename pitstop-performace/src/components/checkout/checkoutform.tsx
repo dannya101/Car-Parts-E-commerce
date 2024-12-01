@@ -3,6 +3,8 @@ import { ProductItem } from "@/components/productitem";
 import React, { useState, useEffect } from "react"
 import { ClearCartButton } from "./clearCart";
 import { ContinueButton } from "./continueToShopButton";
+import { Button } from '../ui/navbutton';
+
 
 export function CheckoutForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,13 +85,6 @@ export function CheckoutForm() {
   
     return (
         <div>
-            {/* CSS needs to be added HERE to this button */}
-            <div className="">
-                <ClearCartButton />
-            </div>
-            <div className="">
-               <ContinueButton/>
-            </div>
         <form
         onSubmit={handleSubmit}
         className="checkout-form mx-auto max-w-3xl bg-white p-6 rounded-lg shadow-lg border border-gray-200"
@@ -116,18 +111,17 @@ export function CheckoutForm() {
             </p>
         </div>
 
-        
-
-        {/* Submit Button */}
-        <div className="flex justify-end">
-            <button
+        {/* Buttons */}
+        <div className="flex justify-center space-x-4">
+            <ContinueButton />
+            <ClearCartButton />
+            <Button
             type="submit"
-            className="w-80 bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+            className="w-40 bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
             >
             Place Order
-            </button>
+            </Button>
         </div>
-
         
         </form>
        
