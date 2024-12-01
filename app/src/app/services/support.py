@@ -26,7 +26,7 @@ def get_all_support_tickets_by_user_id(user_id: int, db: Session):
     """
     return get_tickets_by_user_id(db, user_id)
 
-def get_support_ticket_by_id(support_ticket_id: int, user_id: int, db: Session):
+def get_support_ticket_by_id(support_ticket_id: int, db: Session):
     """
     Retrieve a support ticket by its ID, ensuring it belongs to the user.
 
@@ -42,8 +42,6 @@ def get_support_ticket_by_id(support_ticket_id: int, user_id: int, db: Session):
         HTTPException: If the ticket does not exist or does not belong to the user.
     """
     ticket = get_ticket_by_id(db, support_ticket_id)
-    if not ticket or ticket.user_id != user_id:
-        raise HTTPException(status_code=404, detail=f"Ticket {support_ticket_id} not valid")
 
     replies = get_ticket_replies_by_ticket_id(db=db, ticket_id=support_ticket_id)
 

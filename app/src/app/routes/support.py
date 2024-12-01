@@ -76,7 +76,7 @@ def get_support_ticket(ticket_id: int, current_user: User = Depends(get_current_
         "status": "Open"
     }
     """
-    ticket = support_service.get_support_ticket_by_id(support_ticket_id=ticket_id, user_id=current_user.id, db=db)
+    ticket = support_service.get_support_ticket_by_id(support_ticket_id=ticket_id, db=db)
     return ticket
 
 @router.get("/ticket/all")
