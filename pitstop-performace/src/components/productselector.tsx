@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { AddToCartButton } from "./addToCart";
 import SearchPage from "./search/implementSearch";
 import { SearchBar } from "./ui/searchBar";
+import HomeSearch from "./search/homeSearch";
 
 
 interface Product {
@@ -28,7 +29,16 @@ interface ProductSelectorProps {
 const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProductSelect }): JSX.Element => {
   const [products, setProducts] = useState<Product[]>(product_list);
   const [searchResults, setSearchResults] = useState<string>('');
-  
+  const [filteredItems, setFilteredItems] = useState<Product[]>(product_list);
+
+
+  const handleFilter = (query: string) => {
+    const lowerQuery = query.toLowerCase(); // Convert query to lowercase
+    const results = product_list.filter(product => product.name.toLowerCase().includes(lowerQuery) || 
+    product.description.toLowerCase().includes(lowerQuery)); // Filter logic
+    setFilteredItems(results); // Update filtered items
+  };
+ 
 
   useEffect(() => {
     setProducts(product_list);
@@ -40,13 +50,38 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
   };
 
   console.log("Products: ", products);
-  // I do not know why this is not working anymore
-  // const filteredProducts = product_list.filter(product =>
-  //   product.name.toLowerCase().includes(searchResults.toLowerCase())
-  // );
 
   const handleSearch = (query: string) => {
     setSearchResults(query);
+    handleFilter(query);
+    console.log("In handle search with: ", query)
+    return (
+      <div className="flex flex-col items-center">
+      <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4">
+        {filteredItems.length > 0 ? (
+          filteredItems.map((product) => (
+            <div
+              key={product.id}
+              className="relative w-[330px] h-[400px] p-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => handleProductSelect(product.id)} // Return the product ID on click
+            >
+              <img
+                src={product.thumbnail}
+                alt={product.name}
+                className="w-full h-40 object-cover rounded-lg mb-2"
+              />
+              <h3 className="text-2xl font-semibold">{product.name}</h3>
+              <p className="text-md text-gray-600">{product.description}</p>
+              <h4 className="absolute bottom-4 right-6 text-4xl font-bold">${product.price}</h4>
+             <AddToCartButton productId={product.id} />
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500">No products available</p>
+        )}
+      </div>
+    </div>
+    );
   }
 
 
@@ -54,7 +89,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
     <div className="flex flex-col items-center">
       <div className="relative mt-4 ml-4">
       <h2 className="text-2xl font-bold">Browse Products</h2>
-      {/* <SearchBar onSearch={handleSearch} placeholder="Enter your search query" /> */}
+      <SearchBar onSearch={handleSearch} placeholder="Enter your search query" />
       </div>
       <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4">
         {products && products.length > 0 ? (

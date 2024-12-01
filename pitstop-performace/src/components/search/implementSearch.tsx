@@ -20,29 +20,26 @@ interface Product {
 
 interface ProductSelectorProps {
   product_list: Product[];
+  searchResults: String;
 }
 
-export default function SearchPage({ product_list }: ProductSelectorProps) {
-  const { toast } = useToast()
-  const [searchResults, setSearchResults] = useState<string>('')
-  const filteredProducts = product_list.filter(product =>
-    product.name.toLowerCase().includes(searchResults.toLowerCase())
-  );
+export default function SearchPage({ product_list, searchResults }: ProductSelectorProps) {
+  const [query, setQuery] = useState(''); // State to track the search input
+  const [filteredItems, setFilteredItems] = useState<Product[]>(product_list);
+  // const filteredProducts = product_list.filter(product =>
+  //   product.name.toLowerCase().includes(searchResults.toLowerCase())
+  // );
 
-  const handleSearch = (query: string) => {
-    setSearchResults(query);
-    if (product_list.length === 0) {
-      toast({
-        title: "No results found",
-        description: `No products match the search query: ${query}`,
-        variant: "destructive",
-      });
-    }
-  }
+
+  const handleFilter = (query: string) => {
+    const lowerQuery = query.toLowerCase(); // Convert query to lowercase
+    const results = product_list.filter(product => product.name.toLowerCase().includes(lowerQuery) || 
+    product.description.toLowerCase().includes(lowerQuery)); // Filter logic
+    setFilteredItems(results); // Update filtered items
+  };
 
   return (
     <div className="p-4">
-      <SearchBar onSearch={handleSearch} placeholder="Enter your search query" />
       {searchResults && (
         <div className="mt-4">
           <h2 className="text-xl font-semibold mb-2">
@@ -65,11 +62,6 @@ export default function SearchPage({ product_list }: ProductSelectorProps) {
                   <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                   <p className="text-sm text-gray-600 mb-2">{product.description}</p>
                   <div className="flex flex-wrap gap-2 mb-2">
-                    {/* {product.tags.map((tag, index) => (
-                      <span key={index} className="text-xs bg-gray-200 rounded-full px-2 py-1">
-                        {tag}
-                      </span>
-                    ))} */}
                   </div>
                 </div>
                 <div className="flex justify-between items-center mt-4">
