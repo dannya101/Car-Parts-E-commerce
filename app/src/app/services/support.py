@@ -9,7 +9,8 @@ from app.crud import (
     delete_and_commit,
     get_ticket_by_id,
     get_tickets_by_user_id,
-    get_ticket_replies_by_ticket_id
+    get_ticket_replies_by_ticket_id,
+    get_all_tickets
 )
 
 def get_all_support_tickets_by_user_id(user_id: int, db: Session):

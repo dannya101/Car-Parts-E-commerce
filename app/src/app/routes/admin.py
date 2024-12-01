@@ -3,7 +3,10 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 import app.services.product as product_service
+import app.services.support as support_service
 from app.dependencies import get_db
+from app.models.user import User
+from app.core.auth import get_current_user
 from app.models.product import Product
 from app.schemas.product import ProductCreate, ProductUpdate, PartCategoryCreate, BrandCategoryCreate, ModelCategoryCreate
 
@@ -236,3 +239,20 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
         - If the product is not found, a 404 error will be raised.
     """
     return product_service.delete_product(db=db, product_id=product_id)
+
+@router.get("/support/getalltickets")
+def get_all_tickets(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    tickets = support_service.get_all_tickets(db=db)
+    data = {
+        "tickets": [
+            {
+                "id": ticket.id,
+                "title": ticket.title,
+                "description": ticket.description,
+                "created_at": ticket.created_at,
+                "user_name": ticket.user.username
+            }
+            for ticket in tickets
+        ]
+    }
+    return data

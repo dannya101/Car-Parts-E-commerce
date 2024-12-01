@@ -103,6 +103,9 @@ def get_ticket_replies_by_ticket_id(db: Session, ticket_id: int):
 
     return replies
 
+def get_all_tickets(db: Session):
+    return db.query(SupportTicket).all()
+
 #User CRUD
 def get_user(db: Session, user_id: int):
     """
