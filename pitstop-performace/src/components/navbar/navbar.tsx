@@ -77,6 +77,16 @@ export default function navbar() {
     })
   }
 
+  const handleAdminClick = () => {
+    if (!isAuthenticated) {
+      router.push("/login"); // Redirect to login if not logged in
+    //} else if (isAuthenticated && !isAdmin) {
+    //  router.push("/admin-password"); // Redirect to admin-password page
+    } else if (isAuthenticated && isAdmin) {
+      router.push("/admin"); // Redirect to admin page if logged in as admin
+    }
+  };
+
   return (
     <div className="bg-primary text-primary-foreground h-16 flex items-center">
       <div className="container mx-auto flex justify-between pr-2 pl-2">
@@ -94,13 +104,12 @@ export default function navbar() {
             />
           ))}
 
-        {/*ADMIN*/}
-        {isAdmin && <NavbarItem
-          key={"Admin"}
-          navLink={{label: "Admin", link: "/admin"}}
-          handleLogout={handleLogout}
-        />
-        }
+        {/* ADMIN */}
+        <NavbarItem
+            key="Admin"
+            navLink={{ label: "Admin", link: "#" }}
+            handleLogout={handleAdminClick}
+          />
 
         {/*CHECKOUT/CART*/}
         <Link href="/checkout" className="flex items-center justify-center bg-primary p-2 rounded-full hover:bg-opacity-80">
