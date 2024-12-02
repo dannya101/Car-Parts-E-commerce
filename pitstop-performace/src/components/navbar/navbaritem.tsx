@@ -14,7 +14,7 @@ export default function NavbarItem({ navLink, handleClick }: NavbarItemProps) {
 
   return handleClick ? (
     <Button
-      className="h-full flex bg-navbutton text-navbutton-foreground hover:bg-navbutton-foreground hover:text-white transition-colors duration-300 px-4"
+      className="h-full flex bg-navbutton text-navbutton-foreground hover:bg-navbutton-foreground hover:text-white transition-colors duration-300 px-4 items-center justify-center text-lg"
       onClick={handleClick}
     >
       {label}
@@ -22,7 +22,7 @@ export default function NavbarItem({ navLink, handleClick }: NavbarItemProps) {
   ) : (
     <Link
       href={link}
-      className="h-full flex bg-navbutton text-navbutton-foreground hover:bg-navbutton-foreground hover:text-white transition-colors duration-300 px-4 items-center justify-center"
+      className="h-full flex bg-navbutton text-navbutton-foreground hover:bg-navbutton-foreground hover:text-white transition-colors duration-300 px-4 items-center justify-center text-lg"
     >
       {label}
     </Link>
