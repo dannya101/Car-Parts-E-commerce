@@ -128,28 +128,28 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
         }
 
         try {
-            const shipping_response = await fetch(`http://localhost:8000/checkout/address/setshipping?address_id=${shipping_address_id}`, {
+            await fetch(`http://localhost:8000/checkout/address/setshipping?address_id=${shipping_address_id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 }
             });
-            const billing_response = await fetch(`http://localhost:8000/checkout/address/setbilling?address_id=${billing_address_id}`, {
+            await fetch(`http://localhost:8000/checkout/address/setbilling?address_id=${billing_address_id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 }
             });
-            const payment_method_response = await fetch(`http://localhost:8000/checkout/payment-method?payment_method=${payment_method}`, {
+            await fetch(`http://localhost:8000/checkout/payment-method?payment_method=${payment_method}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 }
             });
-            const shipping_method_response = await fetch(`http://localhost:8000/checkout/shipping-method?shipping_method=${shipping_method}`, {
+            await fetch(`http://localhost:8000/checkout/shipping-method?shipping_method=${shipping_method}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -162,9 +162,10 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
         }
 
         console.log("CHECKOUT DATA ADDED TO DB");
+        completeCheckout();
     };
 
-    /*
+
     const completeCheckout = async () => {
         const token = sessionStorage.getItem("access_token");
         if(!token) {
@@ -186,7 +187,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
 
         console.log("CHECKOUT COMPLETED")
     };
-    */
+
 
     //Add new address to DB from user input data
     const createUserAddress = async () => {
@@ -269,7 +270,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
             <div className="bg-white p-6 rounded-lg shadow-lg w-3/4 md:w-1/2">
                 <h2 className="text-2xl font-bold text-center mb-4">Complete Your Order</h2>
 
-                <form>
+
                 {/* Payment Method */}
                 <div className="mb-4">
                     <label className="block text-lg font-medium mb-2">Payment Method</label>
@@ -392,7 +393,6 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
                     Confirm Order
                     </button>
                 </div>
-                </form>
             </div>
             </div>
     )
