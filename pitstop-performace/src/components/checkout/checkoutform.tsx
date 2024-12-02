@@ -4,13 +4,16 @@ import React, { useState, useEffect } from "react"
 import { ClearCartButton } from "./clearCart";
 import { ContinueButton } from "./continueToShopButton";
 import { Button } from '../ui/navbutton';
+// import { useRouter } from "next/router";
+import { useToast } from "@/hooks/use-toast";
 
 
 export function CheckoutForm() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [cart, setCart] = useState<{ product: { name: string; price: number; id: number }; quantity: number }[]>([]);
     const [total, setTotal] = useState<number>(0);
-
+    const toast = useToast();
+    // const router = useRouter();
     // Fetch cart data from the backend
     useEffect(() => {
         const fetchCartData = async () => {
@@ -55,6 +58,35 @@ export function CheckoutForm() {
     const handleCloseModal = () => {
         setIsModalOpen(false); // Close the modal
     };
+
+    const confirmOrder = async() => {
+        // router.push("/order")
+        setIsModalOpen(false);
+        const token = sessionStorage.getItem("access_token");
+        if (!token) {
+            console.error("Not Authenticated");
+            return;
+        }
+
+        try {
+        const response = await fetch("http://localhost:8000/cart/clear", {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        })
+        if(response.ok)
+        {
+            console.log("Cart successfully cleared")
+        }
+        
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+
     const updateCartItem = async (index: number, newQuantity: number) => {
         const token = sessionStorage.getItem("access_token");
         if (!token) {
@@ -183,6 +215,7 @@ export function CheckoutForm() {
                     <button
                     type="submit"
                     className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                    onClick={confirmOrder}
                     >
                     Confirm Order
                     </button>
