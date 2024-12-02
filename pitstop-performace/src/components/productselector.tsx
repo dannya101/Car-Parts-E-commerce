@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Button } from "./ui/navbutton";
-import { METHODS } from "http";
 import { useToast } from "@/hooks/use-toast";
 import { AddToCartButton } from "./addToCart";
 import { SearchBar } from "./ui/searchBar";
-import { useRouter } from "next/router";
 
 
 interface Product {
