@@ -79,12 +79,12 @@ export default function navbar() {
 
   const handleAdminClick = () => {
     if (!isAuthenticated) {
-      router.push("/login"); // Redirect to login if not logged in
-    //} else if (isAuthenticated && !isAdmin) {
-    //  router.push("/admin-password"); // Redirect to admin-password page
-    } else if (isAuthenticated && isAdmin) {
-      router.push("/admin"); // Redirect to admin page if logged in as admin
+      router.push("/login"); 
+    } else if (isAdmin) {
+      router.push("/admin");
     }
+    // else {
+    //  router.push("/admin-password"); 
   };
 
   return (
@@ -100,7 +100,7 @@ export default function navbar() {
             <NavbarItem
               key={navLink.label}
               navLink={navLink}
-              handleLogout={handleLogout}
+              handleClick={navLink.label === "Logout" ? handleLogout : undefined}
             />
           ))}
 
@@ -108,7 +108,7 @@ export default function navbar() {
         <NavbarItem
             key="Admin"
             navLink={{ label: "Admin", link: "#" }}
-            handleLogout={handleAdminClick}
+            handleClick={handleAdminClick}
           />
 
         {/*CHECKOUT/CART*/}
