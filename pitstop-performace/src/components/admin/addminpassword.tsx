@@ -35,7 +35,7 @@ export default function AdminPassword() {
     };
 
     return (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+        <div className="flex justify-center items-center p-20 z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-3/4 md:w-1/3">
                 <h1 className="text-2xl font-bold text-center mb-4">Admin Password</h1>
                 <form onSubmit={handlePasswordSubmit} className="space-y-4">
