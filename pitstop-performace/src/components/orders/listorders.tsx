@@ -1,11 +1,18 @@
 'use client';
 import React, { useState, useEffect } from "react";
 
+type OrderItem = {
+    product_name: string;
+    quantity: number;
+    price: number;
+};
+
 type Order = {
     id: number;
     user_id: number;
     status: string;
     total_price: number;
+    items: OrderItem[]; 
 };
 
 export function ListOrders() {
@@ -33,7 +40,7 @@ export function ListOrders() {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setOrders(data.order_content); // Adjusted for the API response
+                    setOrders(data.order_content); 
                 } else {
                     const errorData = await response.json();
                     setError(errorData.message || "Failed to fetch orders.");
@@ -63,6 +70,17 @@ export function ListOrders() {
                             <h3 className="font-bold text-lg">Order #{index + 1}</h3>
                             <p>Status: <span className="text-green-600">{order.status}</span></p>
                             <p>Total: <span className="font-bold">${order.total_price.toFixed(2)}</span></p>
+                            <h4 className="font-semibold mt-2">Items:</h4>
+                            <ul className="space-y-2 pl-4">
+                                {order.items.map((item, itemIndex) => (
+                                    <li key={itemIndex} className="text-sm">
+                                        <p><strong>Item #{itemIndex + 1}</strong></p>
+                                        <p>Product: <span className="font-bold">{item.product_name}</span></p>
+                                        <p>Quantity: {item.quantity}</p>
+                                        <p>Price: ${item.price.toFixed(2)}</p>
+                                    </li>
+                                ))}
+                            </ul>
                         </li>
                     ))}
                 </ul>
