@@ -375,8 +375,11 @@ def finalize_checkout(current_user: User = Depends(get_current_user), db: Sessio
     }
     """
     order = checkout_service.finalize_checkout(user_id=current_user.id, db=db)
-    return {"message": "Checkout Complete", "order": order}
 
+    if(order.shipping_address_id and order.billing_address_id and order.shipping_method and order.payment_method):
+        return {"message": "Checkout Complete", "order": order}
+    else:
+        return {"error": "Checkout not completed", "order": order}
 
 
 @router.get("/order-summary")
