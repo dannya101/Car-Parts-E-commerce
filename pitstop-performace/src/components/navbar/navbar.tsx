@@ -77,14 +77,13 @@ export default function navbar() {
     })
   }
 
+  //Handling admin password in admin page
   const handleAdminClick = () => {
     if (!isAuthenticated) {
       router.push("/login"); 
-    } else if (isAdmin) {
+    } else {
       router.push("/admin");
     }
-    // else {
-    //  router.push("/admin-password"); 
   };
 
   return (
