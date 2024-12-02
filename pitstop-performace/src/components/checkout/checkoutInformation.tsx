@@ -159,6 +159,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
 
         } catch (error) {
             console.error("ERROR SETTING CHECKOUT DATA: ", error);
+            return;
         }
 
         console.log("CHECKOUT DATA ADDED TO DB");

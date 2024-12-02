@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import { ClearCartButton } from "./clearCart";
 import { ContinueButton } from "./continueToShopButton";
 import { Button } from '../ui/navbutton';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import CheckoutInformation from "@/components/checkout/checkoutInformation";
 
@@ -14,7 +14,8 @@ export function CheckoutForm() {
     const [cart, setCart] = useState<{ product: { name: string; price: number; id: number }; quantity: number }[]>([]);
     const [total, setTotal] = useState<number>(0);
     const toast = useToast();
-    // const router = useRouter();
+    const router = useRouter();
+
     // Fetch cart data from the backend
     useEffect(() => {
         const fetchCartData = async () => {
@@ -68,24 +69,7 @@ export function CheckoutForm() {
             return;
         }
 
-        try {
-        const response = await fetch("http://localhost:8000/checkout/complete", {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-        })
-        if(response.ok)
-        {
-            console.log("Cart successfully checked out")
-        }
-        
-      } catch (error) {
-        console.error(error)
-      }
-
-    //   router.push("/order")
+        router.push("/orders")
     }
 
 
