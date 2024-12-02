@@ -279,10 +279,6 @@ def add_address(address: AddressSchema, user_id: int, db: Session):
     Raises:
         HTTPException: If no pending order is found.
     """
-    order = get_pending_order_from_db(user_id=user_id, db=db)
-
-    if not order:
-        raise HTTPException(status_code=400, detail="No pending order found")
 
     address_new = Address(
         user_id=user_id,
@@ -295,9 +291,9 @@ def add_address(address: AddressSchema, user_id: int, db: Session):
         is_shipping=address.is_shipping
     )
 
-    set_order_address_in_db(address_new=address_new, order=order, db=db)
+    add_and_commit(db=db, obj=address_new)
 
-    return order
+    return address_new
 
 def finalize_checkout(user_id: int, db: Session):
     """
