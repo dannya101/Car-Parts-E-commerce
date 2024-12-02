@@ -27,7 +27,7 @@ export function SearchBar({ onSearch, placeholder = "Search..." }: SearchBarProp
         placeholder={placeholder}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="flex-grow"
+        className="flex-grow bg-white border-solid border-2 border-black"
         aria-label="Search input"
       />
       <Button type="submit" aria-label="Perform search">
