@@ -53,11 +53,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
         {
             setShippingAddressID(billing_address_id);
         }
-
-        if(checkout_started) {
-            setCheckoutData();
-        }
-    }, [tabValue, is_seperate_shipping_address, billing_address_id, checkout_started]);
+    }, [tabValue, is_seperate_shipping_address, billing_address_id]);
 
     const fetchUserAddresses = async () => {
         const token = sessionStorage.getItem("access_token");
@@ -112,6 +108,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
         console.log("Checkout Started");
 
         setCheckoutStarted;
+        setCheckoutData();
     };
 
     const setCheckoutData = async () => {
@@ -128,14 +125,14 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
         }
 
         try {
-            const shipping_response = await fetch(`http://localhost:8000/checkout/address/setshipping?id=${shipping_address_id}`, {
+            const shipping_response = await fetch(`http://localhost:8000/checkout/address/setshipping?address_id=${shipping_address_id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 }
             });
-            const billing_response = await fetch(`http://localhost:8000/checkout/address/setbilling?id=${billing_address_id}`, {
+            const billing_response = await fetch(`http://localhost:8000/checkout/address/setbilling?address_id=${billing_address_id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -162,9 +159,9 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
         }
 
         console.log("CHECKOUT DATA ADDED TO DB");
-        completeCheckout();
     };
 
+    /*
     const completeCheckout = async () => {
         const token = sessionStorage.getItem("access_token");
         if(!token) {
@@ -186,6 +183,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
 
         console.log("CHECKOUT COMPLETED")
     };
+    */
 
     const createUserAddress = async () => {
         const token = sessionStorage.getItem("access_token");
@@ -233,8 +231,11 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
             setIsSeperate(false);
             setShipping(true);
         } else {
+            setIsSeperate(true);
             setShipping(false);
         }
+
+        console.log("Checkbox value: ", checked);
 
     };
 
@@ -309,7 +310,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
                                 <label className="block text-lg font-medium mb-2">
                                     <input
                                         type="checkbox"
-                                        onChange={(e) => handleCheckboxChange}
+                                        onChange={(e) => handleCheckboxChange(e.target.checked)}
                                         className="mr-2"
                                     />
                                     Shipping address is the same as billing address
@@ -379,7 +380,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
                     Close
                     </button>
                     <button
-                    type="button"
+                    type="submit"
                     className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
                     onClick={startCheckout}
                     >

@@ -69,7 +69,7 @@ export function CheckoutForm() {
         }
 
         try {
-        const response = await fetch("http://localhost:8000/checkout", {
+        const response = await fetch("http://localhost:8000/checkout/complete", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -118,11 +118,6 @@ export function CheckoutForm() {
             console.error("Error updating cart item:", error);
         }
     };
-
-    const handleCopyAddress = () =>{
-        const inputElement = document.getElementById("orderForm");
-        inputElement
-    }
   
     return (
         <div>
