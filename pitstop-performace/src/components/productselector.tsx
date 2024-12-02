@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Button } from "./ui/navbutton";
 import { METHODS } from "http";
 import { useToast } from "@/hooks/use-toast";
 import { AddToCartButton } from "./addToCart";
-import SearchPage from "./search/implementSearch";
 import { SearchBar } from "./ui/searchBar";
+import { useRouter } from "next/router";
 
 
 interface Product {
@@ -28,7 +28,6 @@ interface ProductSelectorProps {
 const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], onProductSelect }): JSX.Element => {
   const [products, setProducts] = useState<Product[]>(product_list);
   const [searchResults, setSearchResults] = useState<string>('');
-  
 
   useEffect(() => {
     setProducts(product_list);
@@ -39,28 +38,24 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], on
     onProductSelect(productId);  // Return the product ID to the parent component
   };
 
+
+  const filteredProducts = useMemo(() => {
+    if (!searchResults || searchResults.localeCompare("") === 0) return product_list;
+    return product_list.filter(product => 
+      product.name.toLowerCase().includes(searchResults.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchResults.toLowerCase())
+    );
+  }, [product_list, searchResults]);
+
+
   console.log("Products: ", products);
+  console.log("Filtered Products: ", filteredProducts)
+  console.log("Search: ", searchResults)
   const handleSearch = async(query: string) => {
     setSearchResults(query);
-    if (!query) {
-      // Reset to original product list if the query is empty
-      setProducts(product_list);
-      return;
-    }
-    try {
-      const response = await fetch(`http://localhost:8000/search/${encodeURIComponent(query)}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      setProducts(data)
-
-    } catch (error) {
-      console.error("Error fetching products by query:", error);
-      setProducts([]);
-      console.log("when we set products to nothing")
+    if(filteredProducts.length === 0)
+    {
+      console.log("Products length is 0")
     }
 
   }
@@ -68,13 +63,15 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], on
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative mt-4 ml-4 flex-row flex space-x-40">
-      <h2 className="text-2xl font-bold">Browse Products</h2>
+      <div className="relative mt-4 flex-row space-x-40 flex">
+      <h2 className="text-2xl font-semibold mb-4">
+          {searchResults ? `Search Results for "${searchResults}"` : "All Products"}
+        </h2>
       <SearchBar onSearch={handleSearch} placeholder="Enter your search query" />
       </div>
       <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4"> 
-        {products.length > 0 ? (
-          products.map((product) => (
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
             <div
               key={product.id}
               className="relative w-[330px] h-[400px] p-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"

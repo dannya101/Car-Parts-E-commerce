@@ -36,6 +36,8 @@ export default function Results() {
         }
         else if(makeNum && modelNum) {
             apiGetProductsBySpecs(makeNum, modelNum);
+        }else{
+            
         }
     }, [make, model, query]);
 
