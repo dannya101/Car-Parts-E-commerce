@@ -68,7 +68,7 @@ export function SelectScrollable() {
   return (
     <>
       <Select onValueChange={handleMakeChange}>
-        <SelectTrigger className="w-[150px] bg-white border-solid border-2 border-black">
+        <SelectTrigger className="w-[150px] bg-white border-solid font-bold border-2 border-black">
           <SelectValue placeholder="Make" />
         </SelectTrigger>
         <SelectContent>

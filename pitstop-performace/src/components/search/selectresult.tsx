@@ -64,7 +64,7 @@ export function SelectScrollableResult({
 
   return (
     <Select onValueChange={onModelSelect}>
-      <SelectTrigger className="w-[150px] bg-white border-solid border-2 border-black">
+      <SelectTrigger className="w-[150px] bg-white font-bold border-solid border-2 border-black">
         <SelectValue placeholder="Model" />
       </SelectTrigger>
       <SelectContent>
