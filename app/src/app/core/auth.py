@@ -65,8 +65,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     return user
 
 def check_admin_pass(password: str):
-    #hash_pwd = pwd_context.hash(password)
-    hash_pwd = password
+    hash_pwd = pwd_context.hash(password)
+    
     if(hash_pwd == ADMIN_PASS):
         return True
     else:
