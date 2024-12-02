@@ -55,6 +55,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
         }
     }, [tabValue, is_seperate_shipping_address, billing_address_id]);
 
+    //Get users saved addresses from DB
     const fetchUserAddresses = async () => {
         const token = sessionStorage.getItem("access_token");
 
@@ -86,6 +87,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
 
     };
 
+    //Initiate checkout - Clears cart
     const startCheckout = async () => {
         const token = sessionStorage.getItem("access_token");
         if(!token) {
@@ -111,6 +113,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
         setCheckoutData();
     };
 
+    //Send data for order to DB
     const setCheckoutData = async () => {
 
         console.log("Shipping Address ID: ", shipping_address_id);
@@ -185,6 +188,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
     };
     */
 
+    //Add new address to DB from user input data
     const createUserAddress = async () => {
         const token = sessionStorage.getItem("access_token");
         if(!token) {
@@ -226,6 +230,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
         setTabValue("select");
     };
 
+    //Runs when the checkbox changes value
     const handleCheckboxChange = (checked: boolean | "indeterminate") => {
         if(checked == true) {
             setIsSeperate(false);
@@ -239,6 +244,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
 
     };
 
+    //Runs when either address dropdown changes
     const handleAddressChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = event.target.value;
         if(selectedValue === "new") {
@@ -285,7 +291,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
                 </div>
 
                 {/* Address */}
-                {/* Tabs for "Submit Ticket" and "View Tickets" */}
+                {/* Tabs for "Select Address" and "Add New Address" */}
                 <div className="bg-white shadow-md rounded-lg p-6 pt-10">
                     <Tabs value={tabValue} onValueChange={setTabValue}>
                         <TabsList className="flex justify-center mb-4">
@@ -293,7 +299,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
                             <TabsTrigger value="new">New Address</TabsTrigger>
                         </TabsList>
 
-                        {/* Submit Ticket Section */}
+                        {/* Billing Address */}
                         <TabsContent value="select">
                             <select className="w-full p-2 border rounded" onChange={handleAddressChange} name="billing">
                                 <option value="new">Add New Address . . .</option>
@@ -302,10 +308,8 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
                                     <option key={index} value={address.id}>{address.street_address}, {address.city}, {address.postal_code}</option>
                                 ))}
                             </select>
-                            {/*<div className="flex items-center space-x-2 pt-4">
-                                <Checkbox id="isShippingCheck" defaultChecked checked={is_shipping} onCheckedChange={handleCheckboxChange}/>
-                                <label htmlFor="isShippingCheck">Use Address For Shipping?</label>
-                            </div>*/}
+
+                        {/* Checkbox */}
                             <div className="mb-4">
                                 <label className="block text-lg font-medium mb-2">
                                     <input
@@ -316,7 +320,8 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
                                     Shipping address is the same as billing address
                                 </label>
                             </div>
-                            
+                        
+                        {/* Shipping Address */}
                             {!is_shipping && (
                                 <select className="w-full p-2 border rounded" onChange={handleAddressChange} name="shipping">
                                     <option value="new">Add New Address . . .</option>
@@ -329,7 +334,7 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
 
                         </TabsContent>
 
-                        {/*  */}
+                        {/* Create New Address */}
                         <TabsContent value="new">
                             <div className="mb-4">
                                 <label className="block text-lg font-medium mb-2">New Address</label>
