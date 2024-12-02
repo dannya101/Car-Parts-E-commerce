@@ -4,6 +4,7 @@ import { METHODS } from "http";
 import { useToast } from "@/hooks/use-toast";
 import { AddToCartButton } from "./addToCart";
 import SearchPage from "./search/implementSearch";
+import { SearchBar } from "./ui/searchBar";
 
 
 interface Product {
@@ -24,8 +25,10 @@ interface ProductSelectorProps {
   product_list: Product[];
 }
 
-const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProductSelect }): JSX.Element => {
+const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], onProductSelect }): JSX.Element => {
   const [products, setProducts] = useState<Product[]>(product_list);
+  const [searchResults, setSearchResults] = useState<string>('');
+  
 
   useEffect(() => {
     setProducts(product_list);
@@ -37,16 +40,40 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
   };
 
   console.log("Products: ", products);
-  // const token = sessionStorage.getItem("access_token");
+  const handleSearch = async(query: string) => {
+    setSearchResults(query);
+    if (!query) {
+      // Reset to original product list if the query is empty
+      setProducts(product_list);
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:8000/search/${encodeURIComponent(query)}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setProducts(data)
+
+    } catch (error) {
+      console.error("Error fetching products by query:", error);
+      setProducts([]);
+      console.log("when we set products to nothing")
+    }
+
+  }
+
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative mt-4 ml-4">
+      <div className="relative mt-4 ml-4 flex-row flex space-x-40">
       <h2 className="text-2xl font-bold">Browse Products</h2>
-      <SearchPage/>
+      <SearchBar onSearch={handleSearch} placeholder="Enter your search query" />
       </div>
-      <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4">
-        {products && products.length > 0 ? (
+      <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4"> 
+        {products.length > 0 ? (
           products.map((product) => (
             <div
               key={product.id}
@@ -67,7 +94,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
         ) : (
           <p className="text-gray-500">No products available</p>
         )}
-      </div>
+        </div>
     </div>
   );
 };

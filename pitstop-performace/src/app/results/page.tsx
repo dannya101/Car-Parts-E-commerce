@@ -16,11 +16,12 @@ interface Product {
     brand_category_id: number,
     model_category_id: number
 }
-
+  
 export default function Results() {
     const searchParams = useSearchParams();
     const make = searchParams.get("make");
     const model = searchParams.get("model");
+    const query = searchParams.get("query")
 
     const [productList, setProductList] = useState<Product[]>([]);
 
@@ -29,14 +30,36 @@ export default function Results() {
     useEffect(() => {
         const makeNum = Number(make);
         const modelNum = Number(model);
-        if(makeNum && modelNum) {
-            apiGetProducts(makeNum, modelNum);
+        if(query)
+        {
+            apiGetProducts(query);
         }
-    }, [make, model]);
+        else if(makeNum && modelNum) {
+            apiGetProductsBySpecs(makeNum, modelNum);
+        }
+    }, [make, model, query]);
 
-    const apiGetProducts = async (make: number, model: number) => {
+    const apiGetProducts = async (query: string) => {
         try {
-            const response = await fetch(`http://localhost:8000/product/get/brand-model?brand_category_id=${make}&model_category_id=${model}`, {
+          const response = await fetch(`http://localhost:8000/search/${encodeURIComponent(query)}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const data = await response.json();
+          setProductList(data);
+          console.log("DATA: ", data);
+        } catch (error) {
+          console.error("Error fetching products by query:", error);
+        }
+      };
+
+    const apiGetProductsBySpecs = async (make: number, model: number) => {
+        try {
+            const apiQuery = query ? `http://localhost:8000/search/${encodeURIComponent(query)}`
+            : `http://localhost:8000/product/get/brand-model?brand_category_id=${make}&model_category_id=${model}`; // Default endpoint for all products
+            const response = await fetch(apiQuery, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

@@ -14,9 +14,9 @@ export function ProductItem({ name, price, quantity, onIncrease, onDecrease }: P
       <div className="product-item flex justify-between items-center border-b border-gray-300 py-4">
         <div className="product-details">
           <h2 className="text-lg font-medium">{name}</h2>
-            <Button variant="outline" size="sm" onClick={onDecrease} disabled={quantity <= 1}>-</Button>
+            <Button variant="outline" size="sm" type="button" onClick={onDecrease} disabled={quantity <= 1}>-</Button>
             <span className="text-sm text-gray-500"> Quantity: {quantity}</span>
-            <Button variant="outline" size="sm" onClick={onIncrease}>+</Button>
+            <Button variant="outline" size="sm" type="button" onClick={onIncrease}>+</Button>
         </div>
         <p className="product-price text-lg font-bold">${(price * quantity).toFixed(2)}</p>
       </div>
