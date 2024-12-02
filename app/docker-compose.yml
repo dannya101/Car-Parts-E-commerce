@@ -14,10 +14,10 @@ services:
     image: postgres:latest
     container_name: postgres_db
     volumes:
-      - postgress_data:/var/lib/postgresql/data 
+      - postgres_data:/var/lib/postgresql/data 
     environment:
       POSTGRES_DB: pitstop_performance_db
-      POSTGRES_USER: postgress
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
@@ -25,7 +25,7 @@ services:
       - app_network
 
 volumes:
-  postgress_data:
+  postgres_data:
 
 networks:
   app_network:
