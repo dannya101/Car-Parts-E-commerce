@@ -31,6 +31,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], on
 
   useEffect(() => {
     setProducts(product_list);
+    console.log("Updated productList: ", product_list);
   }, [product_list]);
 
   // Handle product selection and call the callback with the selected product's ID
