@@ -5,7 +5,6 @@ import { useToast } from "@/hooks/use-toast";
 import { AddToCartButton } from "./addToCart";
 import SearchPage from "./search/implementSearch";
 import { SearchBar } from "./ui/searchBar";
-import HomeSearch from "./search/homeSearch";
 
 
 interface Product {
@@ -26,19 +25,10 @@ interface ProductSelectorProps {
   product_list: Product[];
 }
 
-const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProductSelect }): JSX.Element => {
+const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], onProductSelect }): JSX.Element => {
   const [products, setProducts] = useState<Product[]>(product_list);
   const [searchResults, setSearchResults] = useState<string>('');
-  const [filteredItems, setFilteredItems] = useState<Product[]>(product_list);
-
-
-  const handleFilter = (query: string) => {
-    const lowerQuery = query.toLowerCase(); // Convert query to lowercase
-    const results = product_list.filter(product => product.name.toLowerCase().includes(lowerQuery) || 
-    product.description.toLowerCase().includes(lowerQuery)); // Filter logic
-    setFilteredItems(results); // Update filtered items
-  };
- 
+  
 
   useEffect(() => {
     setProducts(product_list);
@@ -50,49 +40,40 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
   };
 
   console.log("Products: ", products);
-
-  const handleSearch = (query: string) => {
+  const handleSearch = async(query: string) => {
     setSearchResults(query);
-    handleFilter(query);
-    console.log("In handle search with: ", query)
-    return (
-      <div className="flex flex-col items-center">
-      <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4">
-        {filteredItems.length > 0 ? (
-          filteredItems.map((product) => (
-            <div
-              key={product.id}
-              className="relative w-[330px] h-[400px] p-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
-              onClick={() => handleProductSelect(product.id)} // Return the product ID on click
-            >
-              <img
-                src={product.thumbnail}
-                alt={product.name}
-                className="w-full h-40 object-cover rounded-lg mb-2"
-              />
-              <h3 className="text-2xl font-semibold">{product.name}</h3>
-              <p className="text-md text-gray-600">{product.description}</p>
-              <h4 className="absolute bottom-4 right-6 text-4xl font-bold">${product.price}</h4>
-             <AddToCartButton productId={product.id} />
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">No products available</p>
-        )}
-      </div>
-    </div>
-    );
+    if (!query) {
+      // Reset to original product list if the query is empty
+      setProducts(product_list);
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:8000/search/${encodeURIComponent(query)}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setProducts(data)
+
+    } catch (error) {
+      console.error("Error fetching products by query:", error);
+      setProducts([]);
+      console.log("when we set products to nothing")
+    }
+
   }
 
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative mt-4 ml-4">
+      <div className="relative mt-4 ml-4 flex-row flex space-x-40">
       <h2 className="text-2xl font-bold">Browse Products</h2>
       <SearchBar onSearch={handleSearch} placeholder="Enter your search query" />
       </div>
-      <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4">
-        {products && products.length > 0 ? (
+      <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4"> 
+        {products.length > 0 ? (
           products.map((product) => (
             <div
               key={product.id}
@@ -113,7 +94,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list, onProdu
         ) : (
           <p className="text-gray-500">No products available</p>
         )}
-      </div>
+        </div>
     </div>
   );
 };
