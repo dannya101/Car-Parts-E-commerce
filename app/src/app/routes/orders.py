@@ -68,8 +68,9 @@ def get_all_user_orders(current_user: User = Depends(get_current_user), db: Sess
         items = [
             {
                 "product_name": item.product.name,
-                "quantity": item.quantity,
-                "price": item.price,
+                "product_thumbnail": item.product.thumbnail,
+                "item_quantity": item.quantity,
+                "item_price": item.price,
             }
             for item in order.items
         ]
@@ -125,4 +126,24 @@ def get_order_by_id(order_id: int, db: Session = Depends(get_db)):
     order = get_order_by_id_crud(order_id, db)
     if order is None:
         raise HTTPException(status_code=400, detail="Order ID not valid")
-    return order
+    
+    order_data = []
+
+    items = [
+        {
+            "product_name": item.product.name,
+            "product_thumbnail": item.product.thumbnail,
+            "item_quantity": item.quantity,
+            "item_price": item.price,
+        }
+        for item in order.items
+    ]
+
+    order_data.append({
+        "id": order.id,
+        "status": order.status,
+        "total_price": order.total_price,
+        "items": items
+    })
+
+    return order_data
