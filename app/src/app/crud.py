@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import and_
 from app.models.cart import Cart, CartItem
 from app.models.product import Product
 from app.models.user import User
@@ -247,7 +248,7 @@ def get_all_model_categories(db: Session):
     return db.query(ModelCategory).all()
 
 def get_model_categories_by_brand_id(db: Session, brand_category_id: int):
-    return db.query(ModelCategory).filter(BrandCategory.id == brand_category_id).all()
+    return db.query(ModelCategory).join(BrandCategory, ModelCategory.brand_id == BrandCategory.id).filter(BrandCategory.id == brand_category_id).all()
 
 def get_part_category_by_name(db: Session, name: str):
     """
@@ -535,3 +536,25 @@ def get_order_by_id_crud(order_id: int, db: Session):
         - `Order`: The order object corresponding to the provided order ID, or `None` if not found.
     """
     return db.query(Order).filter(Order.id == order_id).first()
+
+def search_products_given_make(make_id: int, search_terms: str, db: Session):
+    """
+    Search for products by brand ID and name containing search terms.
+
+    :param make_id: The ID of the brand.
+    :param search_terms: The search keywords to look for in product names.
+    :param db: The database session.
+    :return: A list of products matching the criteria.
+    """
+    search_query = f"%{search_terms}%"  # Prepare the search pattern
+    products = (
+        db.query(Product)
+        .filter(
+            and_(
+                Product.brand_category_id == make_id,  # Filter by brand ID
+                Product.name.ilike(search_query)  # Case-insensitive search for name
+            )
+        )
+        .all()
+    )
+    return products

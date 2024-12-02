@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends,HTTPException
+from fastapi import APIRouter, Depends,HTTPException, Query
 
 from sqlalchemy.orm import Session
 
@@ -55,4 +55,10 @@ def get_products_from_search(search_terms: str, db: Session = Depends(get_db)):
             status_code=400,
             detail="No Product Found!"
         )
+    return result
+
+@router.get("/make")
+def get_products_from_search_by_make(make_id: int = Query(...), search_terms: str = Query(...), db: Session = Depends(get_db)):
+    result = product_services.search_products_given_make(make_id=make_id, search_terms=search_terms, db=db)
+
     return result
