@@ -6,6 +6,7 @@ import { ContinueButton } from "./continueToShopButton";
 import { Button } from '../ui/navbutton';
 import { useRouter } from "next/router";
 import { useToast } from "@/hooks/use-toast";
+import CheckoutInformation from "@/components/checkout/checkoutInformation";
 
 
 export function CheckoutForm() {
@@ -172,52 +173,7 @@ export function CheckoutForm() {
                 <h2 className="text-2xl font-bold text-center mb-4">Complete Your Order</h2>
 
                 <form onSubmit={confirmOrder} id="orderForm">
-                {/* Payment Method */}
-                <div className="mb-4">
-                    <label className="block text-lg font-medium mb-2">Payment Method</label>
-                    <select className="w-full p-2 border rounded">
-                    <option value="creditCard">Credit Card</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="bankTransfer">Bank Transfer</option>
-                    </select>
-                </div>
-
-                {/* Shipping Method */}
-                <div className="mb-4">
-                    <label className="block text-lg font-medium mb-2">Shipping Method</label>
-                    <select className="w-full p-2 border rounded">
-                    <option value="standard">Standard Shipping</option>
-                    <option value="express">Express Shipping</option>
-                    </select>
-                </div>
-
-                {/* Billing Address */}
-                <div className="mb-4">
-                    <label className="block text-lg font-medium mb-2">Shipping Address</label>
-                    <input type="text" placeholder="Street Address" className="w-full p-2 border rounded mb-2" required/>
-                    <input type="text" placeholder="City" className="w-full p-2 border rounded mb-2" required/>
-                    <input type="text" placeholder="State/Province" className="w-full p-2 border rounded mb-2" required/>
-                    <input type="text" placeholder="ZIP Code" className="w-full p-2 border rounded mb-2" required/>
-                </div>
-
-                <div className="mb-4">
-                    <label className="block text-lg font-medium mb-2">
-                        <input
-                            type="checkbox"
-                            onChange={handleCopyAddress}
-                            className="mr-2"
-                        />
-                        Shipping address is the same as billing address
-                    </label>
-                </div>
-                {/* Shipping Address */}
-                <div className="mb-4">
-                    <label className="block text-lg font-medium mb-2">Billing Address</label>
-                    <input type="text" placeholder="Street Address" className="w-full p-2 border rounded mb-2" required id="formStreet"/>
-                    <input type="text" placeholder="City" className="w-full p-2 border rounded mb-2" required id="formCity"/>
-                    <input type="text" placeholder="State/Province" className="w-full p-2 border rounded mb-2" required id="formState"/>
-                    <input type="text" placeholder="ZIP Code" className="w-full p-2 border rounded mb-2" required id="formZIP"/>
-                </div>
+                <CheckoutInformation handleCloseModal={handleCloseModal}/>
 
                 {/* Buttons */}
                 <div className="flex justify-between">
