@@ -22,7 +22,7 @@ export default function HomeButton() {
       <Button
       variant={"outline"}
       onClick={execute}
-      className='flex w-52 text-xl bg-white border-solid border-4 border-black'
+      className='flex w-52 text-xl font-bold bg-white border-solid border-2 border-black'
       
       >View All Products</Button>
     </div>

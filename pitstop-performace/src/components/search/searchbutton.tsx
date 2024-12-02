@@ -11,7 +11,7 @@ interface SearchButtonProps {
 export function Searchbutton({ selectedModel, selectedMake }: SearchButtonProps) {
   ContinueButton.updateSelection(selectedModel, selectedMake);
   return (
-  <Button asChild className="w-[140px] bg-white border-solid border-2 border-black select-none" variant={"outline"} >
+  <Button asChild className="w-[140px] bg-white font-bold border-solid border-2 border-black select-none" variant={"outline"} >
     <Link href={`/results?make=${selectedMake}&model=${selectedModel}`}>
       Search
     </Link>

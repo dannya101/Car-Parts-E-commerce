@@ -20,7 +20,6 @@ export default function Home() {
       <div style={{position : "fixed"}} className={`${picConfigs} delay-2000`}/>
       <div style={{position : "fixed"}} className={`${picConfigs} delay-4000`}/>
       <div className="relative z-1 p-8 flex flex-col justify-center items-center space-y-8">
-        {/* <h1 className="text-white text-5xl text-border font-bold flex justify-center">Pitstop Performance</h1> */}
         <img src="/webname.svg" alt="logo" width={600} height={309}/>
         <div className="" ><HomeButton/></div>
       </div>

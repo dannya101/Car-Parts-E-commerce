@@ -65,7 +65,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], on
       <div className="relative mt-4 flex-row space-x-40 flex">
       <h2 className="text-2xl font-semibold mb-4">
           {searchResults ? `Search Results for "${searchResults}"` : "All Products"}
-        </h2>
+      </h2>
       <SearchBar onSearch={handleSearch} placeholder="Enter your search query" />
       </div>
       <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4"> 

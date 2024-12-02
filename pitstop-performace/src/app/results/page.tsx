@@ -38,7 +38,6 @@ export default function Results() {
         if(makeNum && modelNum) {
             apiGetProductsBySpecs(makeNum, modelNum);
         }
-        // apiGetProductsBySpecs(makeNum, modelNum, queryVal)
     }, [make, model]);
 
     const filteredProducts = useMemo(() => {
