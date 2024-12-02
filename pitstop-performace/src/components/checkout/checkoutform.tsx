@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import { ClearCartButton } from "./clearCart";
 import { ContinueButton } from "./continueToShopButton";
 import { Button } from '../ui/navbutton';
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useToast } from "@/hooks/use-toast";
 
 
@@ -60,7 +60,6 @@ export function CheckoutForm() {
     };
 
     const confirmOrder = async() => {
-        // router.push("/order")
         setIsModalOpen(false);
         const token = sessionStorage.getItem("access_token");
         if (!token) {
@@ -69,8 +68,8 @@ export function CheckoutForm() {
         }
 
         try {
-        const response = await fetch("http://localhost:8000/cart/clear", {
-            method: 'DELETE',
+        const response = await fetch("http://localhost:8000/checkout", {
+            method: 'POST',
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -78,12 +77,14 @@ export function CheckoutForm() {
         })
         if(response.ok)
         {
-            console.log("Cart successfully cleared")
+            console.log("Cart successfully checked out")
         }
         
       } catch (error) {
         console.error(error)
       }
+
+    //   router.push("/order")
     }
 
 
@@ -161,11 +162,11 @@ export function CheckoutForm() {
        
         {/* Modal */}
         {isModalOpen && (
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-3/4 md:w-1/2">
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50 ">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-5xl h-auto md:h-auto max-h-screen overflow-y-auto flex flex-col md:flex-row">
                 <h2 className="text-2xl font-bold text-center mb-4">Complete Your Order</h2>
 
-                <form>
+                <form onSubmit={confirmOrder}>
                 {/* Payment Method */}
                 <div className="mb-4">
                     <label className="block text-lg font-medium mb-2">Payment Method</label>
@@ -187,20 +188,30 @@ export function CheckoutForm() {
 
                 {/* Billing Address */}
                 <div className="mb-4">
-                    <label className="block text-lg font-medium mb-2">Billing Address</label>
-                    <input type="text" placeholder="Street Address" className="w-full p-2 border rounded mb-2" />
-                    <input type="text" placeholder="City" className="w-full p-2 border rounded mb-2" />
-                    <input type="text" placeholder="State/Province" className="w-full p-2 border rounded mb-2" />
-                    <input type="text" placeholder="ZIP Code" className="w-full p-2 border rounded mb-2" />
+                    <label className="block text-lg font-medium mb-2">Shipping Address</label>
+                    <input type="text" placeholder="Street Address" className="w-full p-2 border rounded mb-2" required/>
+                    <input type="text" placeholder="City" className="w-full p-2 border rounded mb-2" required/>
+                    <input type="text" placeholder="State/Province" className="w-full p-2 border rounded mb-2" required/>
+                    <input type="text" placeholder="ZIP Code" className="w-full p-2 border rounded mb-2" required/>
                 </div>
 
+                <div className="mb-4">
+                    <label className="block text-lg font-medium mb-2">
+                        <input
+                            type="checkbox"
+                            // onChange={handleCopyAddress}
+                            className="mr-2"
+                        />
+                        Shipping address is the same as billing address
+                    </label>
+                </div>
                 {/* Shipping Address */}
                 <div className="mb-4">
-                    <label className="block text-lg font-medium mb-2">Shipping Address</label>
-                    <input type="text" placeholder="Street Address" className="w-full p-2 border rounded mb-2" />
-                    <input type="text" placeholder="City" className="w-full p-2 border rounded mb-2" />
-                    <input type="text" placeholder="State/Province" className="w-full p-2 border rounded mb-2" />
-                    <input type="text" placeholder="ZIP Code" className="w-full p-2 border rounded mb-2" />
+                    <label className="block text-lg font-medium mb-2">Billing Address</label>
+                    <input type="text" placeholder="Street Address" className="w-full p-2 border rounded mb-2" required/>
+                    <input type="text" placeholder="City" className="w-full p-2 border rounded mb-2" required/>
+                    <input type="text" placeholder="State/Province" className="w-full p-2 border rounded mb-2" required/>
+                    <input type="text" placeholder="ZIP Code" className="w-full p-2 border rounded mb-2" required/>
                 </div>
 
                 {/* Buttons */}
@@ -215,7 +226,6 @@ export function CheckoutForm() {
                     <button
                     type="submit"
                     className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-                    onClick={confirmOrder}
                     >
                     Confirm Order
                     </button>
