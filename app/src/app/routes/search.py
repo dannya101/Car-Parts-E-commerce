@@ -8,7 +8,7 @@ from app.dependencies import get_db
 router = APIRouter()
 
 
-@router.get("/{search_terms}")
+@router.get("/search_terms")
 def get_products_from_search(search_terms: str, db: Session = Depends(get_db)):
     """
     Search for Products by Name
