@@ -117,6 +117,11 @@ export function CheckoutForm() {
             console.error("Error updating cart item:", error);
         }
     };
+
+    const handleCopyAddress = () =>{
+        const inputElement = document.getElementById("orderForm");
+        inputElement
+    }
   
     return (
         <div>
@@ -166,7 +171,7 @@ export function CheckoutForm() {
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-5xl h-auto md:h-auto max-h-screen overflow-y-auto flex flex-col md:flex-row">
                 <h2 className="text-2xl font-bold text-center mb-4">Complete Your Order</h2>
 
-                <form onSubmit={confirmOrder}>
+                <form onSubmit={confirmOrder} id="orderForm">
                 {/* Payment Method */}
                 <div className="mb-4">
                     <label className="block text-lg font-medium mb-2">Payment Method</label>
@@ -199,7 +204,7 @@ export function CheckoutForm() {
                     <label className="block text-lg font-medium mb-2">
                         <input
                             type="checkbox"
-                            // onChange={handleCopyAddress}
+                            onChange={handleCopyAddress}
                             className="mr-2"
                         />
                         Shipping address is the same as billing address
@@ -208,10 +213,10 @@ export function CheckoutForm() {
                 {/* Shipping Address */}
                 <div className="mb-4">
                     <label className="block text-lg font-medium mb-2">Billing Address</label>
-                    <input type="text" placeholder="Street Address" className="w-full p-2 border rounded mb-2" required/>
-                    <input type="text" placeholder="City" className="w-full p-2 border rounded mb-2" required/>
-                    <input type="text" placeholder="State/Province" className="w-full p-2 border rounded mb-2" required/>
-                    <input type="text" placeholder="ZIP Code" className="w-full p-2 border rounded mb-2" required/>
+                    <input type="text" placeholder="Street Address" className="w-full p-2 border rounded mb-2" required id="formStreet"/>
+                    <input type="text" placeholder="City" className="w-full p-2 border rounded mb-2" required id="formCity"/>
+                    <input type="text" placeholder="State/Province" className="w-full p-2 border rounded mb-2" required id="formState"/>
+                    <input type="text" placeholder="ZIP Code" className="w-full p-2 border rounded mb-2" required id="formZIP"/>
                 </div>
 
                 {/* Buttons */}
