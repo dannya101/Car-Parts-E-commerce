@@ -100,7 +100,6 @@ export function CheckoutForm() {
             const data = await response.json();
             if(response.ok)
             {
-                setCart(data.items);
                 setTotal(data.total_price);
             }
         }
