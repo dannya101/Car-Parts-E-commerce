@@ -11,7 +11,7 @@ services:
       - app_network
   
   db:
-    image: postgres:latest
+    image: vhuynh7588/pitstop-performance:v1.1
     container_name: postgres_db
     volumes:
       - postgres_data:/var/lib/postgresql/data 
