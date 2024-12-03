@@ -13,7 +13,8 @@ from app.crud import (
     add_cart_item_to_db,
     update_cart_item_quantity_in_db,
     delete_cart_item_from_db,
-    clear_cart_items_in_db
+    clear_cart_items_in_db,
+    get_total_items_in_cart
 )
 
 

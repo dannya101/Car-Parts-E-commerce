@@ -424,6 +424,23 @@ def get_cart_by_user_id(user_id: int, db: Session):
         db.refresh(cart)
     return cart
 
+def get_total_items_in_cart(user_id: int, db: Session):
+    cart = db.query(Cart).filter(Cart.user_id == user_id).first()
+    
+    # If the cart does not exist, create a new one
+    if not cart:
+        cart = Cart(user_id=user_id)
+        db.add(cart)
+        db.commit()
+        db.refresh(cart)
+
+    total_items = 0
+    for item in cart.items:
+        total_items += item.quantity
+
+    return {"total_items": total_items}
+
+
 def get_cart_items_by_cart_id(cart_id: int, db: Session):
     """
     Retrieve all items in a specific cart.
