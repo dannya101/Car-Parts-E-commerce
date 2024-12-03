@@ -4,12 +4,15 @@ import { useTransition } from 'react'
 import { Button } from '../ui/navbutton';
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { useCart } from '@/context/cartcontext';
+
 
 // ClearCartButton component that handles the cart clearing
 export function ClearCartButton() {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
   const router = useRouter();
+  const {cartCount, subFromCart, clearCart} = useCart()
 
   const ClearCart = async () => {
     const token = sessionStorage.getItem("access_token");
@@ -28,6 +31,7 @@ export function ClearCartButton() {
           "Authorization": `Bearer ${token}`,
         },
       });
+      clearCart()
       router.push("/"); // Navigate after clearing cart
     } catch (error) {
       toast({
