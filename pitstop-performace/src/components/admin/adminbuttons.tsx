@@ -160,6 +160,10 @@ export default function AdminButtons() {
                 },
             });
 
+            if(!response.ok) {
+                throw new Error("Failed to delete product")
+            }
+
             const reply = await response.json();
 
             console.log("Delete Response: ",reply);
