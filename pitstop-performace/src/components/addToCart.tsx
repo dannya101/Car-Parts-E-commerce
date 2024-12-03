@@ -10,8 +10,8 @@ interface AddToCartButtonProps {
 }
   
 export function AddToCartButton({ productId }: AddToCartButtonProps) {
-  const [isPending, startTransition] = useTransition()
-  const { toast } = useToast()
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
 
   const handleAddToCart = async() => {
     const token = sessionStorage.getItem("access_token");
