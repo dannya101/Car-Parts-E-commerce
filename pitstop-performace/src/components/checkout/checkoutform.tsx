@@ -83,7 +83,7 @@ export function CheckoutForm() {
         const updatedCart = [...cart];
         updatedCart[index].quantity = newQuantity;
 
-        setCart(updatedCart);
+        
 
         try {
             const response = await fetch("http://localhost:8000/cart/update", {
@@ -97,6 +97,12 @@ export function CheckoutForm() {
                     quantity: newQuantity,
                 }),
             });
+            const data = await response.json();
+            if(response.ok)
+            {
+                setCart(data.items);
+                setTotal(data.total_price);
+            }
         }
         catch (error) {
             console.error("Error updating cart item:", error);
