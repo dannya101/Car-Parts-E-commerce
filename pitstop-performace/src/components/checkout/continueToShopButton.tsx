@@ -25,8 +25,3 @@ export function ContinueButton() {
     </Button>
   );
 }
-// Add static method to the component
-ContinueButton.updateSelection = (model: number, make: number) => {
-    // This will be replaced when the component is rendered
-    console.warn('ContinueButton not yet rendered');
-  };

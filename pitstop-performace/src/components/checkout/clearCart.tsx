@@ -46,6 +46,7 @@ export function ClearCartButton() {
       onClick={ClearCart}
       disabled={isPending}
       className="w-40 bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700"
+      type='button'
     >
       Cancel Cart
     </Button>
