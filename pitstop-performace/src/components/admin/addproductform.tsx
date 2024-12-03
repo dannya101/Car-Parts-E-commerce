@@ -88,6 +88,12 @@ export default function AddProductForm({ onSubmit, onCancel }: AddProductFormPro
         setTags((prev) => prev.filter((t) => t !== tag));
     };
 
+
+    const handleRemoveImage = (url: string) => {
+        setImages((prev) => prev.filter((img) => img !== url));
+        if (thumbnail === url) setThumbnail(""); // Clear thumbnail if it's the removed image
+    };
+
     return (
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 bg-white shadow rounded-lg">
             <div className="space-y-6">
@@ -130,6 +136,18 @@ export default function AddProductForm({ onSubmit, onCancel }: AddProductFormPro
                     className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200"
                     required
                 />
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium mb-1">Image URL:</label>
+                    <input
+                        type="text"
+                        value={thumbnail}
+                        onChange={(e) => setThumbnail(e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200"
+                        placeholder="Enter an image URL"
+                        required
+                    />
                 </div>
 
                 <div>
