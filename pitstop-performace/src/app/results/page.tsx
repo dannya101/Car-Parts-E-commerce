@@ -39,11 +39,10 @@ export default function Results() {
         };
 
         fetchProducts();
-        // Ensure dependencies are properly managed
-    }, [make, model, query]); // Depend on stable values only
+    }, [make, model, query]); 
 
     const filteredProducts = useMemo(() => {
-        if (!query || query.trim() === "") return productList;
+        if (!query || query.trim() === "" || query === "all") return productList;
         return productList.filter(product =>
             product.name.toLowerCase().includes(query.toLowerCase()) ||
             product.description.toLowerCase().includes(query.toLowerCase())
