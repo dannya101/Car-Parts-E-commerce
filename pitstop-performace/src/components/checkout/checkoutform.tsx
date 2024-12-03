@@ -7,6 +7,7 @@ import { Button } from '../ui/navbutton';
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import CheckoutInformation from "@/components/checkout/checkoutInformation";
+import { useCart } from '@/context/cartcontext';
 
 
 export function CheckoutForm() {
@@ -15,6 +16,7 @@ export function CheckoutForm() {
     const [total, setTotal] = useState<number>(0);
     const toast = useToast();
     const router = useRouter();
+    const {cartCount, addToCart, subFromCart, clearCart} = useCart();
 
     // Fetch cart data from the backend
     useEffect(() => {
@@ -73,7 +75,7 @@ export function CheckoutForm() {
     }
 
 
-    const updateCartItem = async (index: number, newQuantity: number) => {
+    const addCartItem = async (index: number, newQuantity: number) => {
         const token = sessionStorage.getItem("access_token");
         if (!token) {
             console.error("Not Authenticated");
@@ -84,7 +86,6 @@ export function CheckoutForm() {
         updatedCart[index].quantity = newQuantity;
 
         
-
         try {
             const response = await fetch("http://localhost:8000/cart/update", {
                 method: "PUT",
@@ -100,6 +101,41 @@ export function CheckoutForm() {
             const data = await response.json();
             if(response.ok)
             {
+                addToCart();
+                setTotal(data.total_price);
+            }
+        }
+        catch (error) {
+            console.error("Error updating cart item:", error);
+        }
+    };
+    const deleteCartItem = async (index: number, newQuantity: number) => {
+        const token = sessionStorage.getItem("access_token");
+        if (!token) {
+            console.error("Not Authenticated");
+            return;
+        }
+
+        const updatedCart = [...cart];
+        updatedCart[index].quantity = newQuantity;
+
+        
+        try {
+            const response = await fetch("http://localhost:8000/cart/update", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    product_id: updatedCart[index].product.id,
+                    quantity: newQuantity,
+                }),
+            });
+            const data = await response.json();
+            if(response.ok)
+            {
+                subFromCart();
                 setTotal(data.total_price);
             }
         }
@@ -123,8 +159,8 @@ export function CheckoutForm() {
                 name={item.product.name}
                 price={item.product.price}
                 quantity={item.quantity}
-                onIncrease={() => updateCartItem(index, item.quantity + 1)}
-                onDecrease={() => updateCartItem(index, item.quantity - 1)}
+                onIncrease={() => addCartItem(index, item.quantity + 1)}
+                onDecrease={() => deleteCartItem(index, item.quantity - 1)}
             />
             ))}
         </div>
