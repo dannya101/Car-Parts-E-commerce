@@ -4,27 +4,14 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/navbutton'
 
-interface ContinueButtonProps {
-  initialModel?: number;
-  initialMake?: number;
-}
-
-export function ContinueButton({ initialModel = 1, initialMake = 1 }: ContinueButtonProps) {
+export function ContinueButton() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const [selectedModel, setSelectedModel] = useState(initialModel);
-  const [selectedMake, setSelectedMake] = useState(initialMake);
 
   const continueShopping = () => {
     startTransition(() => {
-      router.push(`/results?make=${selectedMake}&model=${selectedModel}`);
+      router.push(`/results?query=all`);
     });
-  };
-
-  // Static method to update the selection
-  ContinueButton.updateSelection = (model: number, make: number) => {
-    setSelectedModel(model);
-    setSelectedMake(make);
   };
 
   return (
