@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useTransition } from 'react'
 import { useToast } from "@/hooks/use-toast";
 import { Button } from './ui/navbutton';
+import { useCart } from '@/context/cartcontext';
 
 
 interface AddToCartButtonProps {
@@ -12,6 +13,7 @@ interface AddToCartButtonProps {
 export function AddToCartButton({ productId }: AddToCartButtonProps) {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const { addToCart } = useCart();
 
   const handleAddToCart = async() => {
     const token = sessionStorage.getItem("access_token");
@@ -44,6 +46,7 @@ export function AddToCartButton({ productId }: AddToCartButtonProps) {
         }
         else
         {
+          addToCart();
           toast({
             title: "Success",
             description: "Product Added Successfully to Cart"

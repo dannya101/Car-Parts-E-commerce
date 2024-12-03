@@ -7,12 +7,15 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/authcontext"
 import { useToast } from "@/hooks/use-toast";
 import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/context/cartcontext";
 
 export default function navbar() {
   const {isAuthenticated, setIsAuthenticated} = useAuth();
   const [isAdmin, setIsAdmin] = useState(false); 
   const {toast} = useToast();
   const router = useRouter();
+
+  const {cartCount, addToCart} = useCart();
 
   const checkAdmin = async () => {
     const token = sessionStorage.getItem("access_token");
@@ -66,6 +69,10 @@ export default function navbar() {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    addToCart();
+  }, []);
+
   const handleLogout = () => {
     sessionStorage.removeItem("access_token");
     setIsAuthenticated(false);
@@ -114,6 +121,11 @@ export default function navbar() {
         <Link href="/checkout" className="flex items-center justify-center bg-primary p-2 rounded-full hover:bg-opacity-80">
               {/* <img src="/cart.svg" alt="Cart" width={30} height={30}/> */}
               <ShoppingCart size={48} strokeWidth={3} />
+              {cartCount > 0 && (
+              <span className="absolute top-0 right-0 text-xs text-white bg-red-500 rounded-full px-2 py-1">
+                {cartCount}
+              </span>
+              )}
         </Link>
         </nav>
 
