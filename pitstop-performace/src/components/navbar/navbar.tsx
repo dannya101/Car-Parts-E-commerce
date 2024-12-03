@@ -120,13 +120,14 @@ export default function navbar() {
 
         {/*CHECKOUT/CART*/}
         <Link href="/checkout" className="flex items-center justify-center bg-primary p-2 rounded-full hover:bg-opacity-80">
-              {/* <img src="/cart.svg" alt="Cart" width={30} height={30}/> */}
-              <ShoppingCart size={48} strokeWidth={3} />
-              {cartCount > 0 && (
-              <span className="absolute top-0 right-0 text-xs text-white bg-red-500 rounded-full px-2 py-1">
+          <div className="relative flex items-center justify-center">
+            <ShoppingCart size={48} strokeWidth={3} />
+            {cartCount > 0 && (
+              <span className="absolute top-0 left-10 text-xs text-white bg-red-500 rounded-full px-1 py-0.5">
                 {cartCount}
               </span>
-              )}
+            )}
+          </div>
         </Link>
         </nav>
 
