@@ -56,6 +56,7 @@ export default function navbar() {
     {label: "Home", link: "/"},
     {label: "About", link: "/about"},
     {label: "Support", link: "/support"},
+    {label: "Orders", link: "/orders"},
     log_in_out,
   ];
 
