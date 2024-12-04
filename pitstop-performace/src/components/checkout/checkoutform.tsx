@@ -16,7 +16,7 @@ export function CheckoutForm() {
     const [total, setTotal] = useState<number>(0);
     const toast = useToast();
     const router = useRouter();
-    const {cartCount, addToCart, subFromCart, clearCart} = useCart();
+    const {cartCount, addToCart, subFromCart, clearCart, setCartVal} = useCart();
 
     // Fetch cart data from the backend
     useEffect(() => {
@@ -143,6 +143,38 @@ export function CheckoutForm() {
             console.error("Error updating cart item:", error);
         }
     };
+    const deleteWholeCartItem = async (index: number) => {
+        const token = sessionStorage.getItem("access_token");
+        if (!token) {
+            console.error("Not Authenticated");
+            return;
+        }
+        console.log(index)
+
+        try {
+            const response = await fetch(`http://localhost:8000/cart/remove/${index}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+            if(response.ok)
+            {
+                const data = await response.json();
+                const updatedCart = [...cart];
+                updatedCart.splice(index, 1); // Remove the item from the cart array
+                setCart(updatedCart);
+                
+                setTotal(data.total_price);
+                setCartVal(data.quantity);
+            }
+            
+        }
+        catch (error) {
+            console.error("Error updating cart item:", error);
+        }
+    };
   
     return (
         <div>
@@ -153,7 +185,8 @@ export function CheckoutForm() {
         {/* Product List */}
         <div className="product-list space-y-4 mb-6">
             <h2 className="text-2xl font-bold text-gray-700 mb-4">Your Cart</h2>
-            {cart.map((item, index) => (
+            {cart.length > 0 ? (
+            cart.map((item, index) => (
             <ProductItem
                 key={index}
                 name={item.product.name}
@@ -161,8 +194,12 @@ export function CheckoutForm() {
                 quantity={item.quantity}
                 onIncrease={() => addCartItem(index, item.quantity + 1)}
                 onDecrease={() => deleteCartItem(index, item.quantity - 1)}
+                onDelete={() => deleteWholeCartItem(index)}
             />
-            ))}
+        ))
+        ) : (
+        <p className="text-gray-500">Your cart is empty.</p>
+        )}
         </div>
 
         {/* Total Section */}

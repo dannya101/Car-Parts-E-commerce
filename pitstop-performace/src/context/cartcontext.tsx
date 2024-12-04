@@ -6,6 +6,7 @@ interface CartContextType {
   addToCart: (quantity?: number) => void;
   subFromCart: () => void;
   clearCart: () => void;
+  setCartVal : (quantity?:number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -49,9 +50,10 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     }
   const subFromCart = () => setCartCount((prevCount) => prevCount - 1);
   const clearCart = () => setCartCount(0);
+  const setCartVal = () => setCartCount((newCount) => newCount);
 
   return (
-    <CartContext.Provider value={{ cartCount, addToCart, subFromCart, clearCart }}>
+    <CartContext.Provider value={{ cartCount, addToCart, subFromCart, clearCart , setCartVal}}>
       {children}
     </CartContext.Provider>
   );
