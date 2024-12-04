@@ -139,7 +139,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], on
               />
               <h3 className="text-2xl font-semibold">{product.name}</h3>
               <p className="text-md text-gray-600">{product.description}</p>
-              <span>{productQuantities[product.id] || 0}</span>
+              <span>In Cart: {productQuantities[product.id] || 0}</span>
               <h4 className="absolute bottom-4 right-6 text-4xl font-bold">${product.price}</h4>
              <AddToCartButton productId={product.id} />
             </div>
