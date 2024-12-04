@@ -8,7 +8,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 from fastapi import HTTPException
-import os
 
 load_dotenv()
 
@@ -39,11 +38,17 @@ def send_verification_email(to_email: str, verification_code: str):
     """
     Sends a verification email with the verification code.
     """
+
     # Get email configuration from environment variables
-    smtp_server = os.getenv("SMTP_SERVER")
-    smtp_port = int(os.getenv("SMTP_PORT"))
-    sender_email = os.getenv("SENDER_EMAIL")
-    sender_password = os.getenv("SENDER_PASSWORD")
+    #smtp_server = os.getenv("SMTP_SERVER")
+    #smtp_port = int(os.getenv("SMTP_PORT"))
+    #sender_email = os.getenv("SENDER_EMAIL")
+    #sender_password = os.getenv("SENDER_PASSWORD")
+
+    smtp_server = settings.SMTP_SERVER
+    smtp_port = settings.SMTP_PORT
+    sender_email = settings.SENDER_EMAIL
+    sender_password = settings.SENDER_PASSWORD
 
     verification_link = f"http://localhost:8000/users/verify-email?verification_code={verification_code}"
 
