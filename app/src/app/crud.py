@@ -320,7 +320,12 @@ def get_cart_by_user_id(user_id: int, db: Session):
     Returns:
         Cart: The Cart object if found, otherwise None.
     """
-    return db.query(Cart).filter(Cart.user_id == user_id).first()
+    cart = db.query(Cart).filter(Cart.user_id == user_id).first()
+    if not cart:
+        # Optionally, create a new empty cart
+        return None
+
+    return cart
 
 def get_cart_items_by_cart_id(cart_id: int, db: Session):
     """
