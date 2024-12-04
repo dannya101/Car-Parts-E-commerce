@@ -69,7 +69,8 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], on
 
         console.log("Quantities: ", quantityMap);
 
-        setProductQuantities(quantityMap)
+        setProductQuantities(quantityMap);
+        
       } else {
         console.error("Error fetching cart:", data);
       }
@@ -141,7 +142,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], on
               <p className="text-md text-gray-600">{product.description}</p>
               <span>In Cart: {productQuantities[product.id] || 0}</span>
               <h4 className="absolute bottom-4 right-6 text-4xl font-bold">${product.price}</h4>
-             <AddToCartButton productId={product.id} />
+             <AddToCartButton productId={product.id} onCartUpdate={() => fetchCartData()} />
             </div>
           ))
         ) : (

@@ -7,10 +7,11 @@ import { useCart } from '@/context/cartcontext';
 
 
 interface AddToCartButtonProps {
-  productId: number
+  productId: number;
+  onCartUpdate?: () => void;
 }
   
-export function AddToCartButton({ productId }: AddToCartButtonProps) {
+export function AddToCartButton({ productId, onCartUpdate }: AddToCartButtonProps) {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
   const { addToCart } = useCart();
@@ -47,6 +48,9 @@ export function AddToCartButton({ productId }: AddToCartButtonProps) {
         else
         {
           addToCart();
+
+          if(onCartUpdate) onCartUpdate();
+
           toast({
             title: "Success",
             description: "Product Added Successfully to Cart"
