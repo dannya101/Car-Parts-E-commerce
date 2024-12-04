@@ -149,10 +149,12 @@ export function CheckoutForm() {
             console.error("Not Authenticated");
             return;
         }
-        console.log(index)
+
+        const product_id = cart[index].product.id;
+        console.log(product_id);
 
         try {
-            const response = await fetch(`http://localhost:8000/cart/remove/${index}`, {
+            const response = await fetch(`http://localhost:8000/cart/remove/${product_id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
