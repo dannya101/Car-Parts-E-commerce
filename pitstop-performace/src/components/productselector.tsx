@@ -37,7 +37,7 @@ interface ProductSelectorProps {
 const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], onProductSelect }): JSX.Element => {
   const [products, setProducts] = useState<Product[]>(product_list);
   const [searchResults, setSearchResults] = useState<string>('');
-  const [productQuantities, setProductQuantities] = useState<{ [productId: number]: number }>({});
+  const [productQuantities, setProductQuantities] = useState<number[]>([]);
 
   const fetchCartData = async () => {
     const token = sessionStorage.getItem("access_token");
@@ -53,15 +53,23 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], on
         },
       });
 
-      const data: Cart = await response.json();
+      const data = await response.json();
       if (response.ok) {
         console.log("Fetched Cart Data:", data); // Log the cart data
-        const quantities = data.items.reduce((acc: { [productId: number]: number }, item: CartItem) => {
-          acc[item.product_id] = item.quantity;
-          return acc;
-        }, {});
-        setProductQuantities(quantities);  // Update state with product quantities
-        console.log("Updated Product Quantities:", quantities);  // Log the updated quantities
+        const items = data.items;
+        console.log("Items: ", items);
+
+        const quantityMap = data.items.reduce(
+          (map: Record<number, number>, item: { product: { id: number }; quantity: number }) => {
+            map[item.product.id] = item.quantity; // Use item.product.id if product_id is nested
+            return map;
+          },
+          {}
+        );
+
+        console.log("Quantities: ", quantityMap);
+
+        setProductQuantities(quantityMap)
       } else {
         console.error("Error fetching cart:", data);
       }
@@ -118,7 +126,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], on
       </div>
       <div className="grid grid-cols-4 gap-6 overflow-y-auto max-h-[80vh] mt-4"> 
         {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
+          filteredProducts.map((product , index) => (
             <div
               key={product.id}
               className="relative w-[330px] h-[400px] p-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
