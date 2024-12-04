@@ -18,6 +18,17 @@ interface Product {
   model_category_id: number
 }
 
+interface CartItem {
+  product_id: number;
+  quantity: number;
+}
+
+interface Cart {
+  id: number;
+  user_id: number;
+  items: CartItem[];
+}
+
 interface ProductSelectorProps {
   onProductSelect: (productId: number) => void;  // Callback function to return product ID
   product_list: Product[];
@@ -26,6 +37,43 @@ interface ProductSelectorProps {
 const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], onProductSelect }): JSX.Element => {
   const [products, setProducts] = useState<Product[]>(product_list);
   const [searchResults, setSearchResults] = useState<string>('');
+  const [productQuantities, setProductQuantities] = useState<{ [productId: number]: number }>({});
+
+  const fetchCartData = async () => {
+    const token = sessionStorage.getItem("access_token");
+    if (!token) {
+      console.error("Not authenticated");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/cart", {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      const data: Cart = await response.json();
+      if (response.ok) {
+        console.log("Fetched Cart Data:", data); // Log the cart data
+        const quantities = data.items.reduce((acc: { [productId: number]: number }, item: CartItem) => {
+          acc[item.product_id] = item.quantity;
+          return acc;
+        }, {});
+        setProductQuantities(quantities);  // Update state with product quantities
+        console.log("Updated Product Quantities:", quantities);  // Log the updated quantities
+      } else {
+        console.error("Error fetching cart:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+    }
+  };
+
+  // Fetch cart data on component mount
+  useEffect(() => {
+    fetchCartData();
+  }, []);
 
   useEffect(() => {
     setProducts(product_list);
@@ -83,6 +131,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({ product_list = [], on
               />
               <h3 className="text-2xl font-semibold">{product.name}</h3>
               <p className="text-md text-gray-600">{product.description}</p>
+              <span>{productQuantities[product.id] || 0}</span>
               <h4 className="absolute bottom-4 right-6 text-4xl font-bold">${product.price}</h4>
              <AddToCartButton productId={product.id} />
             </div>
