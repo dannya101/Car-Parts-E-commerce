@@ -1,5 +1,6 @@
 'use client';
 
+import { toast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
 
 interface AddProductFormProps {
@@ -46,10 +47,20 @@ export default function AddProductForm({ onSubmit, onCancel }: AddProductFormPro
                 const brandData = await brandResponse.json();
                 const modelData = await modelResponse.json();
 
-                setPartCategories(partData);
-                setBrandCategories(brandData);
-                setModelCategories(modelData);
+                if(partResponse.ok) setPartCategories(partData);
+                if(brandResponse.ok) setBrandCategories(brandData);
+                if(modelResponse.ok) setModelCategories(modelData);
+
+                if(!partResponse.ok) throw new Error("FETCH PART CATEGORY ERROR");
+                if(!brandResponse.ok) throw new Error("FETCH BRAND CATEGORY ERROR");
+                if(!modelResponse.ok) throw new Error("FETCH MODEL CATEGORY ERROR");
+                
             } catch (error) {
+                toast({
+                    title: "Error",
+                    description: "Make sure part, model, and brand categories have at least 1 value",
+                    variant: "destructive"
+                })
                 console.error("Error fetching categories:", error);
             }
         };
