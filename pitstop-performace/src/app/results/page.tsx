@@ -30,12 +30,16 @@ export default function Results() {
         const fetchProducts = async () => {
             const makeNum = Number(make);
             const modelNum = Number(model);
-
-            if (query) {
-                await apiGetAllProducts();
-            } else if (makeNum && modelNum) {
+            if (makeNum && modelNum) {
                 await apiGetProductsBySpecs(makeNum, modelNum);
             }
+            else if (query) {
+                await apiGetAllProducts();
+            }
+
+            // } else if (makeNum && modelNum) {
+            //     await apiGetProductsBySpecs(makeNum, modelNum);
+            // }
         };
 
         fetchProducts();
