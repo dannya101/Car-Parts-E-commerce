@@ -25,3 +25,8 @@ export function ContinueButton() {
     </Button>
   );
 }
+
+ContinueButton.updateSelection = (model: number, make: number) => {
+  // This will be replaced when the component is rendered
+  console.warn('ContinueButton not yet rendered');
+};
