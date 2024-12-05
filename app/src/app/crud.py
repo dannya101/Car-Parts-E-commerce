@@ -306,7 +306,7 @@ def get_products_by_brand_category_by_id(db: Session, brand_category_id: int):
     return db.query(Product).filter(Product.brand_category_id == brand_category_id).all()
 
 def get_products_by_brand_and_model(db: Session, brand_category_id: int, model_category_id: int):
-    return db.query(Product).filter(Product.brand_category_id == brand_category_id and Product.model_category_id == model_category_id).all()
+    return db.query(Product).filter(Product.brand_category_id == brand_category_id, Product.model_category_id == model_category_id).all()
 
 #Checkout CRUD
 def get_cart_by_user_id(user_id: int, db: Session):
