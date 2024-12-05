@@ -34,6 +34,7 @@ dependencies = [
     "sqlalchemy>=2.0.36",
     "sqlmodel>=0.0.22",
     "pytest>=7.2.0",
+    "psycopg2-binary>=2.9.10",
 ]
 
 [project.urls]
@@ -51,6 +52,7 @@ path = ".venv"
 
 [tool.hatch.envs.default.scripts]
 dev = "uvicorn app.main:app --reload"
+start = "uvicorn src.app.main:app --host 0.0.0.0 --port 8000"
 
 [tool.hatch.envs.default.env-vars]
 PYTHONASYNCIODEBUG = "1"

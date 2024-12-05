@@ -49,6 +49,10 @@ def get_cart_by_user_id(current_user: User = Depends(get_current_user), db: Sess
     cart = cart_service.get_or_create_cart(db=db, user_id=current_user.id)
     return cart
 
+@router.get("/getTotalItems")
+def get_total_number_of_items(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    total_items = cart_service.get_total_items_in_cart(user_id=current_user.id, db=db)
+    return total_items
 
 @router.post("/add", response_model=Cart)
 def add_product_to_cart(item: CartItemCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):

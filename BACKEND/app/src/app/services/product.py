@@ -24,7 +24,8 @@ from app.crud import (
     get_model_category_by_name,
     get_products_by_brand_and_model,
     get_products_by_brand_category_by_id,
-    get_products_by_part_category_id
+    get_products_by_part_category_id,
+    search_products_given_make
 )
 
 def create_new_product(db: Session, product: ProductCreate):

@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import and_
 from app.models.cart import Cart, CartItem
 from app.models.product import Product
 from app.models.user import User
@@ -247,7 +248,7 @@ def get_all_model_categories(db: Session):
     return db.query(ModelCategory).all()
 
 def get_model_categories_by_brand_id(db: Session, brand_category_id: int):
-    return db.query(ModelCategory).filter(BrandCategory.id == brand_category_id).all()
+    return db.query(ModelCategory).join(BrandCategory, ModelCategory.brand_id == BrandCategory.id).filter(BrandCategory.id == brand_category_id).all()
 
 def get_part_category_by_name(db: Session, name: str):
     """
@@ -305,7 +306,7 @@ def get_products_by_brand_category_by_id(db: Session, brand_category_id: int):
     return db.query(Product).filter(Product.brand_category_id == brand_category_id).all()
 
 def get_products_by_brand_and_model(db: Session, brand_category_id: int, model_category_id: int):
-    return db.query(Product).filter(Product.brand_category_id == brand_category_id and Product.model_category_id == model_category_id).all()
+    return db.query(Product).filter(Product.brand_category_id == brand_category_id, Product.model_category_id == model_category_id).all()
 
 #Checkout CRUD
 def get_cart_by_user_id(user_id: int, db: Session):
@@ -319,7 +320,12 @@ def get_cart_by_user_id(user_id: int, db: Session):
     Returns:
         Cart: The Cart object if found, otherwise None.
     """
-    return db.query(Cart).filter(Cart.user_id == user_id).first()
+    cart = db.query(Cart).filter(Cart.user_id == user_id).first()
+    if not cart:
+        # Optionally, create a new empty cart
+        return None
+
+    return cart
 
 def get_cart_items_by_cart_id(cart_id: int, db: Session):
     """
@@ -422,6 +428,23 @@ def get_cart_by_user_id(user_id: int, db: Session):
         db.commit()
         db.refresh(cart)
     return cart
+
+def get_total_items_in_cart(user_id: int, db: Session):
+    cart = db.query(Cart).filter(Cart.user_id == user_id).first()
+    
+    # If the cart does not exist, create a new one
+    if not cart:
+        cart = Cart(user_id=user_id)
+        db.add(cart)
+        db.commit()
+        db.refresh(cart)
+
+    total_items = 0
+    for item in cart.items:
+        total_items += item.quantity
+
+    return {"total_items": total_items}
+
 
 def get_cart_items_by_cart_id(cart_id: int, db: Session):
     """
@@ -535,3 +558,25 @@ def get_order_by_id_crud(order_id: int, db: Session):
         - `Order`: The order object corresponding to the provided order ID, or `None` if not found.
     """
     return db.query(Order).filter(Order.id == order_id).first()
+
+def search_products_given_make(make_id: int, search_terms: str, db: Session):
+    """
+    Search for products by brand ID and name containing search terms.
+
+    :param make_id: The ID of the brand.
+    :param search_terms: The search keywords to look for in product names.
+    :param db: The database session.
+    :return: A list of products matching the criteria.
+    """
+    search_query = f"%{search_terms}%"  # Prepare the search pattern
+    products = (
+        db.query(Product)
+        .filter(
+            and_(
+                Product.brand_category_id == make_id,  # Filter by brand ID
+                Product.name.ilike(search_query)  # Case-insensitive search for name
+            )
+        )
+        .all()
+    )
+    return products

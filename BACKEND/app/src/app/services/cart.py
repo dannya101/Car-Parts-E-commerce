@@ -13,7 +13,8 @@ from app.crud import (
     add_cart_item_to_db,
     update_cart_item_quantity_in_db,
     delete_cart_item_from_db,
-    clear_cart_items_in_db
+    clear_cart_items_in_db,
+    get_total_items_in_cart
 )
 
 
@@ -33,6 +34,12 @@ def get_products_from_cart(db: Session, cart: Cart):
             - "total_price": The total price of all items in the cart.
     """
     cart_items = get_cart_items_by_cart_id(cart.id, db)
+    if not cart_items: 
+        return {
+            "items": [],
+            "total_price": 0,
+            "quantity": 0
+        }
     items = []
     total_price = 0
 
@@ -161,7 +168,11 @@ def remove_product_from_cart(db: Session, product_id: int, user_id: int):
 
     cart_item = get_cart_item_by_cart_and_product(cart_id=cart.id, product_id=product_id, db=db)
     if not cart_item:
-        raise HTTPException(status_code=404, detail="Cart Item Not Found")
+        return {
+            "items": [],
+            "total_price": 0,
+            "quantity": 0
+        }
 
     delete_cart_item_from_db(cart_item=cart_item, db=db)
     return get_products_from_cart(db=db, cart=cart)
