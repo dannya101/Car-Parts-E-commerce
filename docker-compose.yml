@@ -1,8 +1,7 @@
-version: "3.8"
 
 services:
   backend:
-    build: .
+    build: ./backend
     ports:
       - "8000:8000"
     depends_on:
@@ -21,6 +20,14 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
+    networks:
+      - app_network
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
     networks:
       - app_network
 
