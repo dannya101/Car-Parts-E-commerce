@@ -85,15 +85,6 @@ export default function navbar() {
     })
   }
 
-  //Handling admin password in admin page
-  const handleAdminClick = () => {
-    if (!isAuthenticated) {
-      router.push("/login"); 
-    } else {
-      router.push("/admin");
-    }
-  };
-
   return (
     <div className="bg-primary text-primary-foreground h-16 flex items-center ">
       <div className="container mx-auto flex justify-between pr-2 pl-2 ">
@@ -110,13 +101,6 @@ export default function navbar() {
               handleClick={navLink.label === "Logout" ? handleLogout : undefined}
             />
           ))}
-
-        {/* ADMIN */}
-        <NavbarItem
-            key="Admin"
-            navLink={{ label: "Admin", link: "#" }}
-            handleClick={handleAdminClick}
-          />
 
         {/*CHECKOUT/CART*/}
         <Link href="/checkout" className="flex items-center justify-center bg-primary p-2 rounded-full hover:bg-opacity-80">

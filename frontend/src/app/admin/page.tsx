@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import AdminButtons from "@/components/admin/adminbuttons";
-import AdminPassword from "@/components/admin/addminpassword";
 
 export default function Admin() {
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -50,7 +49,7 @@ export default function Admin() {
         )}
 
         {!isAdmin && (
-            <AdminPassword/>
+            <h1>NOT AUTHORIZED</h1>
         )}
         </>
     );
