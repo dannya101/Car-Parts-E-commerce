@@ -256,6 +256,8 @@ def verify_email(verification_code: str,  db:Session=Depends(get_db)):
     """
     return user_service.verify_user_email(db=db, verification_code=verification_code)
 
+#To make an admin user, you must edit the database directly
+"""
 @router.post("/setAdmin")
 def set_user_as_admin(password: str, current_user: User=Depends(get_current_user), db:Session=Depends(get_db)):
     if not check_admin_pass(password=password):
@@ -266,6 +268,7 @@ def set_user_as_admin(password: str, current_user: User=Depends(get_current_user
         )
 
     return user_service.set_admin(db=db, user_id=current_user.id)
+"""
 
 @router.get("/isAdmin")
 def is_user_admin(current_user: User=Depends(get_current_user), db:Session=Depends(get_db)):
