@@ -8,6 +8,8 @@ services:
       - db
     networks:
       - app_network
+    volumes:
+      - ./uploads:/app/uploads
   
   db:
     image: postgres:latest

@@ -105,6 +105,39 @@ export default function AddProductForm({ onSubmit, onCancel }: AddProductFormPro
         if (thumbnail === url) setThumbnail(""); // Clear thumbnail if it's the removed image
     };
 
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const response = await fetch("http://localhost:8000/product/upload/image", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("Image upload failed.");
+            }
+
+            const data = await response.json();
+            if (data.imageUrl) {
+                setImages((prev) => [...prev, data.imageUrl]); // Add the uploaded image URL
+                setThumbnail(data.imageUrl); // Set as the main thumbnail
+            }
+        } catch (error) {
+            toast({
+                title: "Upload Failed",
+                description: "Failed to upload image. Please try again.",
+                variant: "destructive"
+            });
+            console.error("Image upload error:", error);
+        }
+    };
+
+
     return (
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 bg-white shadow rounded-lg">
             <div className="space-y-6">
@@ -149,18 +182,17 @@ export default function AddProductForm({ onSubmit, onCancel }: AddProductFormPro
                 />
                 </div>
 
+                {/* Image Upload */}
                 <div>
-                    <label className="block text-sm font-medium mb-1">Image URL:</label>
+                    <label className="block text-sm font-medium mb-1">Upload Image:</label>
                     <input
-                        type="text"
-                        value={thumbnail}
-                        onChange={(e) => setThumbnail(e.target.value)}
-                        className="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200"
-                        placeholder="Enter an image URL"
-                        required
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="w-full"
                     />
                 </div>
-
+                
                 <div>
                     <label className="block text-sm font-medium mb-1">Tags:</label>
                     <div className="flex space-x-2">

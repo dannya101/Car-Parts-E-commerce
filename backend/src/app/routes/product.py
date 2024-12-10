@@ -1,12 +1,20 @@
-from fastapi import APIRouter, Depends, HTTPException
-
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
+
+from pathlib import Path 
 
 import app.services.product as product_service
 from app.dependencies import get_db
 
+import shutil
+import uuid
+
 
 router = APIRouter()
+
+UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
 @router.get("/")
@@ -349,3 +357,29 @@ def get_product_by_brand_category_id(brand_category_id: int, db: Session = Depen
 @router.get("/get/brand-model")
 def get_product_by_brand_and_model(brand_category_id: int, model_category_id: int, db: Session=Depends(get_db)):
     return product_service.get_products_by_brand_and_model(db=db, brand_category_id=brand_category_id, model_category_id=model_category_id)
+
+@router.post("/upload/image")
+async def upload_image(file: UploadFile = File(...)):
+    # Validate that the uploaded file is an image
+    allowed_extensions = {"jpg", "jpeg", "png", "gif", "webp"}
+    file_extension = file.filename.split(".")[-1].lower()
+
+    if file_extension not in allowed_extensions:
+        raise HTTPException(status_code=400, detail="File type not allowed. Only images are accepted.")
+    
+    # Generate a unique filename to avoid conflicts
+    unique_filename = f"{uuid.uuid4()}.{file_extension}"
+    file_path = UPLOAD_DIR / unique_filename
+
+    # Save the file to the uploads directory
+    try:
+        with file_path.open("wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"File upload failed: {e}")
+
+    # Generate the file's URL
+    file_url = f"http://localhost:8000/uploads/{unique_filename}"
+
+    # Return the file URL as JSON
+    return JSONResponse(content={"imageUrl": file_url})
