@@ -148,6 +148,34 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
     const handleRemoveTag = (tag: string) => {
         setTags(tags.filter((t) => t !== tag));  // Remove the tag from the array
     };
+
+    // Handle thumbnail file upload
+    const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            // Create a FormData object to send the file
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const response = await fetch("http://localhost:8000/product/upload/image", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setThumbnail(data.imageUrl); // Set the thumbnail URL from the response
+                    console.log("Thumbnail uploaded successfully:", data);
+                } else {
+                    console.error("Failed to upload thumbnail:", response.status);
+                }
+            } catch (error) {
+                console.error("Error uploading thumbnail:", error);
+            }
+        }
+    };
+
     return (
         <div>
             <h1>Update Product</h1>
@@ -186,14 +214,12 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
                     required={false}
                 />
 
-                {/* Thumbnail */}
-                <label className="block text-sm font-medium mb-1">Thumbnail</label>
+                {/* Thumbnail - File Upload */}
+                <label className="block text-sm font-medium mb-1">Thumbnail (Upload Image):</label>
                 <input
-                    type="text"
-                    value={thumbnail}
-                    onChange={(e) => setThumbnail(e.target.value)}
+                    type="file"
+                    onChange={handleThumbnailUpload}
                     className="w-full px-3 py-2 border rounded-lg"
-                    placeholder="Image URL"
                 />
 
                 {/* Category Select */}
@@ -204,11 +230,11 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
                     className="w-full px-3 py-2 border rounded-lg"
                 >
                     <option value={0}>Select Part Category</option>
-                        {partCategories.map((category) => (
-                            <option key={category.id} value={category.id}>
-                                {category.part_type_name}
-                            </option>
-                        ))}
+                    {partCategories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                            {category.part_type_name}
+                        </option>
+                    ))}
                 </select>
 
                 <label className="block text-sm font-medium mb-1">Brand Category:</label>
@@ -218,11 +244,11 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
                     className="w-full px-3 py-2 border rounded-lg"
                 >
                     <option value={0}>Select Brand Category</option>
-                        {brandCategories.map((category) => (
-                            <option key={category.id} value={category.id}>
-                                {category.brand_type_name}
-                            </option>
-                        ))}
+                    {brandCategories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                            {category.brand_type_name}
+                        </option>
+                    ))}
                 </select>
 
                 <label className="block text-sm font-medium mb-1">Model Category:</label>
@@ -232,11 +258,11 @@ export default function UpdateProductForm({ onSubmit, onCancel, product_id }: Ad
                     className="w-full px-3 py-2 border rounded-lg"
                 >
                     <option value={0}>Select Model Category</option>
-                        {modelCategories.map((category) => (
-                            <option key={category.id} value={category.id}>
-                                {category.model_name}
-                            </option>
-                        ))}
+                    {modelCategories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                            {category.model_name}
+                        </option>
+                    ))}
                 </select>
 
                 {/* Submit and Cancel buttons */}
