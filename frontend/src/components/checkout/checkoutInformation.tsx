@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/navbutton";
+import { useToast } from "@/hooks/use-toast";
 
 
 
@@ -43,6 +44,8 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
     const [shipping_method, setShippingMethod] = useState<string>("Regular Shipping(3-5 Days)");
 
     const [checkout_started, setCheckoutStarted] = useState<boolean>(false);
+
+    const {toast} = useToast();
 
     useEffect(() => {
         if(tabValue === "select") {
@@ -199,7 +202,19 @@ export default function CheckoutInformation({handleCloseModal}: CheckoutInformat
         }
 
         if(!street_address || !city || !state || !zip || !country) {
-            console.error("Form not filled out!");
+            toast({
+                title: "Form not complete",
+                description: "Make sure all values in the form are complete"
+            });
+            return;
+        }
+
+        const postal_code_pattern = /^\d{5}$/;
+        if(!postal_code_pattern.test(zip)) {
+            toast({
+                title: "Invalid Zip Code!",
+                description: "Zip Code must be 5 digits"
+            });
             return;
         }
 
