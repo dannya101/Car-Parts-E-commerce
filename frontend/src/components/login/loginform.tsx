@@ -93,7 +93,7 @@ export default function LoginForm({onSubmit}: any) {
                 Login
             </button>
 
-            {/* Forgot Password Link */}
+            {/* Forgot Password Link - forgot password page not implimented*/}
             <div className="text-center mt-2">
                 <a
                     href="/forgot-password"
