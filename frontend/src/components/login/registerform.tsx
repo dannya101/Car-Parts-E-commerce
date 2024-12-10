@@ -1,113 +1,71 @@
-import { useState } from "react";
-import {useRouter} from "next/navigation";
-import { useToast } from "@/hooks/use-toast";
+'use client';
 
-export default function RegisterForm({ onSubmit }: any) {
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const {toast} = useToast();
-    const router = useRouter();
+import { useRegisterForm } from '@/hooks/useregisterform';
+import { useState } from 'react';
+import { Form } from '@/components/ui/form';
+import FormFieldWrapper from '@/components/login/formfieldwrapper';
+import SubmitButton from '@/components/login/submitbutton';
+import PasswordRequirements from '@/components/login/passwordrequirements';
 
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
-        if (password !== confirmPassword) {
-            alert("Passwords do not match.");
-            return;
-        }
-        toast({
-            title: "User Registered Successfully",
-            description: "Login with username and password to continue"
-        })
-        handleRegisterSubmit(username, email, password);
-        onSubmit(username, email, password);
-    };
+function RegisterForm() {
+	const { form, onSubmit } = useRegisterForm();
 
-    const handleRegisterSubmit = async (username:string, email:string, password:string) => {
-        try {
-            const response = await fetch("http://localhost:8000/users/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ username, email, password }),
-            });
+	const [passwordValue, setPasswordValue] = useState('');
 
-            const data = await response.json();
-            if(response.ok) {
-                console.log("Registration Successful: ", data);
-            } else {
-                console.error("Registration Failed: ", data);
-            }
-        } catch(error) {
-            console.error("Error Registering: ", error);
-        }
-    };
-
-
-    return (
-        <form onSubmit={handleSubmit}>
-
-            {/*Username*/}
-            <div className="mb-4">
-                <label htmlFor="registerUsername" className="block text-sm font-medium text-white">Username</label>
-                <input
-                    type="string"
-                    id="registerUsername"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="w-full mt-1 p-2 border border-gray-300 rounded"
-                    required
-                />
-            </div>
-
-            {/*Email*/}
-            <div className="mb-4">
-                <label htmlFor="registerEmail" className="block text-sm font-medium text-white">Email</label>
-                <input
-                    type="email"
-                    id="registerEmail"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full mt-1 p-2 border border-gray-300 rounded"
-                    required
-                />
-            </div>
-
-            {/*Password*/}
-            <div className="mb-4">
-                <label htmlFor="registerPassword" className="block text-sm font-medium text-white">Password</label>
-                <input
-                    type="password"
-                    id="registerPassword"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full mt-1 p-2 border border-gray-300 rounded"
-                    required
-                />
-            </div>
-
-            {/*Confirm Password*/}
-            <div className="mb-4">
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-white">Confirm Password</label>
-                <input
-                    type="password"
-                    id="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full mt-1 p-2 border border-gray-300 rounded"
-                    required
-                />
-            </div>
-
-            {/*Register*/}
-            <button
-                type="submit"
-                className="w-full bg-green-500 text-white p-2 rounded"
-            >
-                Register
-            </button>
-        </form>
-    );
+	return (
+		<Form {...form}>
+			<form
+				onSubmit={onSubmit}
+				className="space-y-8"
+			>
+				<FormFieldWrapper
+					name="username"
+					label="Username"
+					placeholder="Enter your username"
+					description="Your username should be unique"
+					autoComplete="username"
+					form={form}
+				/>
+				<FormFieldWrapper
+					name="email"
+					label="Email"
+					placeholder="email"
+					autoComplete="email"
+					description="Enter your email."
+					form={form}
+				/>
+				<FormFieldWrapper
+					name="password"
+					label="Password"
+					placeholder="password"
+					type="password"
+					description="Enter your password."
+					autoComplete="current-password"
+					form={form}
+					handleChange={(e) => {
+						setPasswordValue(e.target.value);
+						form.setValue('password', e.target.value);
+					}}
+				>
+					{passwordValue && (
+						<PasswordRequirements passwordValue={passwordValue} />
+					)}
+				</FormFieldWrapper>
+				<FormFieldWrapper
+					name="confirmPassword"
+					label="Confirm Password"
+					placeholder="confirm password"
+					type="password"
+					autoComplete="current-password"
+					description="Confirm your password."
+					form={form}
+				/>
+				<SubmitButton
+					isSubmitting={form.formState.isSubmitting}
+					label={'Register'}
+				/>
+			</form>
+		</Form>
+	);
 }
+export default RegisterForm;

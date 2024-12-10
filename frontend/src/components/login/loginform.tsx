@@ -88,7 +88,7 @@ export default function LoginForm({onSubmit}: any) {
             {/*Submit*/}
             <button
                 type="submit"
-                className="w-full bg-blue-500 text-white p-2 rounded"
+                className="w-full bg-gradient-to-r from-blue-400 to-green-500 text-white p-2 rounded"
             >
                 Login
             </button>
