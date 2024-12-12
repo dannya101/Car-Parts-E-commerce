@@ -11,3 +11,5 @@ The frontend, backend, and postgres db are dockerized making it simple to run th
 # Notes on Operation
 
 Docker will use a volume to save your image uploads in the ./uploads folder in the local machine allowing them to persist when the server restarts
+
+In order to access the admin page to add products, you must have a user profile that has admin permissions. When setting up the first admin user you currently have to physically alter the DB to set the is_admin column of the users table to true and the user will be given admin permissions. The admin page is accessed by directing your web browser to http://localhost:3000/admin. Any unauthorized user will be given a "NOT AUTHORIZED" message and will not see any admin options.
